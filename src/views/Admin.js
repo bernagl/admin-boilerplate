@@ -1,17 +1,20 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import Router from '../router'
+import { withRouter } from 'react-router-dom'
+import { Router } from '../router'
 import { Breadcrumb, Layout } from 'antd'
 import Sidebar from '../components/Sidebar'
 const { Content, Footer, Header } = Layout
+
 class Admin extends Component {
   render() {
-    console.log(this.props)
     return (
       <Layout style={{ minHeight: '100vh' }}>
         <Sidebar />
         <Layout>
-          <Header style={{ background: '#fff', padding: 0 }} />
+          <Header style={{ background: '#fff', padding: 0 }}>
+            <h1 className="admin-title">{this.props.schema.title}</h1>
+          </Header>
           <Content style={{ margin: '0 16px' }}>
             <Breadcrumb style={{ margin: '16px 0' }}>
               <Breadcrumb.Item>User</Breadcrumb.Item>
@@ -21,15 +24,13 @@ class Admin extends Component {
               <Router />
             </div>
           </Content>
-          <Footer style={{ textAlign: 'center' }}>
-            Ant Design ©2016 Created by Ant UED
-          </Footer>
+          <Footer style={{ textAlign: 'center' }}>Admin by Mobkii</Footer>
         </Layout>
       </Layout>
     )
   }
 }
 
-const mapStateToProps = ({ auth }) => ({ auth })
+const mapStateToProps = ({ auth, schema }) => ({ auth, schema })
 
-export default connect(mapStateToProps)(Admin)
+export default withRouter(connect(mapStateToProps)(Admin))

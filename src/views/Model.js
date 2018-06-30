@@ -1,0 +1,82 @@
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { Button } from 'antd'
+import { setSchemaTitle } from '../actions/schema_actions'
+import Datatable from '../components/Datatable'
+import Modal from '../components/Modal'
+import Table from 'react-xtable'
+// import 'react-xtable/dist/styles.css'
+import '../assets/xtable.css'
+
+const data = [
+  {
+    nombre: 'Daniela',
+    correo: 'danimerlo@gmail.com',
+    contrasena: 'daniela123',
+    age: 22
+  }
+]
+
+class Model extends Component {
+  constructor(props) {
+    super(props)
+    this.modalRef = React.createRef()
+    this.state = { selected: null }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    nextProps.match.params.id !== this.props.match.params.id &&
+      this.props.setSchemaTitle(nextProps.match.params.id)
+  }
+
+  showModal = selected => {
+    this.setState({ selected }, () => this.modalRef.current.showModal())
+  }
+
+  render() {
+    console.log(this.modalRef)
+    const columns = [
+      {
+        label: 'Nombre',
+        key: 'nombre',
+        Render: element => <span>{element.nombre}</span>
+      },
+      { label: 'Correo', key: 'correo' },
+      { label: 'Contraseña', key: 'contrasena' },
+      {
+        label: 'Acciones',
+        key: 'actions',
+        Render: selected => (
+          <span onClick={() => this.showModal(selected)}>View</span>
+        )
+      }
+    ]
+    return (
+      <div>
+        <Table
+          data={data}
+          columns={columns}
+          pagination={50}
+          searchPlaceholder="Buscar"
+          emptyText={() => 'Esta tabla aún no tiene ningún dato'}
+        />
+        <Modal
+          ref={this.modalRef}
+          modalRef={this.modalRef}
+          model={this.props.match.params.id}
+          selected={this.state.selected}
+        />
+        <Button type="primary" onClick={() => this.showModal(null)}>
+          Agregar
+        </Button>
+      </div>
+    )
+  }
+}
+
+const mapStateToProps = ({ schema }) => ({ schema })
+
+export default connect(
+  mapStateToProps,
+  { setSchemaTitle }
+)(Model)

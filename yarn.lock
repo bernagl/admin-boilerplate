@@ -3166,6 +3166,10 @@ forever-agent@~0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/forever-agent/-/forever-agent-0.6.1.tgz#fbc71f0c41adeb37f96c577ad1ed42d8fdacca91"
 
+form-data-to-object@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/form-data-to-object/-/form-data-to-object-0.2.0.tgz#f7a8e68ddd910a1100a65e25ac6a484143ff8168"
+
 form-data@~2.3.1:
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/form-data/-/form-data-2.3.2.tgz#4970498be604c20c005d4f5c23aecd21d6b49099"
@@ -3173,6 +3177,19 @@ form-data@~2.3.1:
     asynckit "^0.4.0"
     combined-stream "1.0.6"
     mime-types "^2.1.12"
+
+formsy-react@^1.1.4:
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/formsy-react/-/formsy-react-1.1.4.tgz#687525cbcaa6f6a6000e0c8029076fb5ac8dac3e"
+  dependencies:
+    form-data-to-object "^0.2.0"
+    prop-types "^15.5.10"
+
+formsy@^0.19.2:
+  version "0.19.2"
+  resolved "https://registry.yarnpkg.com/formsy/-/formsy-0.19.2.tgz#25f7f83105cfd8ea0beb740aa8c7188e11a994b5"
+  dependencies:
+    form-data-to-object "^0.2.0"
 
 forwarded@~0.1.2:
   version "0.1.2"
@@ -6509,6 +6526,10 @@ react-slick@~0.23.1:
     json2mq "^0.2.0"
     lodash.debounce "^4.0.8"
     resize-observer-polyfill "^1.5.0"
+
+react-xtable@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/react-xtable/-/react-xtable-1.0.6.tgz#2008aff38571d92c39cf83a304e0b0af03fa4a78"
 
 react@^16.4.1:
   version "16.4.1"
