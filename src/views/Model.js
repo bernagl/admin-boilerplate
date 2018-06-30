@@ -5,6 +5,7 @@ import { setSchemaTitle } from '../actions/schema_actions'
 import Datatable from '../components/Datatable'
 import Modal from '../components/Modal'
 import Table from 'react-xtable'
+import { getDocumentsByModel } from '../actions/firebase_actions'
 // import 'react-xtable/dist/styles.css'
 import '../assets/xtable.css'
 
@@ -24,9 +25,19 @@ class Model extends Component {
     this.state = { selected: null }
   }
 
+  componentDidMount() {
+    this.setDataToState(this.props.match.params.id)
+  }
+
   componentWillReceiveProps(nextProps) {
-    nextProps.match.params.id !== this.props.match.params.id &&
-      this.props.setSchemaTitle(nextProps.match.params.id)
+    const model = nextProps.match.params.id
+    model !== this.props.match.params.id &&
+      (this.props.setSchemaTitle(model), this.setDataToState(model))
+  }
+
+  setDataToState = async model => {
+    const data = await getDocumentsByModel(this.props.match.params.id)
+    this.setState({ data })
   }
 
   showModal = selected => {

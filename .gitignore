@@ -6,6 +6,8 @@
 # testing
 /coverage
 
+credentials.js
+
 # production
 /build
 
