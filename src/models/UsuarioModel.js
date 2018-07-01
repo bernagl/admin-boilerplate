@@ -14,7 +14,7 @@ export default () => {
 }
 
 const submit = model => {
-  console.log('Modelo desde el usuarioModel: ', model)
+  return model
 }
 
 const Columns = showModal => {

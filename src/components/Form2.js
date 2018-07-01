@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom'
 import { Button, Icon, message, Spin } from 'antd'
 import { Forms } from '../models'
 import Input from './Input'
-import { addDocument, getDocument } from '../actions/firebase_actions'
+import { getDocument } from '../actions/firebase_actions'
 
 export default class Form extends Component {
   constructor(props) {
@@ -24,10 +24,6 @@ export default class Form extends Component {
 
   state = { canSubmit: false, loading: false }
 
-  // componentWillReceiveProps(nextProps) {
-  //   this.formsyRef.current.reset()
-  // }
-
   disableButton = () => {
     this.setState({ canSubmit: false })
   }
@@ -38,40 +34,32 @@ export default class Form extends Component {
 
   submit = async () => {
     const schema = this.formsyRef.current.getModel()
-    const { model, submit } = this.props
-    submit(schema)
-    console.log(model, schema)
-    // const { canSubmit } = this.state
-    // const { model, callback, modalContext, selected, submit } = this.props
-    // const schema = this.formsyRef.current.getModel()
-    // if (!canSubmit) {
-    //   message.error('Por favor valida tu formulario')
-    //   modalContext.setState({ loading: false })
-    //   return
-    // }
+    const { closeModal, model, selected, submit, updateData } = this.props
+    const customModel = submit(schema)
 
-    // const response = await this.props.action({
-    //   id: selected ? selected.id : null,
-    //   ...schema
-    // })
+    const { canSubmit } = this.state
+    if (!canSubmit) {
+      message.error('Por favor valida tu formulario')
+      return
+    }
 
-    // if (response === 202) {
-    //   modalContext.setState({ loading: false, visible: false })
-    //   callback()
-    //   message.success('Registro guardado')
-    // } else {
-    //   message.error('Ocurrió un error, por favor vuelve a intentarlo')
-    // }
-  }
+    const response = await this.props.action({
+      id: selected ? selected.id : null,
+      ...customModel
+    })
 
-  reset = () => {
-    this.formsyRef.current.reset()
+    if (response === 202) {
+      closeModal()
+      updateData()
+      message.success('Registro guardado')
+    } else {
+      message.error('Ocurrió un error, por favor vuelve a intentarlo')
+    }
   }
 
   render() {
     const { canSubmit, selected, loading } = this.state
     const { children, submitText } = this.props
-    console.log(selected)
     return (
       <Formsy
         onSubmit={this.submit}
