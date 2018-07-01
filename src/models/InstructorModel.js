@@ -1,23 +1,7 @@
 import React from 'react'
-import Datatable from '../components/Datatable'
 import Input from '../components/Input'
 
-export default () => {
-  return (
-    <Datatable
-      model="usuario"
-      Inputs={Inputs}
-      Columns={Columns}
-      submit={submit}
-    />
-  )
-}
-
-const submit = model => {
-  console.log('Modelo desde el usuarioModel: ', model)
-}
-
-const Columns = showModal => {
+export const InstructorTable = showModal => {
   return [
     {
       label: 'Nombre',
@@ -34,7 +18,7 @@ const Columns = showModal => {
   ]
 }
 
-const Inputs = ({ nombre, correo, contrasena }) => {
+export const InstructorForm = ({ nombre, correo, contrasena }) => {
   return (
     <React.Fragment>
       <Input

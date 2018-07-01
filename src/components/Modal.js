@@ -18,12 +18,6 @@ export default class ModalForm extends React.Component {
   handleOk = e => {
     this.setState({ loading: true })
     this.formRef.current.submit()
-    setTimeout(() => {
-      this.setState({
-        visible: false,
-        loading: false
-      })
-    }, 2000)
   }
 
   handleCancel = e => {
@@ -36,7 +30,7 @@ export default class ModalForm extends React.Component {
 
   render() {
     const { loading, visible } = this.state
-    const { model, selected, title } = this.props
+    const { action, callback, model, selected, title } = this.props
     return (
       <Modal
         title={selected ? `Editar ${model}` : `Agregar ${model}`}
@@ -49,9 +43,13 @@ export default class ModalForm extends React.Component {
         destroyOnClose={true}
       >
         <Form
+          submit={this.handleOk}
           ref={this.formRef}
-          model={this.props.model}
-          selected={this.props.selected}
+          model={model}
+          selected={selected}
+          action={action}
+          modalContext={this}
+          callback={callback}
         />
       </Modal>
     )

@@ -2,39 +2,41 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Button } from 'antd'
 import { setSchemaTitle } from '../actions/schema_actions'
+import Datatable from '../components/Datatable'
 import Modal from '../components/Modal'
-import { TableHeaders } from '../models'
 import Table from 'react-xtable'
-import {
-  addDocument,
-  getDocumentsByModel,
-  updateDocument
-} from '../actions/firebase_actions'
+import { getDocumentsByModel } from '../actions/firebase_actions'
 // import 'react-xtable/dist/styles.css'
 import '../assets/xtable.css'
+
+const data = [
+  {
+    nombre: 'Daniela',
+    correo: 'danimerlo@gmail.com',
+    contrasena: 'daniela123',
+    age: 22
+  }
+]
 
 class Model extends Component {
   constructor(props) {
     super(props)
     this.modalRef = React.createRef()
-    this.state = { selected: null, data: [] }
+    this.state = { selected: null }
   }
 
   componentDidMount() {
     this.setDataToState(this.props.match.params.id)
   }
 
-  componentDidUpdate(prevProps) {
-    const model = this.props.match.params.id
-    // console.log(model, this.props.match.params.id)
-    model !== prevProps.match.params.id &&
+  componentWillReceiveProps(nextProps) {
+    const model = nextProps.match.params.id
+    model !== this.props.match.params.id &&
       (this.props.setSchemaTitle(model), this.setDataToState(model))
   }
 
   setDataToState = async model => {
-    this.setState({ data: [] })
     const data = await getDocumentsByModel(this.props.match.params.id)
-    // console.table(data)
     this.setState({ data })
   }
 
@@ -43,16 +45,12 @@ class Model extends Component {
   }
 
   render() {
-    // console.log(this.state)
-    const { data, selected } = this.state
-    const { id } = this.props.match.params
-    const action = selected ? updateDocument(id) : addDocument(id)
-    const Columns = TableHeaders[id]
+
     return (
       <div>
         <Table
           data={data}
-          columns={Columns(this.showModal)}
+          columns={columns}
           pagination={50}
           searchPlaceholder="Buscar"
           emptyText={() => 'Esta tabla aún no tiene ningún dato'}
@@ -60,10 +58,8 @@ class Model extends Component {
         <Modal
           ref={this.modalRef}
           modalRef={this.modalRef}
-          model={id}
-          selected={selected}
-          action={action}
-          callback={this.setDataToState}
+          model={this.props.match.params.id}
+          selected={this.state.selected}
         />
         <Button type="primary" onClick={() => this.showModal(null)}>
           Agregar

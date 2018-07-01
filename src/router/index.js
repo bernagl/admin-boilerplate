@@ -1,12 +1,14 @@
 import React from 'react'
 import { Link, Route, Switch } from 'react-router-dom'
 import Model from '../views/Model'
+import Usuario from '../models/UsuarioModel'
 
 export const Router = () => {
   return (
     <Switch>
       {/* <Route path="/" component={Admin} exact /> */}
       <Route path="/test" component={Test} />
+      <Route path="/usuario" component={Usuario} />
       <Route path="/model/:id" component={Model} />
       <Route component={Ekk} />
     </Switch>

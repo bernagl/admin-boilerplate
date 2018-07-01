@@ -33,7 +33,7 @@ export default class Sidebar extends Component {
             </NavLink>
           </Menu.Item>
           <Menu.Item key="3">
-            <NavLink activeClassName="active" to="/model/sucursale">
+            <NavLink activeClassName="active" to="/model/sucursal">
               <Icon type="pie-chart" />
               <span>Sucursales</span>
             </NavLink>
@@ -57,7 +57,7 @@ export default class Sidebar extends Component {
             </NavLink>
           </Menu.Item>
           <Menu.Item key="7">
-            <NavLink activeClassName="active" to="/model/usuario">
+            <NavLink activeClassName="active" to="/usuario">
               <Icon type="pie-chart" />
               <span>Usuarios</span>
             </NavLink>

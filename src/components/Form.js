@@ -1,14 +1,25 @@
 import React, { Component } from 'react'
 import Formsy from 'formsy-react'
 import { withRouter } from 'react-router-dom'
-import { Button, message } from 'antd'
-import Models from '../models'
+import { Button, Icon, message, Spin } from 'antd'
+import { Forms } from '../models'
 import Input from './Input'
+import { addDocument, getDocument } from '../actions/firebase_actions'
 
 export default class Form extends Component {
   constructor(props) {
     super(props)
     this.formsyRef = React.createRef()
+  }
+
+  async componentDidMount() {
+    let { model, selected } = this.props
+    if (selected) {
+      const document = await getDocument(model)(selected.id)
+      this.setState({ selected: document })
+    } else {
+      this.setState({ selected: {} })
+    }
   }
 
   state = { canSubmit: false, loading: false }
@@ -25,13 +36,27 @@ export default class Form extends Component {
     this.setState({ canSubmit: true })
   }
 
-  submit = () => {
+  submit = async () => {
     const { canSubmit } = this.state
-    const { selected, model } = this.props
+    const { model, callback, modalContext, selected, submit } = this.props
     const schema = this.formsyRef.current.getModel()
     if (!canSubmit) {
       message.error('Por favor valida tu formulario')
+      modalContext.setState({ loading: false })
       return
+    }
+
+    const response = await this.props.action({
+      id: selected ? selected.id : null,
+      ...schema
+    })
+
+    if (response === 202) {
+      modalContext.setState({ loading: false, visible: false })
+      callback()
+      message.success('Registro guardado')
+    } else {
+      message.error('Ocurrió un error, por favor vuelve a intentarlo')
     }
 
     console.log(selected, model, schema)
@@ -53,10 +78,9 @@ export default class Form extends Component {
   }
 
   render() {
-    const { canSubmit, loading } = this.state
-    const { children, selected, submitText } = this.props
-    const Model = Models[this.props.model]
-    console.log(selected)
+    const { canSubmit, selected, loading } = this.state
+    const { children, submitText } = this.props
+    const Model = Forms[this.props.model]
     return (
       <Formsy
         onSubmit={this.submit}
@@ -66,7 +90,17 @@ export default class Form extends Component {
         ref={this.formsyRef}
         className="ant-form-vertical"
       >
-        {Model ? <Model {...selected} /> : <h5>No tienes ningún modelo</h5>}
+        {Model ? (
+          selected ? (
+            <Model {...selected} />
+          ) : (
+            <Spin
+              indicator={<Icon type="loading" style={{ fontSize: 24 }} spin />}
+            />
+          )
+        ) : (
+          <h5>No tienes ningún modelo</h5>
+        )}
 
         {/* <Button
           type="primary"
