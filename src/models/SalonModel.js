@@ -14,22 +14,22 @@ export default class SalonModel extends Component {
     this.setState({ gimnasios })
   }
 
+  submit = model => {
+    const { sucursal } = this.state
+    return { ...model, sucursal }
+  }
+
   render() {
     const { nombre, gimnasios } = this.state
     return (
       <Datatable
         model="salon"
-        Inputs={Inputs(gimnasios)}
+        Inputs={Inputs({ gimnasios, context: this })}
         Columns={Columns}
-        submit={submit}
+        submit={this.submit}
       />
     )
   }
-}
-
-const submit = model => {
-  console.log(model)
-  return model
 }
 
 const Columns = showModal => {
@@ -47,24 +47,10 @@ const Columns = showModal => {
   ]
 }
 
-const Inputs = gimnasios => ({ nombre, sucursal }) => {
+const Inputs = ({ gimnasios, context }) => ({ nombre, sucursal }) => {
   let s = sucursal
   return (
     <React.Fragment>
-      <Item label="Sucursal">
-        <Select
-          placeholder="Selecciona una sucursal"
-          defaultValue={sucursal}
-          options={gimnasios}
-          name="sucursal"
-          // onChange={sucursal => (s = sucursal)}
-        >
-          {/* {gimnasios.map(({ id, nombre }) => (
-            <Option key={id}>{nombre}</Option>
-          ))} */}
-        </Select>
-      </Item>
-      <Input type="hidden" name="sucursal" value={s} />
       <Input
         name="nombre"
         label="Nombre"
@@ -72,6 +58,14 @@ const Inputs = gimnasios => ({ nombre, sucursal }) => {
         validations="minLength:3"
         validationError="Ingresa un nombre válido"
         required
+      />
+      <Select
+        placeholder="Selecciona una sucursal"
+        defaultValue={sucursal}
+        options={gimnasios}
+        name="sucursal"
+        context={context}
+        label="Sucursal"
       />
     </React.Fragment>
   )
