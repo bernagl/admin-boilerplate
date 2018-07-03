@@ -14,7 +14,7 @@ export default () => {
 }
 
 const submit = model => {
-  return model
+  return { direccion: { calle: model.nombre, cp: model.contrasena }, ...model }
 }
 
 const Columns = showModal => {
@@ -25,7 +25,6 @@ const Columns = showModal => {
       Render: element => <span>{element.nombre}</span>
     },
     { label: 'Correo', key: 'correo' },
-    { label: 'Contraseña', key: 'contrasena' },
     {
       label: 'Acciones',
       key: 'actions',

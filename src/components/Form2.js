@@ -35,11 +35,16 @@ export default class Form extends Component {
   submit = async () => {
     const schema = this.formsyRef.current.getModel()
     const { closeModal, model, selected, submit, updateData } = this.props
-    const customModel = submit(schema)
 
     const { canSubmit } = this.state
     if (!canSubmit) {
       message.error('Por favor valida tu formulario')
+      return
+    }
+    // console.log(schema)
+    const customModel = submit(schema)
+
+    if (!customModel) {
       return
     }
 

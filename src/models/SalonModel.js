@@ -1,15 +1,42 @@
 import React from 'react'
+import Datatable from '../components/Datatable'
 import Input from '../components/Input'
+import { getDocumentsByModel } from '../actions/firebase_actions'
 
-export const SalonTable = showModal => {
+export default class SalonModel extends Component {
+  async componentDidMount() {
+    const gimnasios = await getDocumentsByModel('gimnasio')
+    this.setState({ gimnasios })
+  }
+
+  render() {
+    const { gimnasios } = this.state
+    return (
+      <Datatable
+        model="clase"
+        Inputs={Inputs(gimnasios)}
+        Columns={Columns}
+        submit={submit}
+      />
+    )
+  }
+}
+
+const submit = model => {
+  return model
+}
+
+const Columns = showModal => {
   return [
     {
       label: 'Nombre',
       key: 'nombre',
       Render: element => <span>{element.nombre}</span>
     },
-    { label: 'Correo', key: 'correo' },
-    { label: 'Contraseña', key: 'contrasena' },
+    {
+      label: 'Gimnasio',
+      Render: element => <span>{element.gimnasio.nombre}</span>
+    },
     {
       label: 'Acciones',
       key: 'actions',
@@ -18,40 +45,20 @@ export const SalonTable = showModal => {
   ]
 }
 
-export const SalonForm = ({ nombre, correo, contrasena }) => {
+const Inputs = ({ nombre, gimnasios }) => {
   return (
     <React.Fragment>
+      <Select>
+        {gimnasios.map((gimnasio, key) => (
+          <Option key={key}>{gimnasio.nombre}</Option>
+        ))}
+      </Select>
       <Input
         name="nombre"
         label="Nombre"
         value={nombre}
         validations="minLength:3"
         validationError="Ingresa un nombre válido"
-        required
-      />
-      <Input
-        name="correo"
-        label="Correo"
-        value={correo}
-        validations="isEmail"
-        validationError="Ingresa un email válido"
-        required
-      />
-      <Input
-        name="contrasena"
-        label="Contraseña"
-        value={contrasena}
-        validations="minLength:6"
-        type="password"
-        validationError="Ingresa una contraseña válida"
-        required
-      />
-      <Input
-        name="confirmar"
-        label="Confirmar contraseña"
-        validations="equalsField:contrasena"
-        type="password"
-        validationError="Las contraseñas no coinciden"
         required
       />
     </React.Fragment>

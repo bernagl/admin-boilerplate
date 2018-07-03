@@ -20,7 +20,7 @@ export const getDocument = collection => id => {
     .ref(collection)
     .child(id)
     .once('value')
-    .then(snapshot => snapshot.val())
+    .then(snapshot => ({ id: snapshot.key, ...snapshot.val() }))
     .catch(e => 404)
 }
 

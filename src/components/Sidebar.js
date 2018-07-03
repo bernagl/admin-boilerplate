@@ -62,19 +62,26 @@ export default class Sidebar extends Component {
               <span>Usuarios</span>
             </NavLink>
           </Menu.Item>
-          {/* <SubMenu
-            key="sub1"
+          <SubMenu
+            key="clases"
             title={
               <span>
                 <Icon type="user" />
-                <span>User</span>
+                <span>Clases</span>
               </span>
             }
           >
-            <Menu.Item key="3">Tom</Menu.Item>
-            <Menu.Item key="4">Bill</Menu.Item>
-            <Menu.Item key="5">Alex</Menu.Item>
-          </SubMenu> */}
+            <Menu.Item key="8">
+              <NavLink activeClassName="active" to="/clase">
+                Lista de clases
+              </NavLink>
+            </Menu.Item>
+            <Menu.Item key="9">
+              <NavLink activeClassName="active" to="/horario">
+                Asignar horario
+              </NavLink>
+            </Menu.Item>
+          </SubMenu>
           {/* <SubMenu
             key="sub2"
             title={
