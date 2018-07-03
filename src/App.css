@@ -2,3 +2,7 @@
   text-transform: capitalize;
   padding-left: 20px;
 }
+
+.divider {
+  border-right: 1px solid #e8e8e8;
+}

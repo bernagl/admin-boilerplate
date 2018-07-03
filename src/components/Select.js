@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Select as S, Form } from 'antd'
-import { withFormsy } from 'formsy-react'
+import Input from './Input'
 const { Item } = Form
 const { Option } = S
 
@@ -8,37 +8,35 @@ class Select extends Component {
   state = { value: '', validate: false }
 
   componentDidMount() {
-    this.setState({ value: this.props.value })
+    this.setState({ value: this.props.defaultValue })
   }
 
   onChange = value => {
-    this.props.setValue(value)
     this.setState({ value })
   }
 
   handleEvent = value => {
-    this.props.setValue(value)
     this.setState({ validate: true, value })
   }
 
   render() {
     const { validate, value } = this.state
-    const { label, name, options, placeholder, type } = this.props
-    const errorMessage = this.props.getErrorMessage()
+    const { label, name, options, placeholder, type, defaultValue } = this.props
+    console.log(this.state)
     return (
       <Item
         label={label}
         layout="vertical"
-        validateStatus={
-          validate
-            ? errorMessage
-              ? 'error'
-              : value
-                ? 'success'
-                : 'error'
-            : null
-        }
-        help={validate && errorMessage}
+        // validateStatus={
+        //   validate
+        //     ? errorMessage
+        //       ? 'error'
+        //       : value
+        //         ? 'success'
+        //         : 'error'
+        //     : null
+        // }
+        // help={validate && errorMessage}
         hasFeedback
       >
         <S
@@ -47,23 +45,26 @@ class Select extends Component {
           //   type={type ? type : 'text'}
           //   onChange={this.onChange}
           //   onBlur={this.handleEvent}
-          value={value}
+          // value={value}
+          defaultValue={defaultValue}
           // mode="tags"
           placeholder={placeholder ? placeholder : 'Selecciona'}
           notFoundContent="Ninguna opción encontrada"
           // style={{ width: '100%' }}
           onChange={claseSelected => this.onChange(claseSelected)}
           //   tokenSeparators={[',']}
+          value={value}
           // pattern={pattern}
           // onFocus={this.handleEvent}
         >
           {options.map(({ nombre, id }, key) => (
-            <Option key={key}>{nombre}</Option>
+            <Option key={id ? id : key}>{nombre}</Option>
           ))}
         </S>
+        {/* <Input type="hidden" name={name} value={value} /> */}
       </Item>
     )
   }
 }
 
-export default withFormsy(Select)
+export default Select

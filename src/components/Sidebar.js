@@ -26,12 +26,12 @@ export default class Sidebar extends Component {
               <span>Asignar créditos</span>
             </NavLink>
           </Menu.Item>
-          <Menu.Item key="2">
+          {/* <Menu.Item key="2">
             <NavLink activeClassName="active" to="/model/clase">
               <Icon type="desktop" />
               <span>Clases</span>
             </NavLink>
-          </Menu.Item>
+          </Menu.Item> */}
           <Menu.Item key="3">
             <NavLink activeClassName="active" to="/model/sucursal">
               <Icon type="pie-chart" />
@@ -51,7 +51,7 @@ export default class Sidebar extends Component {
             </NavLink>
           </Menu.Item>
           <Menu.Item key="6">
-            <NavLink activeClassName="active" to="/model/salon">
+            <NavLink activeClassName="active" to="/salon">
               <Icon type="pie-chart" />
               <span>Salones</span>
             </NavLink>

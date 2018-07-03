@@ -5,7 +5,7 @@ import { InstructorForm } from './InstructorModel'
 import { PagoForm } from './PagoModel'
 
 import { SucursalTable } from './SucursalModel'
-// import { UsuarioTable } from './UsuarioModel'
+// import { SalonTable } from './SalonModel'
 
 export const Forms = {
   instructor: InstructorForm,
@@ -16,6 +16,7 @@ export const Forms = {
 }
 
 export const TableHeaders = {
-  sucursal: SucursalTable
+  sucursal: SucursalTable,
+  // salon: SalonTable
   // usuario: UsuarioTable
 }

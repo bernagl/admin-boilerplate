@@ -42,8 +42,9 @@ export default class Form extends Component {
       return
     }
     // console.log(schema)
-    const customModel = submit(schema)
+    const customModel = await submit(schema)
 
+    console.log(customModel)
     if (!customModel) {
       return
     }

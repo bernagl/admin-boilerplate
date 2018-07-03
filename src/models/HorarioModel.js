@@ -34,7 +34,7 @@ export default class Horario extends Component {
 
   async componentDidMount() {
     const clases = await getDocumentsByModel('clase')
-    const gimnasios = await getDocumentsByModel('gimnasio')
+    const gimnasios = await getDocumentsByModel('sucursal')
     const profesores = await getDocumentsByModel('profesor')
 
     this.setState({ clases, gimnasios, profesores })

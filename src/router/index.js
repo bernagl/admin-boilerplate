@@ -5,6 +5,7 @@ import Usuario from '../models/UsuarioModel'
 import Clase from '../models/ClaseModel'
 import Horario from '../models/HorarioModel'
 import { SucursalForm } from '../models/SucursalModel'
+import SalonModel from '../models/SalonModel'
 
 export const Router = () => {
   return (
@@ -15,7 +16,8 @@ export const Router = () => {
       <Route path="/clase" component={Clase} />
       <Route path="/horario" component={Horario} />
       <Route path="/model/:id" component={Model} />
-      <Route path="/sucursal/:id" component={SucursalForm} />
+      <Route path="/salon/:id?" component={SalonModel} />
+      <Route path="/sucursal/:id?" component={SucursalForm} />
       <Route component={Ekk} />
     </Switch>
   )

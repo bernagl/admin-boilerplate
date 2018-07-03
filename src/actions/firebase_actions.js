@@ -33,6 +33,7 @@ export const addDocument = collection => document => {
 }
 
 export const updateDocument = collection => data => {
+  console.log(collection, data)
   return db
     .ref(collection)
     .child(data.id)

@@ -36,7 +36,6 @@ export default class Datatable extends Component {
 
   handleOk = () => {
     this.formRef.current.submit()
-    this.setState({ selected: {}, modal: false })
   }
 
   render() {

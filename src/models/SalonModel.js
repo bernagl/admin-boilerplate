@@ -1,19 +1,24 @@
-import React from 'react'
+import React, { Component } from 'react'
+import { Form as F } from 'antd'
 import Datatable from '../components/Datatable'
 import Input from '../components/Input'
+import Select from '../components/Select'
 import { getDocumentsByModel } from '../actions/firebase_actions'
 
+const { Item } = F
+
 export default class SalonModel extends Component {
+  state = { gimnasios: [] }
   async componentDidMount() {
-    const gimnasios = await getDocumentsByModel('gimnasio')
+    const gimnasios = await getDocumentsByModel('sucursal')
     this.setState({ gimnasios })
   }
 
   render() {
-    const { gimnasios } = this.state
+    const { nombre, gimnasios } = this.state
     return (
       <Datatable
-        model="clase"
+        model="salon"
         Inputs={Inputs(gimnasios)}
         Columns={Columns}
         submit={submit}
@@ -23,6 +28,7 @@ export default class SalonModel extends Component {
 }
 
 const submit = model => {
+  console.log(model)
   return model
 }
 
@@ -34,10 +40,6 @@ const Columns = showModal => {
       Render: element => <span>{element.nombre}</span>
     },
     {
-      label: 'Gimnasio',
-      Render: element => <span>{element.gimnasio.nombre}</span>
-    },
-    {
       label: 'Acciones',
       key: 'actions',
       Render: selected => <span onClick={() => showModal(selected)}>View</span>
@@ -45,14 +47,24 @@ const Columns = showModal => {
   ]
 }
 
-const Inputs = ({ nombre, gimnasios }) => {
+const Inputs = gimnasios => ({ nombre, sucursal }) => {
+  let s = sucursal
   return (
     <React.Fragment>
-      <Select>
-        {gimnasios.map((gimnasio, key) => (
-          <Option key={key}>{gimnasio.nombre}</Option>
-        ))}
-      </Select>
+      <Item label="Sucursal">
+        <Select
+          placeholder="Selecciona una sucursal"
+          defaultValue={sucursal}
+          options={gimnasios}
+          name="sucursal"
+          // onChange={sucursal => (s = sucursal)}
+        >
+          {/* {gimnasios.map(({ id, nombre }) => (
+            <Option key={id}>{nombre}</Option>
+          ))} */}
+        </Select>
+      </Item>
+      <Input type="hidden" name="sucursal" value={s} />
       <Input
         name="nombre"
         label="Nombre"
