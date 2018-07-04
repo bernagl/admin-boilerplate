@@ -51,7 +51,7 @@ export default class Horario extends Component {
   }
 
   render() {
-    const { creditos, data, usuario, usuarios } = this.state
+    const { data } = this.state
     return (
       <AnimationWrapper>
         <div className="row">

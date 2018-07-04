@@ -12,11 +12,11 @@ export const Forms = {
   // usuario: UsuarioForm,
   // pago: PagoForm,
   // salon: SalonForm,
-  sucursal: SucursalForm
+  // sucursal: SucursalForm
 }
 
 export const TableHeaders = {
-  sucursal: SucursalTable,
+  // sucursal: SucursalTable,
   // salon: SalonTable
   // usuario: UsuarioTable
 }

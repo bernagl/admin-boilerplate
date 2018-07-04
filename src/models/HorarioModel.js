@@ -72,7 +72,6 @@ export default class Horario extends Component {
       const r = await createHorario({
         cupo,
         fecha: moment(fecha).format('L'),
-        clase: clases[clase],
         gimnasio: gimnasios[gimnasio],
         clase: clases[clase],
         instructor: instructores[instructor],
@@ -101,10 +100,8 @@ export default class Horario extends Component {
     const {
       clases,
       clase,
-      fechas,
       gimnasio,
       gimnasios,
-      nombre,
       instructor,
       instructores
     } = this.state
@@ -196,8 +193,4 @@ export default class Horario extends Component {
       </AnimationWrapper>
     )
   }
-}
-
-const submit = model => {
-  return model
 }

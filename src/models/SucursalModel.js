@@ -1,5 +1,5 @@
 import React from 'react'
-import { message, Button, Divider } from 'antd'
+import { message, Button } from 'antd'
 import Input from '../components/Input'
 import { Link } from 'react-router-dom'
 import {
@@ -37,8 +37,7 @@ export class SucursalForm extends React.Component {
     const { sucursal } = this.state
     const { nombre, ciudad, calle, colonia, numero } = sucursal
       ? sucursal
-      : { nombre, ciudad, calle, colonia, numero }
-    const { id } = this.props.match.params
+      : { nombre: '', ciudad: '', calle: '', colonia: '', numero: '' }
 
     return (
       <Form submit={this.submit} ref={this.formRef}>

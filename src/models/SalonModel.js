@@ -1,11 +1,8 @@
 import React, { Component } from 'react'
-import { Form as F } from 'antd'
 import Datatable from '../components/Datatable'
 import Input from '../components/Input'
 import Select from '../components/Select'
 import { getDocumentsByModel } from '../actions/firebase_actions'
-
-const { Item } = F
 
 export default class SalonModel extends Component {
   state = { gimnasios: [] }
@@ -20,7 +17,7 @@ export default class SalonModel extends Component {
   }
 
   render() {
-    const { nombre, gimnasios } = this.state
+    const { gimnasios } = this.state
     return (
       <Datatable
         model="salon"

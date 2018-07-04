@@ -1,9 +1,6 @@
 import React, { Component } from 'react'
 import Formsy from 'formsy-react'
-import { withRouter } from 'react-router-dom'
-import { Button, Icon, message, Spin } from 'antd'
-import { Forms } from '../models'
-import Input from './Input'
+import { message } from 'antd'
 import { getDocument } from '../actions/firebase_actions'
 
 export default class Form extends Component {
@@ -34,7 +31,7 @@ export default class Form extends Component {
 
   submit = async () => {
     const schema = this.formsyRef.current.getModel()
-    const { closeModal, model, selected, submit, updateData } = this.props
+    const { closeModal, selected, submit, updateData } = this.props
 
     const { canSubmit } = this.state
     if (!canSubmit) {
@@ -62,8 +59,7 @@ export default class Form extends Component {
   }
 
   render() {
-    const { canSubmit, selected, loading } = this.state
-    const { children, submitText } = this.props
+    const { children } = this.props
     return (
       <Formsy
         onSubmit={this.submit}

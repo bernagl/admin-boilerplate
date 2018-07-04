@@ -1,6 +1,5 @@
 import React from 'react'
 import Datatable from '../components/Datatable'
-import Input from '../components/Input'
 
 export default () => {
   return (

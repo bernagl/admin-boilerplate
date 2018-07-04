@@ -1,12 +1,11 @@
 import React from 'react'
-import { Modal, Button } from 'antd'
+import { Modal } from 'antd'
 import Form from './Form'
 
 export default class ModalForm extends React.Component {
   constructor(props) {
     super(props)
     this.formRef = React.createRef()
-    this.state = { visible: false, loading: false }
   }
 
   showModal = () => {
@@ -29,8 +28,7 @@ export default class ModalForm extends React.Component {
   }
 
   render() {
-    const { loading, visible } = this.state
-    const { action, callback, model, selected, title } = this.props
+    const { action, callback, model, selected } = this.props
     return (
       <Modal
         title={selected ? `Editar ${model}` : `Agregar ${model}`}
