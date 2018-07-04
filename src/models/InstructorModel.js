@@ -1,15 +1,32 @@
 import React from 'react'
+import Datatable from '../components/Datatable'
 import Input from '../components/Input'
 
-export const InstructorTable = showModal => {
+export default () => {
+  return (
+    <Datatable
+      model="instructor"
+      Inputs={Inputs}
+      Columns={Columns}
+      submit={submit}
+    />
+  )
+}
+
+const submit = model => {
+  return model
+}
+
+const Columns = showModal => {
   return [
     {
       label: 'Nombre',
       key: 'nombre',
       Render: element => <span>{element.nombre}</span>
     },
+    { label: 'Apellido', key: 'apellido' },
     { label: 'Correo', key: 'correo' },
-    { label: 'Contraseña', key: 'contrasena' },
+    { label: 'Teléfono', key: 'telefono' },
     {
       label: 'Acciones',
       key: 'actions',
@@ -18,7 +35,7 @@ export const InstructorTable = showModal => {
   ]
 }
 
-export const InstructorForm = ({ nombre, correo, contrasena }) => {
+const Inputs = ({ nombre, apellido, correo, telefono }) => {
   return (
     <React.Fragment>
       <Input
@@ -30,28 +47,27 @@ export const InstructorForm = ({ nombre, correo, contrasena }) => {
         required
       />
       <Input
+        name="apellido"
+        label="Apellidos"
+        value={apellido}
+        validations="minLength:3"
+        validationError="Ingresa un apellido válido"
+        required
+      />
+      <Input
         name="correo"
         label="Correo"
         value={correo}
         validations="isEmail"
-        validationError="Ingresa un email válido"
+        validationError="Ingresa un correo válido"
         required
       />
       <Input
-        name="contrasena"
-        label="Contraseña"
-        value={contrasena}
-        validations="minLength:6"
-        type="password"
-        validationError="Ingresa una contraseña válida"
-        required
-      />
-      <Input
-        name="confirmar"
-        label="Confirmar contraseña"
-        validations="equalsField:contrasena"
-        type="password"
-        validationError="Las contraseñas no coinciden"
+        name="telefono"
+        label="Teléfono"
+        value={telefono}
+        validations="isNumeric"
+        validationError="Ingresa un número de teléfono válido"
         required
       />
     </React.Fragment>

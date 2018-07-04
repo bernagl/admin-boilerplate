@@ -25,19 +25,19 @@ export default class Horario extends Component {
     this.state = {
       clases: [],
       gimnasios: [],
-      profesores: [],
+      instructores: [],
       clase: '',
       gimnasio: '',
-      profesor: ''
+      instructor: ''
     }
   }
 
   async componentDidMount() {
     const clases = await getDocumentsByModel('clase')
     const gimnasios = await getDocumentsByModel('sucursal')
-    const profesores = await getDocumentsByModel('profesor')
+    const instructores = await getDocumentsByModel('instructor')
 
-    this.setState({ clases, gimnasios, profesores })
+    this.setState({ clases, gimnasios, instructores })
   }
 
   submit = model => {
@@ -47,8 +47,8 @@ export default class Horario extends Component {
       cupo,
       gimnasio,
       gimnasios,
-      profesor,
-      profesores,
+      instructor,
+      instructores,
       inicio,
       fin,
       fechas
@@ -57,7 +57,7 @@ export default class Horario extends Component {
       !clase ||
       !cupo ||
       !gimnasio ||
-      !profesor ||
+      !instructor ||
       !inicio ||
       !fin ||
       !fechas
@@ -75,7 +75,7 @@ export default class Horario extends Component {
         clase: clases[clase],
         gimnasio: gimnasios[gimnasio],
         clase: clases[clase],
-        profesor: profesores[profesor],
+        instructor: instructores[instructor],
         inicio: moment(
           `${moment(fecha).format('YYYY-MM-DD')}T${moment(inicio).format(
             'HH:mm'
@@ -105,8 +105,8 @@ export default class Horario extends Component {
       gimnasio,
       gimnasios,
       nombre,
-      profesor,
-      profesores
+      instructor,
+      instructores
     } = this.state
     return (
       <Form ref={this.formRef} submit={this.submit}>
@@ -144,17 +144,17 @@ export default class Horario extends Component {
           <div className="col-4">
             <Item label="Profesor" layout="vertical">
               <Select
-                placeholder="Selecciona un profesor"
-                notFoundContent="Ningun profesor encontrado"
-                onChange={profesor => this.setState({ profesor })}
+                placeholder="Selecciona un instructor"
+                notFoundContent="Ningun instructor encontrado"
+                onChange={instructor => this.setState({ instructor })}
                 tokenSeparators={[',']}
               >
-                {profesores.map(({ nombre, id }, key) => (
+                {instructores.map(({ nombre, id }, key) => (
                   <Option key={key}>{nombre}</Option>
                 ))}
               </Select>
             </Item>
-            <Input type="hidden" name="profesor" value={profesor} />
+            <Input type="hidden" name="instructor" value={instructor} />
           </div>
           <div className="col-3">
             <MultipleDatePicker

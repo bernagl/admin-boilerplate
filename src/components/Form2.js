@@ -41,10 +41,8 @@ export default class Form extends Component {
       message.error('Por favor valida tu formulario')
       return
     }
-    // console.log(schema)
     const customModel = await submit(schema)
 
-    console.log(customModel)
     if (!customModel) {
       return
     }

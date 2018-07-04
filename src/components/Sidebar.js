@@ -21,7 +21,7 @@ export default class Sidebar extends Component {
         <div className="logo" />
         <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
           <Menu.Item key="1">
-            <NavLink activeClassName="active" to="/model/credito">
+            <NavLink activeClassName="active" to="/credito">
               <Icon type="pie-chart" />
               <span>Asignar créditos</span>
             </NavLink>
@@ -39,13 +39,13 @@ export default class Sidebar extends Component {
             </NavLink>
           </Menu.Item>
           <Menu.Item key="4">
-            <NavLink activeClassName="active" to="/model/pago">
+            <NavLink activeClassName="active" to="/pago">
               <Icon type="pie-chart" />
               <span>Pagos</span>
             </NavLink>
           </Menu.Item>
           <Menu.Item key="5">
-            <NavLink activeClassName="active" to="/model/instructor">
+            <NavLink activeClassName="active" to="/instructor">
               <Icon type="pie-chart" />
               <span>Instructores</span>
             </NavLink>
