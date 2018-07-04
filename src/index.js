@@ -6,8 +6,8 @@ import { Provider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
 import registerServiceWorker from './registerServiceWorker'
 import './index.css'
-import 'antd/dist/antd.css'
 import 'bootstrap-4-grid/css/grid.min.css'
+import 'antd/dist/antd.css'
 
 ReactDOM.render(
   <Provider store={store}>

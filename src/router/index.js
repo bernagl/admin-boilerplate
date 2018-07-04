@@ -2,6 +2,7 @@ import React from 'react'
 import { Link, Route, Switch } from 'react-router-dom'
 // import Model from '../views/Model'
 import Usuario from '../models/UsuarioModel'
+import Clases from '../views/Clases'
 import Clase from '../models/ClaseModel'
 import Instructor from '../models/InstructorModel'
 import Horario from '../models/HorarioModel'
@@ -14,6 +15,7 @@ export const Router = () => {
   return (
     <Switch>
       {/* <Route path="/" component={Admin} exact /> */}
+      <Route path="/clases" component={Clases} />
       <Route path="/test" component={Test} />
       <Route path="/usuario" component={Usuario} />
       <Route path="/clase" component={Clase} />

@@ -13,7 +13,7 @@ export default class Datatable extends Component {
   constructor(props) {
     super(props)
     this.formRef = React.createRef()
-    this.state = { selected: null, modal: false, data: [] }
+    this.state = { loading: false, selected: null, modal: false, data: [] }
   }
 
   componentDidMount() {
@@ -31,11 +31,11 @@ export default class Datatable extends Component {
   }
 
   closeModal = () => {
-    this.setState({ selected: {}, modal: false })
+    this.setState({ selected: {}, modal: false, loading: false })
   }
 
   handleOk = () => {
-    this.formRef.current.submit()
+    this.setState({ loading: true }, () => this.formRef.current.submit())
   }
 
   render() {

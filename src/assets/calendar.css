@@ -1,0 +1,172 @@
+/* Helpers */
+
+.a {
+    color: #337ddf;
+    cursor: pointer;
+}
+
+.inline-block {
+    display: inline-block;
+}
+
+.fw {
+    width: 100%;
+}
+
+.bw {
+    background: white;
+}
+
+.fh {
+    height: calc(100vh - 80px);
+    /* height: 100vh; */
+}
+
+.margin-auto {
+    margin: auto !important;
+}
+
+.container-shadow {
+    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14);
+    background-color: white;
+    border-radius: 5px;
+}
+
+.center-text {
+    text-align: center;
+}
+
+.bw {
+    background-color: white !important;
+}
+
+
+@media (max-width: 992px) {
+    .show-sm {
+        display: block !important;
+    }
+    .hidden-sm {
+        display: none !important;
+    }
+    .week {
+        display: block !important;
+        width: 100%;
+    }
+    .day {
+        max-width: 100% !important;
+        width: 100%;
+        margin-top: 10px !important;
+        margin: 0px !important;
+    }
+}
+
+.hidden-lg {
+    display: none;
+}
+
+.hidden-sm {
+    display: none;
+}
+
+.show-lg {
+    display: flex;
+}
+
+.week {
+    display: flex;
+}
+
+.week.week-events {
+    /* border: 1px solid #e8e8e8; */
+}
+
+.day {
+    flex-basis: 0;
+    flex: 1 1 0;
+    margin: 0px 2.5px !important;
+    /* max-width: 14.2857%; */
+    /* text-align: center; */
+}
+
+/* .row {
+    margin: 0px 2.5px !important;
+} */
+
+.day:last-child {
+    margin-right: 0px !important;
+}
+
+.day:first-child {
+    margin-left: 0px !important;
+}
+
+.day-row {
+    background-color: #337ddf;
+    color: white;
+}
+
+.calendar-container {
+    min-height: 200px;
+}
+
+.day-event {
+    background: #e8e8e8;
+    padding: 10px;
+    margin: 2.5px 0px;
+    width: 100%;
+    /* opacity: 1; */
+    transition: .7s;
+    word-break: break-all;
+    cursor: pointer;
+}
+
+.day-event:last-child {
+    margin-bottom: 0px !important;
+}
+
+.day-event:first-child {
+    margin-top: 0px !important;
+}
+
+.day-event.disabled {
+    background: lightgray !important;
+    cursor: not-allowed;
+}
+
+.day-event.full {
+    background-color: #5e3444 !important;
+    color: white !important;
+}
+
+.day-event.active {
+    background-color: #34495e !important;
+    color: white !important;
+}
+
+.day-event.active-reservada {
+    background-color: #78b2ec !important;
+    color: white !important;
+}
+
+.today {
+    border: 1px solid #337ddf;
+    border-top: none;
+}
+
+.week-header {
+    background: #337ddf;
+    padding: 20px 0px;
+    width: 100%;
+}
+
+.box-button {
+    border-radius: 0 !important;
+}
+
+.no-credits-label {
+    float: right;
+}
+
+.float-right {
+    float: right;
+}

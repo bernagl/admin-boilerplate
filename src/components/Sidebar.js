@@ -20,6 +20,12 @@ export default class Sidebar extends Component {
       >
         <div className="logo" />
         <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
+          <Menu.Item key="0">
+            <NavLink activeClassName="active" to="/clases">
+              <Icon type="calendar" />
+              <span>Calendario</span>
+            </NavLink>
+          </Menu.Item>
           <Menu.Item key="1">
             <NavLink activeClassName="active" to="/asignar-credito">
               <Icon type="credit-card" />
