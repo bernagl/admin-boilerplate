@@ -26,6 +26,7 @@ class Select extends Component {
           placeholder={placeholder ? placeholder : 'Selecciona'}
           notFoundContent="Ninguna opción encontrada"
           onChange={sucursal => context.setState({ sucursal })}
+          className="fw"
         >
           {options.map(({ nombre, id }, key) => (
             <Option key={id ? id : key}>{nombre}</Option>

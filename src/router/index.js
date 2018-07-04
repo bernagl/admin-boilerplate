@@ -7,6 +7,7 @@ import Instructor from '../models/InstructorModel'
 import Horario from '../models/HorarioModel'
 import { SucursalForm } from '../models/SucursalModel'
 import SalonModel from '../models/SalonModel'
+import AsignarCredito from '../models/AsignarCredito'
 import Pago from '../models/PagoModel'
 
 export const Router = () => {
@@ -17,6 +18,7 @@ export const Router = () => {
       <Route path="/usuario" component={Usuario} />
       <Route path="/clase" component={Clase} />
       <Route path="/pago" component={Pago} />
+      <Route path="/asignar-credito" component={AsignarCredito} />
       <Route path="/instructor" component={Instructor} />
       <Route path="/horario" component={Horario} />
       <Route path="/model/:id" component={Model} />

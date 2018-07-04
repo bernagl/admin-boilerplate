@@ -21,7 +21,7 @@ export default class Sidebar extends Component {
         <div className="logo" />
         <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
           <Menu.Item key="1">
-            <NavLink activeClassName="active" to="/credito">
+            <NavLink activeClassName="active" to="/asignar-credito">
               <Icon type="pie-chart" />
               <span>Asignar créditos</span>
             </NavLink>

@@ -6,3 +6,9 @@
 .divider {
   border-right: 1px solid #e8e8e8;
 }
+
+/* Helpers */
+
+.fw {
+  width: 100%;
+}
