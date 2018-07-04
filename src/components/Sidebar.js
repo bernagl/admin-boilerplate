@@ -33,7 +33,7 @@ export default class Sidebar extends Component {
             </NavLink>
           </Menu.Item> */}
           <Menu.Item key="3">
-            <NavLink activeClassName="active" to="/model/sucursal">
+            <NavLink activeClassName="active" to="/sucursal">
               <Icon type="shop" />
               <span>Sucursales</span>
             </NavLink>
