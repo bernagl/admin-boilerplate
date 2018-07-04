@@ -22,7 +22,7 @@ export default class Sidebar extends Component {
         <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
           <Menu.Item key="1">
             <NavLink activeClassName="active" to="/asignar-credito">
-              <Icon type="pie-chart" />
+              <Icon type="credit-card" />
               <span>Asignar créditos</span>
             </NavLink>
           </Menu.Item>
@@ -34,31 +34,31 @@ export default class Sidebar extends Component {
           </Menu.Item> */}
           <Menu.Item key="3">
             <NavLink activeClassName="active" to="/model/sucursal">
-              <Icon type="pie-chart" />
+              <Icon type="shop" />
               <span>Sucursales</span>
             </NavLink>
           </Menu.Item>
           <Menu.Item key="4">
             <NavLink activeClassName="active" to="/pago">
-              <Icon type="pie-chart" />
+              <Icon type="wallet" />
               <span>Pagos</span>
             </NavLink>
           </Menu.Item>
           <Menu.Item key="5">
             <NavLink activeClassName="active" to="/instructor">
-              <Icon type="pie-chart" />
+              <Icon type="usergroup-add" />
               <span>Instructores</span>
             </NavLink>
           </Menu.Item>
           <Menu.Item key="6">
             <NavLink activeClassName="active" to="/salon">
-              <Icon type="pie-chart" />
+              <Icon type="home" />
               <span>Salones</span>
             </NavLink>
           </Menu.Item>
           <Menu.Item key="7">
             <NavLink activeClassName="active" to="/usuario">
-              <Icon type="pie-chart" />
+              <Icon type="user" />
               <span>Usuarios</span>
             </NavLink>
           </Menu.Item>
@@ -66,7 +66,7 @@ export default class Sidebar extends Component {
             key="clases"
             title={
               <span>
-                <Icon type="user" />
+                <Icon type="schedule" />
                 <span>Clases</span>
               </span>
             }

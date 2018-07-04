@@ -12,3 +12,22 @@
 .fw {
   width: 100%;
 }
+
+.fade {
+  animation: fade;
+  animation-duration: 1s;
+}
+
+.fadeIn {
+  animation: fade;
+  animation-duration: .8s;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

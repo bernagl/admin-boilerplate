@@ -9,7 +9,7 @@ import {
 } from 'antd'
 import moment from 'moment'
 import MultipleDatePicker from 'react-multiple-datepicker'
-import Datatable from '../components/Datatable'
+import AnimationWrapper from '../components/AnimationWrapper'
 import Form from '../components/Form2'
 import Input from '../components/Input'
 import { getDocumentsByModel } from '../actions/firebase_actions'
@@ -109,89 +109,91 @@ export default class Horario extends Component {
       instructores
     } = this.state
     return (
-      <Form ref={this.formRef} submit={this.submit}>
-        <div className="row">
-          <div className="col-4">
-            <Item label="Clases" layout="vertical">
-              <Select
-                placeholder="Selecciona una clase"
-                notFoundContent="Ninguna clase encontrada"
-                onChange={clase => this.setState({ clase })}
-                tokenSeparators={[',']}
-              >
-                {clases.map(({ nombre, id }, key) => (
-                  <Option key={key}>{nombre}</Option>
-                ))}
-              </Select>
-            </Item>
-            <Input type="hidden" name="clase" value={clase} />
-          </div>
-          <div className="col-4">
-            <Item label="Gimnasio" layout="vertical">
-              <Select
-                placeholder="Selecciona una gimnasio"
-                notFoundContent="Ningun gimnasio encontrado"
-                onChange={gimnasio => this.setState({ gimnasio })}
-                tokenSeparators={[',']}
-              >
-                {gimnasios.map(({ nombre, id }, key) => (
-                  <Option key={key}>{nombre}</Option>
-                ))}
-              </Select>
-            </Item>
-            <Input type="hidden" name="gimnasio" value={gimnasio} />
-          </div>
-          <div className="col-4">
-            <Item label="Profesor" layout="vertical">
-              <Select
-                placeholder="Selecciona un instructor"
-                notFoundContent="Ningun instructor encontrado"
-                onChange={instructor => this.setState({ instructor })}
-                tokenSeparators={[',']}
-              >
-                {instructores.map(({ nombre, id }, key) => (
-                  <Option key={key}>{nombre}</Option>
-                ))}
-              </Select>
-            </Item>
-            <Input type="hidden" name="instructor" value={instructor} />
-          </div>
-          <div className="col-3">
-            <MultipleDatePicker
-              onSubmit={fechas => this.setValue('fechas', fechas)}
-            />
-          </div>
-          <div className="col-3">
-            <Item label="Hora inicio" layout="vertical">
-              <TimePicker
-                onChange={inicio => this.setValue('inicio', inicio)}
-                defaultOpenValue={moment('00:00:00', 'HH:mm:ss')}
+      <AnimationWrapper>
+        <Form ref={this.formRef} submit={this.submit}>
+          <div className="row">
+            <div className="col-4">
+              <Item label="Clases" layout="vertical">
+                <Select
+                  placeholder="Selecciona una clase"
+                  notFoundContent="Ninguna clase encontrada"
+                  onChange={clase => this.setState({ clase })}
+                  tokenSeparators={[',']}
+                >
+                  {clases.map(({ nombre, id }, key) => (
+                    <Option key={key}>{nombre}</Option>
+                  ))}
+                </Select>
+              </Item>
+              <Input type="hidden" name="clase" value={clase} />
+            </div>
+            <div className="col-4">
+              <Item label="Gimnasio" layout="vertical">
+                <Select
+                  placeholder="Selecciona una gimnasio"
+                  notFoundContent="Ningun gimnasio encontrado"
+                  onChange={gimnasio => this.setState({ gimnasio })}
+                  tokenSeparators={[',']}
+                >
+                  {gimnasios.map(({ nombre, id }, key) => (
+                    <Option key={key}>{nombre}</Option>
+                  ))}
+                </Select>
+              </Item>
+              <Input type="hidden" name="gimnasio" value={gimnasio} />
+            </div>
+            <div className="col-4">
+              <Item label="Profesor" layout="vertical">
+                <Select
+                  placeholder="Selecciona un instructor"
+                  notFoundContent="Ningun instructor encontrado"
+                  onChange={instructor => this.setState({ instructor })}
+                  tokenSeparators={[',']}
+                >
+                  {instructores.map(({ nombre, id }, key) => (
+                    <Option key={key}>{nombre}</Option>
+                  ))}
+                </Select>
+              </Item>
+              <Input type="hidden" name="instructor" value={instructor} />
+            </div>
+            <div className="col-3">
+              <MultipleDatePicker
+                onSubmit={fechas => this.setValue('fechas', fechas)}
               />
-            </Item>
+            </div>
+            <div className="col-3">
+              <Item label="Hora inicio" layout="vertical">
+                <TimePicker
+                  onChange={inicio => this.setValue('inicio', inicio)}
+                  defaultOpenValue={moment('00:00:00', 'HH:mm:ss')}
+                />
+              </Item>
+            </div>
+            <div className="col-3">
+              <Item label="Hora fin" layout="vertical">
+                <TimePicker
+                  onChange={fin => this.setValue('fin', fin)}
+                  defaultOpenValue={moment('00:00:00', 'HH:mm:ss')}
+                />
+              </Item>
+            </div>
+            <div className="col-3">
+              <Item label="Cupo" layout="vertical">
+                <InputNumber
+                  min={1}
+                  max={100}
+                  defaultValue={10}
+                  onChange={cupo => this.setValue('cupo', cupo)}
+                />
+              </Item>
+            </div>
           </div>
-          <div className="col-3">
-            <Item label="Hora fin" layout="vertical">
-              <TimePicker
-                onChange={fin => this.setValue('fin', fin)}
-                defaultOpenValue={moment('00:00:00', 'HH:mm:ss')}
-              />
-            </Item>
-          </div>
-          <div className="col-3">
-            <Item label="Cupo" layout="vertical">
-              <InputNumber
-                min={1}
-                max={100}
-                defaultValue={10}
-                onChange={cupo => this.setValue('cupo', cupo)}
-              />
-            </Item>
-          </div>
-        </div>
-        <Button type="primary" onClick={() => this.formRef.current.submit()}>
-          Submit
-        </Button>
-      </Form>
+          <Button type="primary" onClick={() => this.formRef.current.submit()}>
+            Submit
+          </Button>
+        </Form>
+      </AnimationWrapper>
     )
   }
 }

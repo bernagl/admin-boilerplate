@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { AutoComplete, Button, Form as F, message, InputNumber } from 'antd'
-import Select from '../components/Select'
+import AnimationWrapper from '../components/AnimationWrapper'
 import { getDocumentsByModel } from '../actions/firebase_actions'
 import { asignarCreditos } from '../actions/credito_actions'
 const { Item } = F
@@ -53,34 +53,36 @@ export default class Horario extends Component {
   render() {
     const { creditos, data, usuario, usuarios } = this.state
     return (
-      <div className="row">
-        <div className="col-6">
-          <Item label="Usuario" layout="vertical">
-            <AutoComplete
-              dataSource={data}
-              placeholder="Seleccionar usuario"
-              onSearch={this.handleSearch}
-              className="fw"
-              onSelect={usuario => this.setValue('usuario', usuario)}
-            />
-          </Item>
+      <AnimationWrapper>
+        <div className="row">
+          <div className="col-6">
+            <Item label="Usuario" layout="vertical">
+              <AutoComplete
+                dataSource={data}
+                placeholder="Seleccionar usuario"
+                onSearch={this.handleSearch}
+                className="fw"
+                onSelect={usuario => this.setValue('usuario', usuario)}
+              />
+            </Item>
+          </div>
+          <div className="col-3">
+            <Item label="Créditos" layout="vertical">
+              <InputNumber
+                min={1}
+                max={100}
+                defaultValue={1}
+                onChange={creditos => this.setValue('creditos', creditos)}
+              />
+            </Item>
+          </div>
+          <div className="col-12">
+            <Button type="primary" onClick={this.submit}>
+              Submit
+            </Button>
+          </div>
         </div>
-        <div className="col-3">
-          <Item label="Créditos" layout="vertical">
-            <InputNumber
-              min={1}
-              max={100}
-              defaultValue={1}
-              onChange={creditos => this.setValue('creditos', creditos)}
-            />
-          </Item>
-        </div>
-        <div className="col-12">
-          <Button type="primary" onClick={this.submit}>
-            Submit
-          </Button>
-        </div>
-      </div>
+      </AnimationWrapper>
     )
   }
 }
