@@ -1,15 +1,27 @@
 import React from 'react'
+import Datatable from '../components/Datatable'
 import Input from '../components/Input'
 
-export const PagoTable = showModal => {
+export default () => {
+  return (
+    <Datatable
+      model="pago"
+      title="Detalles del pago"
+      Inputs={Inputs}
+      Columns={Columns}
+      submit={submit}
+    />
+  )
+}
+
+const submit = model => {
+  return model
+}
+
+const Columns = showModal => {
   return [
-    {
-      label: 'Nombre',
-      key: 'nombre',
-      Render: element => <span>{element.nombre}</span>
-    },
-    { label: 'Correo', key: 'correo' },
-    { label: 'Contraseña', key: 'contrasena' },
+    { label: 'Créditos', key: 'creditos' },
+    { label: 'Fecha', key: 'fecha' },
     {
       label: 'Acciones',
       key: 'actions',
@@ -18,12 +30,11 @@ export const PagoTable = showModal => {
   ]
 }
 
-export const PagoForm = ({ id, nombre, correo, contrasena }) => {
+const Inputs = ({ creditos, fecha }) => {
   return (
     <React.Fragment>
-      <h5>
-        Id: <span>{id}</span>
-      </h5>
+      <p>Créditos: {creditos}</p>
+      <p>Fecha: {fecha}</p>
     </React.Fragment>
   )
 }

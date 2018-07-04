@@ -116,8 +116,8 @@ export const SucursalTable = showModal => {
   return [
     {
       label: 'Nombre',
-      key: 'nombre',
-      Render: element => <span>{element.nombre}</span>
+      key: 'nombre'
+      // Render: element => <span>{element.nombre}</span>
     },
     { label: 'Ciudad', key: 'ciudad' },
     { label: 'Colonia', key: 'colonia' },

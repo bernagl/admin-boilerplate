@@ -40,7 +40,7 @@ export default class Datatable extends Component {
 
   render() {
     const { data, selected, loading, modal } = this.state
-    const { Columns, Inputs, model, submit } = this.props
+    const { Columns, Inputs, model, submit, title } = this.props
     const action = selected ? updateDocument(model) : addDocument(model)
     return (
       <div>
@@ -52,7 +52,9 @@ export default class Datatable extends Component {
           emptyText={() => 'Esta tabla aún no tiene ningún dato'}
         />
         <Modal
-          title={selected ? `Editar ${model}` : `Agregar ${model}`}
+          title={
+            title ? title : selected ? `Editar ${model}` : `Agregar ${model}`
+          }
           visible={modal}
           onOk={this.handleOk}
           okText="Guardar"

@@ -2,7 +2,7 @@ import { SucursalForm } from './SucursalModel'
 // import { InstructorForm } from './InstructorModel'
 // import { UsuarioForm } from './UsuarioModel'
 // import { SalonForm } from './SalonModel'
-import { PagoForm } from './PagoModel'
+// import { PagoForm } from './PagoModel'
 
 import { SucursalTable } from './SucursalModel'
 // import { SalonTable } from './SalonModel'
@@ -10,7 +10,7 @@ import { SucursalTable } from './SucursalModel'
 export const Forms = {
   // instructor: InstructorForm,
   // usuario: UsuarioForm,
-  pago: PagoForm,
+  // pago: PagoForm,
   // salon: SalonForm,
   sucursal: SucursalForm
 }
