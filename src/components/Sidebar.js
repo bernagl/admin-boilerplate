@@ -9,7 +9,6 @@ class Sidebar extends Component {
   state = { collapsed: false }
   render() {
     const path = this.props.location.pathname.replace('/', '')
-    console.log(path)
     return (
       <Sider
         collapsible

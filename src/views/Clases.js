@@ -47,9 +47,17 @@ export default class Gimnasio extends Component {
     const gimnasios = await getDocumentsByModel('sucursal')
     const clases = await getDocumentsByModel('horario')
     console.log(clases)
+    const clasesOrdered = clases.sort(
+      (a, b) =>
+        moment(a.inicio) > moment(b.inicio)
+          ? 1
+          : moment(a.inicio) < moment(b.inicio)
+            ? -1
+            : 0
+    )
     this.setState(
       {
-        events: clases,
+        events: clasesOrdered,
         gimnasios
       },
       () => this.handleGym(0)
@@ -84,7 +92,7 @@ export default class Gimnasio extends Component {
         (e, j) =>
           moment(day).format('L') === e.fecha && e.gimnasio.id === id_gym
       )
-      return d[i] = { events: evts, name: d[i].name }
+      return (d[i] = { events: evts, name: d[i].name })
     })
 
     const month = moment(startOfWeek).format('MMMM')
@@ -133,7 +141,7 @@ export default class Gimnasio extends Component {
       clases,
       modal,
       gymSelected,
-      gimnasios,
+      gimnasios
     } = this.state
     // const { auth } = this.props
     return (

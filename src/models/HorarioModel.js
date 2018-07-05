@@ -155,9 +155,12 @@ export default class Horario extends Component {
               <Input type="hidden" name="instructor" value={instructor} />
             </div>
             <div className="col-3">
-              <MultipleDatePicker
-                onSubmit={fechas => this.setValue('fechas', fechas)}
-              />
+              <Item label="Fechas" layout="vertical">
+                <MultipleDatePicker
+                  onSubmit={fechas => this.setValue('fechas', fechas)}
+                  className="ant-input-number-input-wrap"
+                />
+              </Item>
             </div>
             <div className="col-3">
               <Item label="Hora inicio" layout="vertical">

@@ -41,7 +41,7 @@ export const Body = ({ clases, dates, dias, eventHandler }) => {
                 dias[i].events.map((ev, j) => {
                   const cola = ev.cupo <= ev.inscritos ? true : false
                   const status = ev.status ? ev.status : 0
-                  const future = moment(ev.fin) >= moment()
+                  const future = moment(ev.fin) >= moment() && moment(ev.inicio) > moment() ? true: false
                   return (
                     <div
                       className={`col-12 day-event fade ${status === 2 &&
