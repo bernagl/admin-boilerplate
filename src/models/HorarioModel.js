@@ -74,6 +74,8 @@ export default class Horario extends Component {
         fecha: moment(fecha).format('L'),
         gimnasio: gimnasios[gimnasio],
         clase: clases[clase],
+        inscritos_numero: 0,
+        costo: 1,
         instructor: instructores[instructor],
         inicio: moment(
           `${moment(fecha).format('YYYY-MM-DD')}T${moment(inicio).format(
@@ -86,8 +88,6 @@ export default class Horario extends Component {
       })
       return r
     })
-
-    console.log(count, fechas.length)
 
     message.success('Clases guardadas correctamente')
   }

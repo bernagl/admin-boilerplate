@@ -1,12 +1,11 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
 import AnimationWrapper from '../components/AnimationWrapper'
-import { Button, Icon, message, Radio } from 'antd'
-// import moment from 'moment-timezone'
+import { Button, Icon, Input, message, Modal, Radio } from 'antd'
 import moment from 'moment'
 import 'moment/locale/es'
 import { Body, Header } from '../components/Calendario'
 import { getDocumentsByModel } from '../actions/firebase_actions'
+import { cancelarClase } from '../actions/clase_actions'
 import '../assets/calendar.css'
 
 const RadioButton = Radio.Button
@@ -24,9 +23,12 @@ export default class Gimnasio extends Component {
     gimnasios: [],
     clasesCount: 0,
     week: 0,
+    event: null,
     events: [],
     creditos: 5,
     menosCreditos: 0,
+    motivo: null,
+    modal: false,
     clases: new Map(),
     month: moment().format('MMMM'),
     dates: [],
@@ -79,14 +81,10 @@ export default class Gimnasio extends Component {
     let d = [...dias]
     let id_gym = gimnasios[gymSelected].id
     days.map((day, i) => {
-      const evts = events.filter((e, j) => {
-        // console.log(
-        //   e.fecha,
-        //   moment(day).format('L'),
-        //   e.fecha
-        // )
-        return moment(day).format('L') === e.fecha && e.gimnasio.id === id_gym
-      })
+      const evts = events.filter(
+        (e, j) =>
+          moment(day).format('L') === e.fecha && e.gimnasio.id === id_gym
+      )
       d[i] = { events: evts, name: d[i].name }
     })
 
@@ -99,25 +97,44 @@ export default class Gimnasio extends Component {
     })
   }
 
-  eventHandler = (event, cola) => {
-    console.log(event, cola)
+  cancelarClase = async () => {
+    const { event, motivo } = this.state
+    if (!motivo) {
+      message.error(
+        'Debes de ingresar un motivo para poder notificarle a los usuarios'
+      )
+      return
+    }
+    const response = await cancelarClase({ clase: event, motivo })
+    if (response === 202) {
+      message.success(
+        'La clase se ha cancelado y los usuarios han sido notificados'
+      )
+      const clases = await getDocumentsByModel('horario')
+      this.setState({ clases, events: clases, modal: false }, () =>
+        this.daysHandler()
+      )
+    } else {
+      message.error('Ocurrió un error, por favor intentalo de nuevo')
+    }
+  }
+  cancel = () => {
+    this.setState({ modal: false })
   }
 
-  setCheckout = () => {
-    const { clases, creditos } = this.state
-    clases.size === 0
-      ? message.error('Para proceder al pago debes agregar al menos una clase')
-      : (this.props.setCheckout({ clases, creditos }),
-        this.props.history.push('/checkout'))
+  eventHandler = (event, cola) => {
+    this.setState({ modal: true, event })
   }
 
   render() {
     const {
+      event,
       dates,
       clasesCount,
       creditos,
       dias,
       clases,
+      modal,
       gymSelected,
       gimnasios,
       menosCreditos
@@ -172,6 +189,40 @@ export default class Gimnasio extends Component {
             </div>
           </div>
         </div>
+        {event && (
+          <Modal
+            title="Detalle de la clase"
+            visible={modal}
+            onCancel={this.cancel}
+            onOk={this.cancelarClase}
+            cancelText="Regresar"
+            okText="Cancelar clase"
+          >
+            <div className="row">
+              <div className="col-12">
+                <span>Clase: {event.clase.nombre}</span>
+              </div>
+              <div className="col-12">
+                <span>Fecha: {event.fecha}</span>
+              </div>
+              <div className="col-12">
+                <span>Instructor: {event.instructor.nombre}</span>
+              </div>
+              <div className="col-12">
+                <span>
+                  De: {moment(event.inicio).format('LT')} a{' '}
+                  {moment(event.fin).format('LT')}
+                </span>
+              </div>
+              <div className="col-12 mt-3">
+                <Input.TextArea
+                  placeholder="Motivo de cancelamiento"
+                  onChange={motivo => this.setState({ motivo })}
+                />
+              </div>
+            </div>
+          </Modal>
+        )}
         {/* </div> */}
       </AnimationWrapper>
     )

@@ -31,3 +31,8 @@
     opacity: 1;
   }
 }
+
+.cancelada {
+  background-color: #b71540;
+  color: white;
+}

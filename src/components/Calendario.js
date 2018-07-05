@@ -39,35 +39,20 @@ export const Body = ({ clases, dates, dias, eventHandler }) => {
             <div className="row">
               {dias[i].events.length > 0 ? (
                 dias[i].events.map((ev, j) => {
-                  let active = null
-                  let clase = false
-                  if (clases.has(ev.id)) {
-                    clase = clases.get(ev.id)
-                    active =
-                      clase.status === 0
-                        ? 1
-                        : clase.status === 2
-                          ? null
-                          : clase.status === 1
-                            ? 0
-                            : null
-                  }
                   const cola = ev.cupo <= ev.inscritos ? true : false
+                  const status = ev.status ? ev.status : 0
                   const future = moment(ev.fin) >= moment()
                   return (
                     <div
-                      className={`col-12 day-event fade ${
-                        active === 1
-                          ? 'active-reservada'
-                          : active === 0
-                            ? 'active'
-                            : ''
-                      } ${!future && 'disabled'}
+                      className={`col-12 day-event fade ${status === 2 &&
+                        'cancelada'} ${!future && 'disabled'}
                       ${cola && 'full'}`}
                       onClick={() =>
-                        future
-                          ? eventHandler(ev, cola)
-                          : message.info('Esta clase ya se venció')
+                        status === 2
+                          ? message.info('Esta clase fue cancelada')
+                          : future
+                            ? eventHandler(ev, cola)
+                            : message.info('Esta clase ya se venció')
                       }
                       key={j}
                     >
@@ -77,15 +62,18 @@ export const Body = ({ clases, dates, dias, eventHandler }) => {
                       <span>
                         {moment(ev.inicio).format('LT')} -
                         {moment(ev.fin).format('LT')}
-                      </span><br/>
-                      <span>Cupo: {ev.cupo}</span><br/>
-                      <span>Inscritos: {ev.inscritos ? ev.inscritos : 0}</span><br/>
+                      </span>
+                      <br />
+                      <span>Cupo: {ev.cupo}</span>
+                      <br />
+                      <span>Inscritos: {ev.inscritos_numero ? ev.inscritos_numero : 0}</span>
+                      <br />
                       {ev.salon && (
                         <React.Fragment>
                           <br />
                           <span>Salón: {ev.salon}</span>
                           <br />
-                          {clase && <span>{clase.status}</span>}
+                          {/* {clase && <span>{clase.status}</span>} */}
                         </React.Fragment>
                       )}
                     </div>
