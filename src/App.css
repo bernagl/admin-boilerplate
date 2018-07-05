@@ -7,6 +7,28 @@
   border-right: 1px solid #e8e8e8;
 }
 
+.ant-menu,
+.logo,
+.ant-layout-sider-children {
+  background: #242a33 !important;
+}
+
+.ant-layout-sider-trigger {
+  background: #22262d !important;
+}
+
+.ant-layout-header {
+  background: rgb(115, 89, 243) !important;
+}
+
+.ant-layout-header * {
+  color: white;
+}
+
+.logo img {
+  width: 100%;
+}
+
 /* Helpers */
 
 .fw {

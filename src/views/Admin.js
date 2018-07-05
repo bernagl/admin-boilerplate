@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { Router } from '../router'
-import { Breadcrumb, Layout } from 'antd'
+import { Layout } from 'antd'
 import Sidebar from '../components/Sidebar'
 const { Content, Footer, Header } = Layout
 
@@ -16,10 +16,6 @@ class Admin extends Component {
             <h1 className="admin-title">{this.props.schema.title}</h1>
           </Header>
           <Content style={{ margin: '0 16px' }}>
-            <Breadcrumb style={{ margin: '16px 0' }}>
-              <Breadcrumb.Item>User</Breadcrumb.Item>
-              <Breadcrumb.Item>Bill</Breadcrumb.Item>
-            </Breadcrumb>
             <div style={{ padding: 24, background: '#fff' }}>
               <Router />
             </div>

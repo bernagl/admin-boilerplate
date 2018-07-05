@@ -18,7 +18,13 @@ export default class Sidebar extends Component {
           }))
         }
       >
-        <div className="logo" />
+        <div className="logo p-4">
+          <img
+            src=""
+            alt=""
+            src="http://impulse-fitnessstudio.com/wp-content/uploads/2016/12/logo-impulsfit.png"
+          />
+        </div>
         <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
           <Menu.Item key="0">
             <NavLink activeClassName="active" to="/clases">
