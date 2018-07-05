@@ -5,7 +5,7 @@ export const cancelarClase = ({ clase, motivo }) => {
   return ref
     .once('value')
     .then(snapshot => {
-      const clase = snapshot.val()
+      // const clase = snapshot.val()
       return ref
         .update({ status: 2 })
         .then(r => 202)

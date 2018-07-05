@@ -45,7 +45,6 @@ const Columns = showModal => {
 }
 
 const Inputs = ({ gimnasios, context }) => ({ nombre, sucursal }) => {
-  let s = sucursal
   return (
     <React.Fragment>
       <Input

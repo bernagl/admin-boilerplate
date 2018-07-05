@@ -22,7 +22,6 @@ class Sidebar extends Component {
       >
         <div className="logo p-4">
           <img
-            src=""
             alt=""
             src="http://impulse-fitnessstudio.com/wp-content/uploads/2016/12/logo-impulsfit.png"
           />

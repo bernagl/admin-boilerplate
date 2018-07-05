@@ -68,7 +68,7 @@ export default class Horario extends Component {
       return
     }
 
-    const count = fechas.map(async (fecha, key) => {
+    fechas.map(async (fecha, key) => {
       const r = await createHorario({
         cupo,
         fecha: moment(fecha).format('L'),

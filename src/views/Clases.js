@@ -57,7 +57,6 @@ export default class Gimnasio extends Component {
   }
 
   handleGym = i => {
-    const { gimnasios } = this.state
     this.setState({ gymSelected: i }, () => this.daysHandler())
   }
 
@@ -85,7 +84,7 @@ export default class Gimnasio extends Component {
         (e, j) =>
           moment(day).format('L') === e.fecha && e.gimnasio.id === id_gym
       )
-      d[i] = { events: evts, name: d[i].name }
+      return d[i] = { events: evts, name: d[i].name }
     })
 
     const month = moment(startOfWeek).format('MMMM')
@@ -130,14 +129,11 @@ export default class Gimnasio extends Component {
     const {
       event,
       dates,
-      clasesCount,
-      creditos,
       dias,
       clases,
       modal,
       gymSelected,
       gimnasios,
-      menosCreditos
     } = this.state
     // const { auth } = this.props
     return (
