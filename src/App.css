@@ -17,6 +17,10 @@
   background: #22262d !important;
 }
 
+.ant-menu-item < .ant-menu-item-selected {
+  background-color: red;
+}
+
 .ant-layout-header {
   background: rgb(115, 89, 243) !important;
 }

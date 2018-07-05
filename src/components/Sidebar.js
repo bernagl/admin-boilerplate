@@ -1,13 +1,15 @@
 import React, { Component } from 'react'
 import { Layout, Menu, Icon } from 'antd'
-import { NavLink } from 'react-router-dom'
+import { NavLink, withRouter } from 'react-router-dom'
 
 const { SubMenu } = Menu
 const { Sider } = Layout
 
-export default class Sidebar extends Component {
+class Sidebar extends Component {
   state = { collapsed: false }
   render() {
+    const path = this.props.location.pathname.replace('/', '')
+    console.log(path)
     return (
       <Sider
         collapsible
@@ -25,14 +27,14 @@ export default class Sidebar extends Component {
             src="http://impulse-fitnessstudio.com/wp-content/uploads/2016/12/logo-impulsfit.png"
           />
         </div>
-        <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
-          <Menu.Item key="0">
-            <NavLink activeClassName="active" to="/clases">
+        <Menu theme="dark" defaultSelectedKeys={[path]} mode="inline">
+          <Menu.Item key="calendario">
+            <NavLink activeClassName="active" to="/calendario">
               <Icon type="calendar" />
               <span>Calendario</span>
             </NavLink>
           </Menu.Item>
-          <Menu.Item key="1">
+          <Menu.Item key="asignar-credito">
             <NavLink activeClassName="active" to="/asignar-credito">
               <Icon type="credit-card" />
               <span>Asignar créditos</span>
@@ -44,31 +46,31 @@ export default class Sidebar extends Component {
               <span>Clases</span>
             </NavLink>
           </Menu.Item> */}
-          <Menu.Item key="3">
+          <Menu.Item key="sucursal">
             <NavLink activeClassName="active" to="/sucursal">
               <Icon type="shop" />
               <span>Sucursales</span>
             </NavLink>
           </Menu.Item>
-          <Menu.Item key="4">
+          <Menu.Item key="pago">
             <NavLink activeClassName="active" to="/pago">
               <Icon type="wallet" />
               <span>Pagos</span>
             </NavLink>
           </Menu.Item>
-          <Menu.Item key="5">
+          <Menu.Item key="instructor">
             <NavLink activeClassName="active" to="/instructor">
               <Icon type="usergroup-add" />
               <span>Instructores</span>
             </NavLink>
           </Menu.Item>
-          <Menu.Item key="6">
+          <Menu.Item key="salon">
             <NavLink activeClassName="active" to="/salon">
               <Icon type="home" />
               <span>Salones</span>
             </NavLink>
           </Menu.Item>
-          <Menu.Item key="7">
+          <Menu.Item key="usuario">
             <NavLink activeClassName="active" to="/usuario">
               <Icon type="user" />
               <span>Usuarios</span>
@@ -83,12 +85,12 @@ export default class Sidebar extends Component {
               </span>
             }
           >
-            <Menu.Item key="8">
+            <Menu.Item key="clase">
               <NavLink activeClassName="active" to="/clase">
                 Lista de clases
               </NavLink>
             </Menu.Item>
-            <Menu.Item key="9">
+            <Menu.Item key="horario">
               <NavLink activeClassName="active" to="/horario">
                 Asignar horario
               </NavLink>
@@ -117,3 +119,5 @@ export default class Sidebar extends Component {
     )
   }
 }
+
+export default withRouter(Sidebar)

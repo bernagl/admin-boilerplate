@@ -15,7 +15,7 @@ export const Router = () => {
   return (
     <Switch>
       {/* <Route path="/" component={Admin} exact /> */}
-      <Route path="/clases" component={Clases} />
+      <Route path="/calendario" component={Clases} />
       <Route path="/test" component={Test} />
       <Route path="/usuario" component={Usuario} />
       <Route path="/clase" component={Clase} />
