@@ -68,3 +68,8 @@
   font-size: 18px;
   color: #1890ff;
 }
+
+.dt-toggle-status-btn {
+  color: #1890ff;
+  cursor: pointer;
+}

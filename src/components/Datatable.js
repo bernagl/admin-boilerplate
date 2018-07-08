@@ -13,7 +13,14 @@ export default class Datatable extends Component {
   constructor(props) {
     super(props)
     this.formRef = React.createRef()
-    this.state = { loading: false, selected: null, modal: false, data: [] }
+    this.state = {
+      loading: false,
+      selected: null,
+      modal: false,
+      data: [],
+      dataSource: [],
+      hideDisabled: false
+    }
   }
 
   componentDidMount() {
@@ -23,7 +30,7 @@ export default class Datatable extends Component {
   setDataToState = async model => {
     // this.setState({ data: [] })
     const data = await getDocumentsByModel(this.props.model)
-    this.setState({ data })
+    this.setState({ data, dataSource: data })
   }
 
   showModal = selected => {
@@ -38,8 +45,19 @@ export default class Datatable extends Component {
     this.setState({ loading: true }, () => this.formRef.current.submit())
   }
 
+  toggleDisabled = () => {
+    this.setState(({ dataSource, hideDisabled }) => {
+      if (!hideDisabled) {
+        const d = dataSource.filter(row => row.status === 1)
+        return { data: d, hideDisabled: !hideDisabled }
+      } else {
+        return { data: dataSource, hideDisabled: !hideDisabled }
+      }
+    })
+  }
+
   render() {
-    const { data, selected, loading, modal } = this.state
+    const { data, hideDisabled, loading, modal, selected } = this.state
     const { Columns, Inputs, model, submit, title } = this.props
     const action = selected ? updateDocument(model) : addDocument(model)
     return (
@@ -52,6 +70,9 @@ export default class Datatable extends Component {
           >
             Agregar
           </Button>
+          <span onClick={this.toggleDisabled} className="dt-toggle-status-btn">
+            {hideDisabled ? 'Mostrar deshabilitados' : 'Ocultar deshabilitados'}
+          </span>
         </div>
         <div className="col-12">
           <Table
