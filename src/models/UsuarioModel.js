@@ -1,5 +1,6 @@
 import React from 'react'
 import Datatable from '../components/Datatable'
+import DatatableActions from '../components/DatatableActions'
 import Input from '../components/Input'
 
 export default () => {
@@ -28,7 +29,13 @@ const Columns = showModal => {
     {
       label: 'Acciones',
       key: 'actions',
-      Render: selected => <span onClick={() => showModal(selected)}>View</span>
+      Render: selected => (
+        <DatatableActions
+          model="usuario"
+          selected={selected}
+          showModal={showModal}
+        />
+      )
     }
   ]
 }

@@ -1,5 +1,6 @@
 import React from 'react'
 import Datatable from '../components/Datatable'
+import DatatableActions from '../components/DatatableActions'
 import Input from '../components/Input'
 
 export default () => {
@@ -17,7 +18,7 @@ const submit = model => {
   return model
 }
 
-const Columns = showModal => {
+const Columns = (showModal, setDataToState) => {
   return [
     {
       label: 'Nombre',
@@ -30,7 +31,14 @@ const Columns = showModal => {
     {
       label: 'Acciones',
       key: 'actions',
-      Render: selected => <span onClick={() => showModal(selected)}>View</span>
+      Render: selected => (
+        <DatatableActions
+          model="instructor"
+          selected={selected}
+          showModal={showModal}
+          setDataToState={setDataToState}
+        />
+      )
     }
   ]
 }

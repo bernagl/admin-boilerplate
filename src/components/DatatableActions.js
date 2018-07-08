@@ -20,21 +20,19 @@ export default ({ model, selected, showModal, setDataToState }) => {
   )
 
   return (
-    <div className="row">
-      <div className="col-">
+    <div>
+      {setDataToState && (
         <Dropdown overlay={menu}>
           <a className="ant-dropdown-link" href="#">
             {selected.status === 1 ? 'Activo' : 'Inactivo'} <Icon type="down" />
           </a>
         </Dropdown>
-      </div>
-      <div className="col-6">
-        <Icon
-          type="edit"
-          onClick={() => showModal(selected)}
-          className="dt-edit-button"
-        />
-      </div>
+      )}
+      <Icon
+        type="edit"
+        onClick={() => showModal(selected)}
+        className="dt-edit-button"
+      />
     </div>
   )
 }

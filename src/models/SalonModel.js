@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Datatable from '../components/Datatable'
+import DatatableActions from '../components/DatatableActions'
 import Input from '../components/Input'
 import Select from '../components/Select'
 import { getDocumentsByModel } from '../actions/firebase_actions'
@@ -29,7 +30,7 @@ export default class SalonModel extends Component {
   }
 }
 
-const Columns = showModal => {
+const Columns = (showModal, setDataToState) => {
   return [
     {
       label: 'Nombre',
@@ -39,7 +40,14 @@ const Columns = showModal => {
     {
       label: 'Acciones',
       key: 'actions',
-      Render: selected => <span onClick={() => showModal(selected)}>View</span>
+      Render: selected => (
+        <DatatableActions
+          model="salon"
+          selected={selected}
+          showModal={showModal}
+          setDataToState={setDataToState}
+        />
+      )
     }
   ]
 }
