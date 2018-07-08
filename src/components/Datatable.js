@@ -55,7 +55,7 @@ export default class Datatable extends Component {
         </div>
         <div className="col-12">
           <Table
-            columns={Columns(this.showModal)}
+            columns={Columns(this.showModal, this.setDataToState)}
             data={data}
             emptyText={() => 'Esta tabla aún no tiene ningún dato'}
             footer={false}

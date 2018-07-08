@@ -27,12 +27,13 @@ export const getDocument = collection => id => {
 export const addDocument = collection => document => {
   return db
     .ref(collection)
-    .push(document)
+    .push({ status: 1, ...document })
     .then(r => 202)
     .catch(e => 404)
 }
 
 export const updateDocument = collection => data => {
+  console.log(collection, data)
   return db
     .ref(collection)
     .child(data.id)

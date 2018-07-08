@@ -62,3 +62,9 @@
   background-color: #b71540;
   color: white;
 }
+
+/* Datatable */
+.dt-edit-button {
+  font-size: 18px;
+  color: #1890ff;
+}
