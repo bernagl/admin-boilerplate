@@ -89,7 +89,7 @@ export default class Datatable extends Component {
           <br />
           {download && (
             <CSVLink data={exportData}>
-              Export <Icon type="file-excel" />
+              Exportar <Icon type="file-excel" />
             </CSVLink>
           )}
         </div>

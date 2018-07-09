@@ -46,7 +46,6 @@ export default class Gimnasio extends Component {
   async componentDidMount() {
     const gimnasios = await getDocumentsByModel('sucursal')
     const clases = await getDocumentsByModel('horario')
-    console.log(clases)
     const clasesOrdered = clases.sort(
       (a, b) =>
         moment(a.inicio) > moment(b.inicio)

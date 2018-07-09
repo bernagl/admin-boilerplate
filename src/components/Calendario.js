@@ -65,11 +65,10 @@ export const Body = ({ clases, dates, dias, eventHandler }) => {
                       <span>Cupo: {ev.cupo}</span>
                       <br />
                       <span>Inscritos: {ev.inscritos_numero ? ev.inscritos_numero : 0}</span>
-                      <br />
                       {ev.salon && (
                         <React.Fragment>
                           <br />
-                          <span>Salón: {ev.salon}</span>
+                          <span>Salón: {ev.salon.nombre}</span>
                           <br />
                           {/* {clase && <span>{clase.status}</span>} */}
                         </React.Fragment>

@@ -21,6 +21,10 @@
   background-color: red;
 }
 
+.ant-row.ant-form-item {
+  margin-bottom: 5px;
+}
+
 .ant-layout-header {
   background: rgb(115, 89, 243) !important;
 }
