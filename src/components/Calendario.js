@@ -3,7 +3,6 @@ import moment from 'moment'
 import { message } from 'antd'
 
 export const Header = ({ dates, dias }) => {
-  console.log(dates)
   return (
     <div className="week">
       <div className="week-header hidden-sm show-lg">
@@ -22,7 +21,6 @@ export const Header = ({ dates, dias }) => {
 }
 
 export const Body = ({ clases, dates, dias, eventHandler }) => {
-  console.log('dias', dias)
   return (
     <div className="week week-events">
       {dates.map((e, i) => (

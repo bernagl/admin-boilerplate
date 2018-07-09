@@ -7,7 +7,9 @@ export default () => {
       model="pago"
       title="Detalles del pago"
       Inputs={Inputs}
+      hideDisabled={false}
       Columns={Columns}
+      download={true}
       submit={submit}
     />
   )

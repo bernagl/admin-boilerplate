@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import { Button, Modal } from 'antd'
+import { Button, Icon, Modal } from 'antd'
+import { CSVLink } from 'react-csv'
 import Table from 'react-xtable'
 import Form from './Form2'
 import {
@@ -18,6 +19,7 @@ export default class Datatable extends Component {
       selected: null,
       modal: false,
       data: [],
+      exportData: [],
       dataSource: [],
       hideDisabled: false
     }
@@ -56,9 +58,20 @@ export default class Datatable extends Component {
     })
   }
 
+  setExportData = exportData => {
+    this.setState({ exportData })
+  }
+
   render() {
-    const { data, hideDisabled, loading, modal, selected } = this.state
-    const { Columns, Inputs, model, submit, title } = this.props
+    const {
+      data,
+      exportData,
+      hideDisabled,
+      loading,
+      modal,
+      selected
+    } = this.state
+    const { Columns, download, Inputs, model, submit, title } = this.props
     const action = selected ? updateDocument(model) : addDocument(model)
     return (
       <div className="row">
@@ -73,16 +86,23 @@ export default class Datatable extends Component {
           <span onClick={this.toggleDisabled} className="dt-toggle-status-btn">
             {hideDisabled ? 'Mostrar deshabilitados' : 'Ocultar deshabilitados'}
           </span>
+          <br />
+          {download && (
+            <CSVLink data={exportData}>
+              Export <Icon type="file-excel" />
+            </CSVLink>
+          )}
         </div>
         <div className="col-12">
           <Table
+            callback={this.setExportData}
             columns={Columns(this.showModal, this.setDataToState)}
             data={data}
             emptyText={() => 'Esta tabla aún no tiene ningún dato'}
             footer={false}
-            header={false}
+            header={true}
             pagination={50}
-            search={false}
+            search={true}
             searchPlaceholder="Buscar"
           />
           <Modal

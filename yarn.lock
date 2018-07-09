@@ -6437,6 +6437,10 @@ react-bootstrap-typeahead@^2.4.0:
     react-overlays "^0.8.1"
     warning "^3.0.0"
 
+react-csv@^1.0.14:
+  version "1.0.14"
+  resolved "https://registry.yarnpkg.com/react-csv/-/react-csv-1.0.14.tgz#7c9e444fc4c3ca1e1cf73a81129b1ec032838a71"
+
 react-dev-utils@^5.0.1:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/react-dev-utils/-/react-dev-utils-5.0.1.tgz#1f396e161fe44b595db1b186a40067289bf06613"
@@ -6619,9 +6623,9 @@ react-transition-group@^2.2.0, react-transition-group@^2.2.1:
     prop-types "^15.6.2"
     react-lifecycles-compat "^3.0.4"
 
-react-xtable@^1.0.7:
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/react-xtable/-/react-xtable-1.0.7.tgz#4d93114ffea98b9143c177237690a4695a79eec9"
+react-xtable@^1.0.9:
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/react-xtable/-/react-xtable-1.0.9.tgz#f3094a66b70b0a65a48e0c8627369b9229068130"
 
 react@^16.4.1:
   version "16.4.1"
