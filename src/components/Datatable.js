@@ -71,7 +71,15 @@ export default class Datatable extends Component {
       modal,
       selected
     } = this.state
-    const { Columns, download, Inputs, model, submit, title } = this.props
+    const {
+      Columns,
+      download,
+      Inputs,
+      model,
+      showHideDisabled,
+      submit,
+      title
+    } = this.props
     const action = selected ? updateDocument(model) : addDocument(model)
     return (
       <div className="row">
@@ -83,9 +91,16 @@ export default class Datatable extends Component {
           >
             Agregar
           </Button>
-          <span onClick={this.toggleDisabled} className="dt-toggle-status-btn">
-            {hideDisabled ? 'Mostrar deshabilitados' : 'Ocultar deshabilitados'}
-          </span>
+          {!showHideDisabled && (
+            <span
+              onClick={this.toggleDisabled}
+              className="dt-toggle-status-btn"
+            >
+              {hideDisabled
+                ? 'Mostrar deshabilitados'
+                : 'Ocultar deshabilitados'}
+            </span>
+          )}
           <br />
           {download && (
             <CSVLink data={exportData}>
