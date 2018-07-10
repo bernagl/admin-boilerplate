@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import AnimationWrapper from '../components/AnimationWrapper'
-import { Button, Icon, Input, message, Modal, Radio } from 'antd'
+import { Button, Card, Icon, Input, message, Modal, Radio } from 'antd'
 import moment from 'moment'
 import 'moment/locale/es'
 import { Body, Header } from '../components/Calendario'
@@ -148,6 +148,28 @@ export default class Gimnasio extends Component {
         {/* <div className="row align-items-center"> */}
         <div className="col-12 my-4">
           <div className="row">
+            <div className="col-12">
+              <div className="row">
+                <div className="col-4">
+                  <Card title="Pagos">
+                    <p>Ganancia total: $5000 MXN</p>
+                    <p>Total pagos: 50</p>
+                  </Card>
+                </div>
+                <div className="col-4">
+                  <Card title="Usuarios">
+                    <p>Total: 500</p>
+                    <p>Activos: 150</p>
+                  </Card>
+                </div>
+                <div className="col-4">
+                  <Card title="Clases">
+                    <p>Clases este mes: 70</p>
+                    <p>Mes pasado: 55</p>
+                  </Card>
+                </div>
+              </div>
+            </div>
             <div className="col-12 container-shadow p-2 p-md-4">
               <div className="row">
                 <div className="col-12 center-text my-4 my-md-0">
