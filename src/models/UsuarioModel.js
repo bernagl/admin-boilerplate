@@ -59,6 +59,16 @@ const Inputs = ({ nombre, correo, contrasena }) => {
         validationError="Ingresa un email válido"
         required
       />
+      {!nombre && (
+        <Input
+          name="creditos"
+          label="Créditos"
+          value={10}
+          validations="isNumeric"
+          validationError="Ingresa una cantidad de créditos válida"
+          required
+        />
+      )}
       <Input
         name="contrasena"
         label="Contraseña"

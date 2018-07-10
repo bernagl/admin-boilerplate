@@ -148,7 +148,7 @@ export default class Gimnasio extends Component {
         {/* <div className="row align-items-center"> */}
         <div className="col-12 my-4">
           <div className="row">
-            <div className="col-12">
+            <div className="col-12 mb-5">
               <div className="row">
                 <div className="col-4">
                   <Card title="Pagos">
