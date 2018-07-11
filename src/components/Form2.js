@@ -62,7 +62,7 @@ export default class Form extends Component {
     const { children } = this.props
     return (
       <Formsy
-        onSubmit={this.submit}
+        // onSubmit={this.submit}
         onValidSubmit={this.submit}
         onValid={this.enableButton}
         onInvalid={this.disableButton}

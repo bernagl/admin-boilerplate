@@ -6623,9 +6623,9 @@ react-transition-group@^2.2.0, react-transition-group@^2.2.1:
     prop-types "^15.6.2"
     react-lifecycles-compat "^3.0.4"
 
-react-xtable@^1.0.9:
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/react-xtable/-/react-xtable-1.0.9.tgz#f3094a66b70b0a65a48e0c8627369b9229068130"
+react-xtable@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/react-xtable/-/react-xtable-1.1.0.tgz#276959c0efadab2b74e67f180545e5e0eae21673"
 
 react@^16.4.1:
   version "16.4.1"
