@@ -19,6 +19,7 @@ message.config({
 
 export default class Gimnasio extends Component {
   state = {
+    cancelClass: true,
     gymSelected: 0,
     gimnasios: [],
     clasesCount: 0,
@@ -104,7 +105,13 @@ export default class Gimnasio extends Component {
   }
 
   cancelarClase = async () => {
-    const { event, motivo } = this.state
+    const { event, motivo, cancelClass } = this.state
+    if (!cancelClass) {
+      message.error(
+        'Las clases solo se pueden cancelar 3 horas antes de su inicio'
+      )
+      return
+    }
     if (!motivo) {
       message.error(
         'Debes de ingresar un motivo para poder notificarle a los usuarios'
@@ -129,11 +136,14 @@ export default class Gimnasio extends Component {
   }
 
   eventHandler = (event, cola) => {
-    this.setState({ modal: true, event })
+    const difference = moment.duration(moment(event.inicio).diff(moment()))
+    const cancelClass = difference.asHours() > 3 ? true : false
+    this.setState({ modal: true, event, cancelClass })
   }
 
   render() {
     const {
+      cancelClass,
       event,
       dates,
       dias,
@@ -142,10 +152,8 @@ export default class Gimnasio extends Component {
       gymSelected,
       gimnasios
     } = this.state
-    // const { auth } = this.props
     return (
       <AnimationWrapper>
-        {/* <div className="row align-items-center"> */}
         <div className="col-12 my-4">
           <div className="row">
             <div className="col-12 mb-5">
@@ -174,15 +182,18 @@ export default class Gimnasio extends Component {
               <div className="row">
                 <div className="col-12 center-text my-4 my-md-0">
                   <RadioGroup defaultValue={gymSelected} size="large">
-                    {gimnasios.map((gym, i) => (
-                      <RadioButton
-                        value={gym.id}
-                        onClick={() => this.handleGym(i)}
-                        key={i}
-                      >
-                        {gym.nombre}
-                      </RadioButton>
-                    ))}
+                    {gimnasios.map(
+                      (gym, i) =>
+                        gym.status === 1 && (
+                          <RadioButton
+                            value={gym.id}
+                            onClick={() => this.handleGym(i)}
+                            key={i}
+                          >
+                            {gym.nombre}
+                          </RadioButton>
+                        )
+                    )}
                   </RadioGroup>
                 </div>
                 <div className="col-12">
@@ -240,15 +251,21 @@ export default class Gimnasio extends Component {
                 </span>
               </div>
               <div className="col-12 mt-3">
-                <Input.TextArea
-                  placeholder="Motivo de cancelamiento"
-                  onChange={motivo => this.setState({ motivo })}
-                />
+                {cancelClass ? (
+                  <Input.TextArea
+                    placeholder="Motivo de cancelamiento"
+                    onChange={motivo => this.setState({ motivo })}
+                  />
+                ) : (
+                  <span>
+                    Las clases solo se pueden cancelar 3 horas antes de su
+                    inicio
+                  </span>
+                )}
               </div>
             </div>
           </Modal>
         )}
-        {/* </div> */}
       </AnimationWrapper>
     )
   }

@@ -78,7 +78,7 @@ export default class Horario extends Component {
           </div>
           <div className="col-12">
             <Button type="primary" onClick={this.submit}>
-              Submit
+              Asignar créditos
             </Button>
           </div>
         </div>
