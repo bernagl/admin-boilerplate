@@ -56,6 +56,12 @@ class Sidebar extends Component {
               <span>Pagos</span>
             </NavLink>
           </Menu.Item>
+          <Menu.Item>
+            <NavLink activeClassName="active" to="/paquete">
+              <Icon type="appstore-o" />
+              <span>Paquetes</span>
+            </NavLink>
+          </Menu.Item>
           <Menu.Item key="instructor">
             <NavLink activeClassName="active" to="/instructor">
               <Icon type="usergroup-add" />
