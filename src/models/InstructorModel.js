@@ -2,6 +2,7 @@ import React from 'react'
 import Datatable from '../components/Datatable'
 import DatatableActions from '../components/DatatableActions'
 import Input from '../components/Input'
+import Uploader from '../components/Uploader'
 
 export default () => {
   return (
@@ -43,9 +44,10 @@ const Columns = (showModal, setDataToState) => {
   ]
 }
 
-const Inputs = ({ nombre, apellido, correo, telefono }) => {
+const Inputs = ({ imagen, nombre, apellido, correo, telefono }) => {
   return (
     <React.Fragment>
+      <Uploader model="instructor" url={imagen} />
       <Input
         name="nombre"
         label="Nombre"
