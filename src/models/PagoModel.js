@@ -1,11 +1,12 @@
 import React from 'react'
 import Datatable from '../components/Datatable'
 import DatatableActions from '../components/DatatableActions'
+import moment from 'moment'
 
 export default () => {
   return (
     <Datatable
-      model="compra"
+      model="pago"
       title="Detalles del pago"
       Inputs={Inputs}
       showHideDisabled={true}
@@ -22,11 +23,28 @@ const submit = model => {
 
 const Columns = showModal => {
   return [
-    { label: 'Usuario', key: 'nombre' },
+    // { label: 'Usuario', key: 'nombre' },
     { label: 'Créditos', key: 'creditos' },
-    { label: 'Paquete', key: 'paquete' },
-    { label: 'Precio', key: 'precio' },
-    { label: 'Fecha', key: 'fecha' },
+    { label: 'Tipo', key: 'tipo', Render: ({ name }) => <span>{name}</span> },
+    {
+      label: 'Precio',
+      key: 'precio',
+      Render: ({ precio }) => <span>MXN${precio}</span>
+    },
+    {
+      label: 'Fecha',
+      key: 'fecha',
+      Render: ({ fecha }) => <span>{moment(fecha).format('LL')}</span>
+    },
+    {
+      label: 'Método',
+      key: 'metodo',
+      Render: ({ tarjeta, last4 }) => (
+        <span>
+          {tarjeta} - {last4}
+        </span>
+      )
+    },
     {
       label: 'Acciones',
       key: 'actions',

@@ -39,7 +39,10 @@ export const Body = ({ clases, dates, dias, eventHandler }) => {
                 dias[i].events.map((ev, j) => {
                   const cola = ev.cupo <= ev.inscritos ? true : false
                   const status = ev.status ? ev.status : 0
-                  const future = moment(ev.fin) >= moment() && moment(ev.inicio) > moment() ? true: false
+                  const future =
+                    moment(ev.fin) >= moment() && moment(ev.inicio) > moment()
+                      ? true
+                      : false
                   return (
                     <div
                       className={`col-12 day-event fade ${status === 2 &&
@@ -47,7 +50,8 @@ export const Body = ({ clases, dates, dias, eventHandler }) => {
                       ${cola && 'full'}`}
                       onClick={() =>
                         status === 2
-                          ? message.info('Esta clase fue cancelada')
+                          ? (message.info('Esta clase fue cancelada'),
+                            console.log(ev))
                           : future
                             ? eventHandler(ev, cola)
                             : message.info('Esta clase ya se venció')
@@ -64,7 +68,10 @@ export const Body = ({ clases, dates, dias, eventHandler }) => {
                       <br />
                       <span>Cupo: {ev.cupo}</span>
                       <br />
-                      <span>Inscritos: {ev.inscritos_numero ? ev.inscritos_numero : 0}</span>
+                      <span>
+                        Inscritos:{' '}
+                        {ev.inscritos_numero ? ev.inscritos_numero : 0}
+                      </span>
                       {ev.salon && (
                         <React.Fragment>
                           <br />
