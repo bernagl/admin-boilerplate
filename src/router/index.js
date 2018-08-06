@@ -11,6 +11,9 @@ import AsignarCredito from '../models/AsignarCredito'
 import Pago from '../models/PagoModel'
 import Paquete from '../models/PaqueteModel'
 import Sucursal from '../models/Sucursal'
+import Login from '../views/Login'
+import Recover from '../views/Recover'
+import Register from '../views/Register'
 
 export const Router = () => {
   return (
@@ -33,6 +36,14 @@ export const Router = () => {
     </Switch>
   )
 }
+
+export const RouterAuth = () => (
+  <Switch>
+    <Route path="/registro" component={Register} />
+    <Route path="/recover" component={Recover} />
+    <Route component={Login} />
+  </Switch>
+)
 
 const Ekk = () => {
   return (

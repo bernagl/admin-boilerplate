@@ -1,0 +1,17 @@
+#login {
+    height: 100vh;
+}
+
+#login .login-box {
+    border: 1px solid #e8e8e8;
+}
+
+#login .logo-container img {
+    width: 50%;
+}
+
+/* Helpers */
+
+.center-text {
+    text-align: center;
+}

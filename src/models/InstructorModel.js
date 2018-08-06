@@ -47,7 +47,7 @@ const Columns = (showModal, setDataToState) => {
 const Inputs = ({ imagen, nombre, apellido, correo, telefono }) => {
   return (
     <React.Fragment>
-      <Uploader model="instructor" url={imagen} />
+      {/* <Uploader model="instructor" url={imagen} /> */}
       <Input
         name="nombre"
         label="Nombre"

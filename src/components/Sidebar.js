@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { Layout, Menu, Icon } from 'antd'
 import { NavLink, withRouter } from 'react-router-dom'
+import { logout } from '../actions/firebase_auth'
+import logo from '../assets/ifs.png'
 
 const { SubMenu } = Menu
 const { Sider } = Layout
@@ -20,10 +22,7 @@ class Sidebar extends Component {
         }
       >
         <div className="logo p-4">
-          <img
-            alt=""
-            src="http://impulse-fitnessstudio.com/wp-content/uploads/2016/12/logo-impulsfit.png"
-          />
+          <img alt="" src={logo} />
         </div>
         <Menu theme="dark" defaultSelectedKeys={[path]} mode="inline">
           <Menu.Item key="calendario">
@@ -100,6 +99,10 @@ class Sidebar extends Component {
               </NavLink>
             </Menu.Item>
           </SubMenu>
+          <Menu.Item key="logout" onClick={logout}>
+            <Icon type="logout" />
+            <span>Salir</span>
+          </Menu.Item>
           {/* <SubMenu
             key="sub2"
             title={
