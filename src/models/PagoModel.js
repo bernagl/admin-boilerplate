@@ -1,29 +1,19 @@
 import React from 'react'
-import Datatable from '../components/Datatable'
-import DatatableActions from '../components/DatatableActions'
+import Table from 'react-xtable'
+import { DatePicker, Select } from 'antd'
+import { getDocumentsByModel } from '../actions/firebase_actions'
 import moment from 'moment'
 
-export default () => {
-  return (
-    <Datatable
-      model="pago"
-      title="Detalles del pago"
-      Inputs={Inputs}
-      showHideDisabled={true}
-      Columns={Columns}
-      download={true}
-      submit={submit}
-    />
-  )
-}
+const { RangePicker } = DatePicker
 
-const submit = model => {
-  return model
-}
+export default class Pago extends React.Component {
+  state = { data: [], dataCopy: [] }
+  async componentDidMount() {
+    const data = await getDocumentsByModel('pago')
+    this.setState({ data, dataCopy: data, type: null, dates: null })
+  }
 
-const Columns = showModal => {
-  return [
-    // { label: 'Usuario', key: 'nombre' },
+  columns = [
     { label: 'Créditos', key: 'creditos' },
     { label: 'Tipo', key: 'tipo', Render: ({ name }) => <span>{name}</span> },
     {
@@ -44,12 +34,109 @@ const Columns = showModal => {
           {tarjeta} - {last4}
         </span>
       )
+    }
+  ]
+
+  handleSelect = type => {
+    const { dataCopy, dates } = this.state
+    let data = []
+    if (type === 'todos') data = dataCopy
+    else data = dataCopy.filter(pago => pago.type === type)
+    if (dates) this.handleDates(data)(dates)
+    else this.setState({ data, type })
+  }
+
+  handleDates = d => dates => {
+    console.log(dates)
+    // const { data: d, dataCopy, type } = this.state
+    // const dFilter = type ? (type === 'todos' ? dataCopy : d) : dataCopy
+    const data = d.filter(pago => {
+      const f = moment(pago.fecha)
+      let status = false
+      status = f >= dates[0] ? true : false
+      status = f <= dates[1] ? (status ? true : false) : false
+
+      return status
+    })
+
+    this.setState({ data, dates })
+  }
+
+  render() {
+    const { data, dataCopy, type } = this.state
+    return (
+      <div className="row">
+        <div className="col-6">
+          <Select
+            onChange={this.handleSelect}
+            placeholder="Filtar por..."
+            className="fw"
+          >
+            <Select.Option key="todos">Todos</Select.Option>
+            <Select.Option key="subscripcion">Suscripción</Select.Option>
+            <Select.Option key="paquete">Créditos</Select.Option>
+          </Select>
+        </div>
+        <div className="col-6">
+          <RangePicker
+            placeholder={['Desde', 'Hasta']}
+            format="DD-MM-YYYY"
+            onChange={dates => this.handleDates(type ? data : dataCopy)(dates)}
+          />
+        </div>
+        <div className="col-12 my-3">
+          <Table
+            data={data}
+            columns={this.columns}
+            pagination={50}
+            searchPlaceholder="Buscar"
+            emptyText={() => 'Esta tabla aún no tiene ningún dato'}
+          />
+        </div>
+      </div>
+    )
+  }
+}
+
+// export default () => {
+//   return (
+//     // <Datatable
+//     //   model="pago"
+//     //   title="Detalles del pago"
+//     //   Inputs={Inputs}
+//     //   showHideDisabled={true}
+//     //   Columns={Columns}
+//     //   download={true}
+//     //   submit={submit}
+//     // />
+//   )
+// }
+
+// const submit = model => {
+//   return model
+// }
+
+const Columns = () => {
+  return [
+    { label: 'Créditos', key: 'creditos' },
+    { label: 'Tipo', key: 'tipo', Render: ({ name }) => <span>{name}</span> },
+    {
+      label: 'Precio',
+      key: 'precio',
+      Render: ({ precio }) => <span>MXN${precio}</span>
     },
     {
-      label: 'Acciones',
-      key: 'actions',
-      Render: selected => (
-        <DatatableActions showModal={showModal} selected={selected} />
+      label: 'Fecha',
+      key: 'fecha',
+      Render: ({ fecha }) => <span>{moment(fecha).format('LL')}</span>
+    },
+    {
+      label: 'Método',
+      key: 'metodo',
+      Render: ({ tarjeta, last4 }) => (
+        <span>
+          {tarjeta} - {last4}
+        </span>
       )
     }
   ]
@@ -58,22 +145,23 @@ const Columns = showModal => {
 const Inputs = ({
   nombre,
   correo,
-  telefono,
   paquete,
   precio,
-  creditos,
-  fecha
+  fecha,
+  name,
+  tarjeta,
+  last4
 }) => {
   return (
     <React.Fragment>
       <p>Usuario: {nombre}</p>
       <p>Correo: {correo}</p>
-      <p>Teléfono: {telefono}</p>
-      <p>Paquete: {paquete}</p>
-      <p>Precio: {precio}</p>
-      <p>Fecha: {fecha}</p>
-      <p>Créditos: {creditos}</p>
-      <p>Fecha: {fecha}</p>
+      <p>Paquete: {name}</p>
+      <p>Precio: MXN${precio}</p>
+      <p>Fecha: {moment(fecha).format('LL')}</p>
+      <p>
+        Método: {tarjeta} - {last4}
+      </p>
     </React.Fragment>
   )
 }
