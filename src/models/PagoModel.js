@@ -1,7 +1,8 @@
 import React from 'react'
 import Table from 'react-xtable'
-import { DatePicker, Select } from 'antd'
+import { DatePicker, Icon, Select } from 'antd'
 import { getDocumentsByModel } from '../actions/firebase_actions'
+import { CSVLink } from 'react-csv'
 import moment from 'moment'
 
 const { RangePicker } = DatePicker
@@ -47,7 +48,6 @@ export default class Pago extends React.Component {
   }
 
   handleDates = d => dates => {
-    console.log(dates)
     // const { data: d, dataCopy, type } = this.state
     // const dFilter = type ? (type === 'todos' ? dataCopy : d) : dataCopy
     const data = d.filter(pago => {
@@ -66,6 +66,11 @@ export default class Pago extends React.Component {
     const { data, dataCopy, type } = this.state
     return (
       <div className="row">
+        <div className="col-12 my-3">
+          <CSVLink data={data}>
+            Exportar <Icon type="file-excel" />
+          </CSVLink>
+        </div>
         <div className="col-6">
           <Select
             onChange={this.handleSelect}

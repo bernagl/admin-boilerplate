@@ -1,4 +1,6 @@
 import { auth, db } from './firebase-config'
+import { message } from 'antd'
+import moment from 'moment'
 
 export const login = async (correo, contrasena) => {
   try {
@@ -26,8 +28,75 @@ export const register = async (correo, contrasena, nombre) => {
       .ref(`admin/${user.uid}`)
       .set({ correo, nombre, admin: true })
       .then(result => 202)
-  } catch (e) {
-    return 500
+  } catch ({ code }) {
+    var errorText = ''
+    switch (code) {
+      case 'auth/invalid-email':
+        errorText = 'El correo es inválido'
+        break
+      case 'auth/weak-password':
+        errorText = 'La contraseña es muy sencilla, intenta con otra'
+        break
+      case 'auth/email-already-in-use':
+        errorText = 'El correo ya está en uso, prueba con otro'
+        break
+      default:
+        errorText = 'Ocurrió un error, por favor vuelve a intentarlo'
+        break
+    }
+    message.error(errorText)
+    return 404
+  }
+}
+
+export const registerUser = async ({
+  correo,
+  contrasena,
+  nombre,
+  telefono,
+  edad
+}) => {
+  try {
+    const { user } = await auth.createUserWithEmailAndPassword(
+      correo,
+      contrasena
+    )
+    return db
+      .ref(`usuario/${user.uid}`)
+      .set({
+        correo,
+        edad,
+        nombre,
+        status: 1,
+        telefono,
+        clases: {},
+        creditos: { '-LJ5w7hFuZxYmwiprTIY': 1 },
+        created_at: moment().format(),
+        tarjetas: {},
+        invitado: true
+      })
+      .then(result => {
+        message.success('Usuario agregado correctamente')
+        return 202
+      })
+  } catch ({ code }) {
+    var errorText = ''
+    switch (code) {
+      case 'auth/invalid-email':
+        errorText = 'El correo es inválido'
+        break
+      case 'auth/weak-password':
+        errorText = 'La contraseña es muy sencilla, intenta con otra'
+        break
+      case 'auth/email-already-in-use':
+        errorText = 'El correo ya está en uso, prueba con otro'
+        break
+      default:
+        errorText = 'Ocurrió un error, por favor vuelve a intentarlo'
+        break
+    }
+    message.error(errorText)
+    return 404
   }
 }
 

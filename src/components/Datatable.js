@@ -39,6 +39,10 @@ export default class Datatable extends Component {
     this.setState({ selected, modal: true })
   }
 
+  setLoadingToFalse = () => {
+    this.setState({ loading: false })
+  }
+
   closeModal = () => {
     this.setState({ selected: {}, modal: false, loading: false })
   }
@@ -139,6 +143,7 @@ export default class Datatable extends Component {
               submit={submit}
               model={model}
               closeModal={this.closeModal}
+              setLoadingToFalse={this.setLoadingToFalse}
               ref={this.formRef}
             >
               {Inputs(selected ? selected : {})}

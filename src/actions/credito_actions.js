@@ -1,6 +1,46 @@
 import { db } from './firebase-config'
 import moment from 'moment'
 
+export const asignarInscripcion = ({ uid, correo, tipo }) => {
+  console.log(uid, correo, tipo)
+  return db
+    .ref('usuario')
+    .child(uid)
+    .once('value')
+    .then(snap => {
+      const usuario = snap.val()
+      return db
+        .ref('pago')
+        .push({
+          name: 'Suscripción',
+          uid,
+          fecha: moment().format(),
+          nombre: usuario.nombre,
+          precio: 600,
+          metodo: 'Admin',
+          last4: tipo,
+          tarjeta: 'Sucursal',
+          correo
+        })
+        .then(pid => {
+          const id = pid.key
+          let { pagos } = usuario
+          if (typeof pagos === 'undefined') pagos = {}
+          return db
+            .ref('usuario')
+            .child(uid)
+            .update({
+              pagos: { ...pagos, [id]: true },
+              last_class: moment().format(),
+              status: 1
+            })
+            .then(r => 202)
+            .catch(e => 404)
+        })
+        .catch(e => 404)
+    })
+}
+
 export const asignarCreditos = ({
   creditos: compra,
   id,
@@ -8,11 +48,12 @@ export const asignarCreditos = ({
   sid,
   paquete,
   sucursal,
+  correo,
   tipo
 }) => {
   const ref = db.ref(model).child(id)
   return ref.once('value').then(r => {
-    let { creditos, pagos } = r.val()
+    let { creditos, pagos, ilimitado } = r.val()
     let screditos = 0
     if (typeof creditos !== 'undefined')
       screditos = creditos[sid] + +paquete.creditos
@@ -27,35 +68,47 @@ export const asignarCreditos = ({
         fecha: moment().format(),
         metodo: 'Admin',
         last4: tipo,
-        tarjeta: 'Sucursal'
+        tarjeta: 'Sucursal',
+        correo
       })
       .then(r => {
         const pid = r.key
-        return ref
-          .update({
-            creditos: { ...creditos, [sid]: screditos },
-            pagos: { ...pagos, [pid]: true }
-          })
-          .then(r => 202)
-          .catch(e => 404)
+        pagos = { ...pagos, [pid]: true }
+        if (paquete.meses) {
+          let inicio, fin
+          const now = moment()
+          if (typeof ilimitado === 'undefined') {
+            inicio = now.format()
+            fin = now.add(paquete.meses, 'M')
+          } else {
+            if (moment(fin).format() < now.format()) {
+              inicio = now.format()
+              fin = now.add(paquete.meses, 'M')
+            } else {
+              inicio = ilimitado['inicio']
+              fin = moment(ilimitado.fin).add(paquete.meses, 'M')
+            }
+          }
+          return ref
+            .update({
+              ilimitado: {
+                inicio: moment(inicio).format(),
+                fin: moment(fin).format()
+              },
+              pagos
+            })
+            .then(r => 202)
+            .catch(e => 404)
+        } else {
+          return ref
+            .update({
+              creditos: { ...creditos, [sid]: screditos },
+              pagos
+            })
+            .then(r => 202)
+            .catch(e => 404)
+        }
       })
       .catch(e => 404)
-    // return ref
-    //   .child('clases')
-    //   .push({ fecha: new Date(), compra, metodo: 'Admin' })
-    //   .then(r => {
-    // return db
-    //   .ref('pago')
-    //   .push({
-    //     ...paquete,
-    //     id,
-    //     fecha: moment().format(),
-    //     metodo: 'Admin',
-    //     tarjeta: 'Efectivo'
-    //   })
-    //   .then(r => 202)
-    //   .catch(e => 404)
-    // })
-    // .catch(e => 404)
   })
 }

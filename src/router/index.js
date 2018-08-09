@@ -8,6 +8,7 @@ import Instructor from '../models/InstructorModel'
 import Horario from '../models/HorarioModel'
 import SalonModel from '../models/SalonModel'
 import AsignarCredito from '../models/AsignarCredito'
+import AsignarInscripcion from '../models/AsignarInscripcion'
 import Pago from '../models/PagoModel'
 import Paquete from '../models/PaqueteModel'
 import Sucursal from '../models/Sucursal'
@@ -25,6 +26,7 @@ export const Router = () => {
       <Route path="/clase" component={Clase} />
       <Route path="/pago" component={Pago} />
       <Route path="/asignar-credito" component={AsignarCredito} />
+      <Route path="/asignar-inscripcion" component={AsignarInscripcion} />
       <Route path="/instructor" component={Instructor} />
       <Route path="/horario" component={Horario} />
       <Route path="/sucursal" component={Sucursal} />

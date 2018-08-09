@@ -31,7 +31,13 @@ export default class Form extends Component {
 
   submit = async () => {
     const schema = this.formsyRef.current.getModel()
-    const { closeModal, selected, submit, updateData } = this.props
+    const {
+      closeModal,
+      setLoadingToFalse,
+      selected,
+      submit,
+      updateData
+    } = this.props
 
     const { canSubmit } = this.state
     if (!canSubmit) {
@@ -41,6 +47,7 @@ export default class Form extends Component {
     const customModel = await submit(schema)
 
     if (!customModel) {
+      if (setLoadingToFalse) setLoadingToFalse()
       return
     }
 

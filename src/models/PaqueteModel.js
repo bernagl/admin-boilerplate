@@ -58,7 +58,8 @@ const Inputs = ({ gimnasios, context }) => ({
   nombre,
   creditos,
   precio,
-  sucursal
+  sucursal,
+  meses
 }) => {
   return (
     <React.Fragment>
@@ -76,7 +77,13 @@ const Inputs = ({ gimnasios, context }) => ({
         value={creditos}
         validations="isNumeric"
         validationError="Ingresa un credito válido"
-        required
+      />
+      <Input
+        name="meses"
+        label="Paquete ilímitado (meses)"
+        value={meses}
+        validations={{ isNumeric: true, maxLength: 2 }}
+        validationError="Ingresa un valor válido"
       />
       <Input
         name="precio"

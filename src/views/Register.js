@@ -14,6 +14,7 @@ export default class Registro extends Component {
   submit = async ({ correo, contrasena, nombre }) => {
     const response = await register(correo, contrasena, nombre)
     if (response === 202) message.success('Bienvenido')
+    console.log(response)
     return response
   }
 

@@ -2,6 +2,7 @@ import React from 'react'
 import Datatable from '../components/Datatable'
 import DatatableActions from '../components/DatatableActions'
 import Input from '../components/Input'
+import { registerUser } from '../actions/firebase_auth'
 
 export default () => {
   return (
@@ -14,8 +15,10 @@ export default () => {
   )
 }
 
-const submit = model => {
-  return { direccion: { calle: model.nombre, cp: model.contrasena }, ...model }
+const submit = async model => {
+  // return { direccion: { calle: model.nombre, cp: model.contrasena }, ...model }
+  const response = registerUser(model)
+  if(response) return false
 }
 
 const Columns = showModal => {
@@ -40,7 +43,7 @@ const Columns = showModal => {
   ]
 }
 
-const Inputs = ({ nombre, correo, contrasena }) => {
+const Inputs = ({ nombre, edad, telefono, correo, contrasena }) => {
   return (
     <React.Fragment>
       <Input
@@ -52,6 +55,14 @@ const Inputs = ({ nombre, correo, contrasena }) => {
         required
       />
       <Input
+        name="edad"
+        label="Edad"
+        value={edad}
+        validations={{ maxLength: 2, isNumeric: true }}
+        validationError="Ingresa una edad válida"
+        required
+      />
+      <Input
         name="correo"
         label="Correo"
         value={correo}
@@ -59,16 +70,14 @@ const Inputs = ({ nombre, correo, contrasena }) => {
         validationError="Ingresa un email válido"
         required
       />
-      {!nombre && (
-        <Input
-          name="creditos"
-          label="Créditos"
-          value={10}
-          validations="isNumeric"
-          validationError="Ingresa una cantidad de créditos válida"
-          required
-        />
-      )}
+      <Input
+        name="telefono"
+        label="Teléfono"
+        value={telefono}
+        validations={{ maxLength: 10, isNumeric: true }}
+        validationError="Ingresa un número de teléfono válido"
+        required
+      />
       <Input
         name="contrasena"
         label="Contraseña"

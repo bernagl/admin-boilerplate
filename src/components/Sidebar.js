@@ -37,6 +37,12 @@ class Sidebar extends Component {
               <span>Asignar créditos</span>
             </NavLink>
           </Menu.Item>
+          <Menu.Item key="asignar-inscripcion">
+            <NavLink activeClassName="active" to="/asignar-inscripcion">
+              <Icon type="credit-card" />
+              <span>Asignar inscripción</span>
+            </NavLink>
+          </Menu.Item>
           {/* <Menu.Item key="2">
             <NavLink activeClassName="active" to="/model/clase">
               <Icon type="desktop" />

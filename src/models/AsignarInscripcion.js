@@ -1,31 +1,19 @@
 import React, { Component } from 'react'
-import {
-  AutoComplete,
-  Button,
-  Form as F,
-  message,
-  InputNumber,
-  Select
-} from 'antd'
+import { AutoComplete, Button, message, Select } from 'antd'
 import AnimationWrapper from '../components/AnimationWrapper'
 import { getDocumentsByModel } from '../actions/firebase_actions'
-import { asignarCreditos } from '../actions/credito_actions'
-const { Item } = F
+import { asignarInscripcion } from '../actions/credito_actions'
 
 export default class Horario extends Component {
   constructor(props) {
     super(props)
     this.formRef = React.createRef()
     this.state = {
-      creditos: 1,
       data: [],
       dataSource: [],
       usuarios: [],
       usuario: null,
-      sucursales: [],
-      paquetes: [],
-      sselected: 0,
-      pselected: 0
+      tipo: null
     }
   }
 
@@ -38,43 +26,16 @@ export default class Horario extends Component {
   }
 
   submit = async () => {
-    const {
-      creditos,
-      usuario: correo,
-      dataSource,
-      sselected,
-      paquetes,
-      pselected,
-      sucursales,
-      tipo
-    } = this.state
+    const { dataSource, usuario: correo, tipo } = this.state
     if (!correo) {
       message.error('El usuario es requerido')
       return
     }
-
     const { id } = dataSource.find(usuario => usuario.correo === correo)
-    const paquete = paquetes.find(p => p.id === pselected)
-    const sucursal = sucursales.find(suc => suc.id === sselected)
-    const response = await asignarCreditos({
-      model: 'usuario',
-      creditos,
-      id,
-      correo,
-      tipo,
-      sid: sselected,
-      sucursal,
-      paquete
-    })
-    let text
-    if (paquete.meses) {
-      text = `El paquete ilímitado de ${
-        paquete.meses
-      } mes(es) se agregó correctamente`
-    } else {
-      text = `Se asignaron ${paquete.creditos} creditos correctamente`
-    }
-    message.success(text)
+    const response = await asignarInscripcion({ uid: id, correo, tipo })
+    response === 202
+      ? message.success('Inscripción actualizada')
+      : message.error('Ocurrió un error, por favor vuelve a intentarlo')
   }
 
   setValue = (key, value) => {
@@ -91,15 +52,13 @@ export default class Horario extends Component {
   }
 
   render() {
-    const { data, paquetes: p, sucursales, sselected } = this.state
-    const paquetes = p.filter(paq => sselected === paq.sucursal)
-    console.log(this.state)
+    const { data } = this.state
     return (
       <AnimationWrapper>
         <div className="row">
           <div className="col-6">
             <div className="row">
-              <div className="col-6 my-3">
+              <div className="col-6">
                 {/* <Item label="Usuario" layout="vertical"> */}
                 <AutoComplete
                   dataSource={data}
@@ -109,38 +68,6 @@ export default class Horario extends Component {
                   onSelect={usuario => this.setValue('usuario', usuario)}
                 />
                 {/* </Item> */}
-              </div>
-              {/* <div className="col-6">
-            <Item label="Créditos" layout="vertical">
-              <InputNumber
-                min={1}
-                max={100}
-                defaultValue={1}
-                onChange={creditos => this.setValue('creditos', creditos)}
-              />
-            </Item>
-          </div> */}
-              <div className="col-6 my-3">
-                <Select
-                  placeholder="Selecciona una sucursal"
-                  onChange={i => this.setState({ sselected: i })}
-                  className="fw"
-                >
-                  {sucursales.map((suc, i) => (
-                    <Select.Option key={suc.id}>{suc.nombre}</Select.Option>
-                  ))}
-                </Select>
-              </div>
-              <div className="col-6">
-                <Select
-                  placeholder="Selecciona un paquete"
-                  onChange={id => this.setState({ pselected: id })}
-                  className="fw"
-                >
-                  {paquetes.map((paq, i) => (
-                    <Select.Option key={paq.id}>{paq.nombre}</Select.Option>
-                  ))}
-                </Select>
               </div>
               <div className="col-6">
                 <Select
