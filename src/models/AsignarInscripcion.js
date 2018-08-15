@@ -75,13 +75,14 @@ export default class Horario extends Component {
                   onChange={tipo => this.setState({ tipo })}
                   className="fw"
                 >
-                  <Select.Option key="Terminal">Terminal</Select.Option>
+                  <Select.Option key="Deposito">Depósito</Select.Option>
                   <Select.Option key="Efectivo">Efectivo</Select.Option>
+                  <Select.Option key="Terminal">Terminal</Select.Option>
                 </Select>
               </div>
               <div className="col-6 my-3">
                 <Button type="primary" onClick={this.submit}>
-                  Asignar créditos
+                  Actualizar inscripción
                 </Button>
               </div>
             </div>
