@@ -1,5 +1,12 @@
 import { db } from './firebase-config'
 
+export const getCollectionLength = model => {
+  return db
+    .ref(model)
+    .once('value')
+    .then(snap => snap.numChildren())
+}
+
 export const getDocumentsByModel = model => {
   let data = []
   return db
@@ -33,7 +40,6 @@ export const addDocument = collection => document => {
 }
 
 export const updateDocument = collection => data => {
-  console.log(collection, data)
   return db
     .ref(collection)
     .child(data.id)

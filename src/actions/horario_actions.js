@@ -8,7 +8,6 @@ export const createHorario = horario => {
 }
 
 export const getSalones = gimnasio => {
-  console.log(gimnasio)
   const ref = db.ref('salon')
   return ref
     .orderByChild('sucursal')

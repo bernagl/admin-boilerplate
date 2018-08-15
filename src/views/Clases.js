@@ -1,15 +1,24 @@
 import React, { Component } from 'react'
 import AnimationWrapper from '../components/AnimationWrapper'
-import { Button, Card, Icon, Input, message, Modal, Radio } from 'antd'
+import { Button, Card, Icon, Input, message, Modal, Radio, Tabs } from 'antd'
 import moment from 'moment'
 import 'moment/locale/es'
 import { Body, Header } from '../components/Calendario'
-import { getDocumentsByModel } from '../actions/firebase_actions'
-import { cancelarClase } from '../actions/clase_actions'
+import {
+  getDocumentsByModel,
+  getCollectionLength
+} from '../actions/firebase_actions'
+import {
+  cancelarClase,
+  getUsuarios,
+  getGanancias
+} from '../actions/clase_actions'
+// import { sendMail } from '../actions/mail_actions'
 import '../assets/calendar.css'
 
 const RadioButton = Radio.Button
 const RadioGroup = Radio.Group
+const { TabPane } = Tabs
 moment.locale('es')
 // moment.tz.setDefault('America/Mexico_City')
 message.config({
@@ -33,6 +42,10 @@ export default class Gimnasio extends Component {
     clases: new Map(),
     month: moment().format('MMMM'),
     dates: [],
+    ganancia: 0,
+    totalUsuarios: 0,
+    totalPagos: 0,
+    totalClases: 0,
     dias: [
       { name: 'Lunes', events: [] },
       { name: 'Martes', events: [] },
@@ -47,6 +60,10 @@ export default class Gimnasio extends Component {
   async componentDidMount() {
     const gimnasios = await getDocumentsByModel('sucursal')
     const clases = await getDocumentsByModel('horario')
+    const totalUsuarios = await getCollectionLength('usuario')
+    const totalClases = await getCollectionLength('horario')
+    const totalPagos = await getCollectionLength('pago')
+    const ganancia = await getGanancias()
     const clasesOrdered = clases.sort(
       (a, b) =>
         moment(a.inicio) > moment(b.inicio)
@@ -58,7 +75,11 @@ export default class Gimnasio extends Component {
     this.setState(
       {
         events: clasesOrdered,
-        gimnasios
+        gimnasios,
+        ganancia,
+        totalUsuarios,
+        totalPagos,
+        totalClases
       },
       () => this.handleGym(0)
     )
@@ -132,13 +153,15 @@ export default class Gimnasio extends Component {
     }
   }
   cancel = () => {
-    this.setState({ modal: false })
+    this.setState({ modal: false, usuarios: [] })
   }
 
-  eventHandler = (event, cola) => {
+  eventHandler = async (event, cola) => {
     const difference = moment.duration(moment(event.inicio).diff(moment()))
     const cancelClass = difference.asHours() > 3 ? true : false
-    this.setState({ modal: true, event, cancelClass })
+    const usuarios = await getUsuarios(event.id)
+    this.setState({ modal: true, event, cancelClass, usuarios })
+    // sendMail()
   }
 
   render() {
@@ -149,8 +172,13 @@ export default class Gimnasio extends Component {
       dias,
       clases,
       modal,
+      ganancia,
+      totalPagos,
+      totalUsuarios,
+      totalClases,
       gymSelected,
-      gimnasios
+      gimnasios,
+      usuarios
     } = this.state
     return (
       <AnimationWrapper>
@@ -160,20 +188,21 @@ export default class Gimnasio extends Component {
               <div className="row">
                 <div className="col-4">
                   <Card title="Pagos">
-                    <p>Ganancia total: $5000 MXN</p>
-                    <p>Total pagos: 50</p>
+                    <p>Ganancia total: ${ganancia} MXN</p>
+                    <p>Total pagos: {totalPagos}</p>
                   </Card>
                 </div>
                 <div className="col-4">
                   <Card title="Usuarios">
-                    <p>Total: 500</p>
-                    <p>Activos: 150</p>
+                    <p>Total: {totalUsuarios}</p>
+                    {/* <p>Activos: 150</p> */}
                   </Card>
                 </div>
                 <div className="col-4">
                   <Card title="Clases">
-                    <p>Clases este mes: 70</p>
-                    <p>Mes pasado: 55</p>
+                    Total: {totalClases}
+                    {/* <p>Clases este mes: 70</p>
+                    <p>Mes pasado: 55</p> */}
                   </Card>
                 </div>
               </div>
@@ -234,36 +263,47 @@ export default class Gimnasio extends Component {
             cancelText="Regresar"
             okText="Cancelar clase"
           >
-            <div className="row">
-              <div className="col-12">
-                <span>Clase: {event.clase.nombre}</span>
-              </div>
-              <div className="col-12">
-                <span>Fecha: {event.fecha}</span>
-              </div>
-              <div className="col-12">
-                <span>Instructor: {event.instructor.nombre}</span>
-              </div>
-              <div className="col-12">
-                <span>
-                  De: {moment(event.inicio).format('LT')} a{' '}
-                  {moment(event.fin).format('LT')}
-                </span>
-              </div>
-              <div className="col-12 mt-3">
-                {cancelClass ? (
-                  <Input.TextArea
-                    placeholder="Motivo de cancelamiento"
-                    onChange={motivo => this.setState({ motivo })}
-                  />
+            <Tabs defaultActiveKey="1">
+              <TabPane tab="Cancelar clase" key="1">
+                <div className="row">
+                  <div className="col-12">
+                    <span>Clase: {event.clase.nombre}</span>
+                  </div>
+                  <div className="col-12">
+                    <span>Fecha: {event.fecha}</span>
+                  </div>
+                  <div className="col-12">
+                    <span>Instructor: {event.instructor.nombre}</span>
+                  </div>
+                  <div className="col-12">
+                    <span>
+                      De: {moment(event.inicio).format('LT')} a{' '}
+                      {moment(event.fin).format('LT')}
+                    </span>
+                  </div>
+                  <div className="col-12 mt-3">
+                    {cancelClass ? (
+                      <Input.TextArea
+                        placeholder="Motivo de cancelamiento"
+                        onChange={motivo => this.setState({ motivo })}
+                      />
+                    ) : (
+                      <span>
+                        Las clases solo se pueden cancelar 3 horas antes de su
+                        inicio
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </TabPane>
+              <TabPane tab="Usuarios inscritos" key="2">
+                {usuarios.length > 0 ? (
+                  usuarios.map(({ id, nombre }) => <div key={id}>{nombre}</div>)
                 ) : (
-                  <span>
-                    Las clases solo se pueden cancelar 3 horas antes de su
-                    inicio
-                  </span>
+                  <div>No hay usuarios inscritos</div>
                 )}
-              </div>
-            </div>
+              </TabPane>
+            </Tabs>
           </Modal>
         )}
       </AnimationWrapper>

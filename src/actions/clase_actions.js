@@ -13,3 +13,41 @@ export const cancelarClase = ({ clase, motivo }) => {
     })
     .catch(e => 404)
 }
+
+export const getUsuarios = id => {
+  return db
+    .ref('horario')
+    .child(id)
+    .once('value')
+    .then(async snap => {
+      let { inscritos } = snap.val()
+      const usuarios = []
+      if (typeof inscritos === 'undefined') inscritos = {}
+      const usuariosPromise = Object.keys(inscritos).map(uid => {
+        if (inscritos[uid]) {
+          return db
+            .ref('usuario')
+            .child(uid)
+            .once('value')
+            .then(usnap => ({ ...usnap.val(), id: usnap.key }))
+        }
+      })
+
+      const usuariosResolve = await Promise.all(usuariosPromise)
+      return usuariosResolve.filter(v => v && v)
+    })
+}
+
+export const getGanancias = () => {
+  return db
+    .ref('pago')
+    .once('value')
+    .then(snapshot => {
+      let total = 0
+      snapshot.forEach(pago => {
+        const { precio } = pago.val()
+        total += Number(precio)
+      })
+      return total
+    })
+}
