@@ -31,8 +31,8 @@ export default class Horario extends Component {
       message.error('El usuario es requerido')
       return
     }
-    const { id } = dataSource.find(usuario => usuario.correo === correo)
-    const response = await asignarInscripcion({ uid: id, correo, tipo })
+    const { id, nombre } = dataSource.find(usuario => usuario.correo === correo)
+    const response = await asignarInscripcion({ uid: id, correo, nombre, tipo })
     response === 202
       ? message.success('Inscripción actualizada')
       : message.error('Ocurrió un error, por favor vuelve a intentarlo')

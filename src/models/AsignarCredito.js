@@ -53,7 +53,7 @@ export default class Horario extends Component {
       return
     }
 
-    const { id } = dataSource.find(usuario => usuario.correo === correo)
+    const { id, nombre } = dataSource.find(usuario => usuario.correo === correo)
     const paquete = paquetes.find(p => p.id === pselected)
     const sucursal = sucursales.find(suc => suc.id === sselected)
     const response = await asignarCreditos({
@@ -64,7 +64,8 @@ export default class Horario extends Component {
       tipo,
       sid: sselected,
       sucursal,
-      paquete
+      paquete,
+      usuario: nombre
     })
     let text
     if (paquete.meses) {

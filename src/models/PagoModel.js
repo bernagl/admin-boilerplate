@@ -20,7 +20,16 @@ export default class Pago extends React.Component {
     {
       label: 'Precio',
       key: 'precio',
-      Render: ({ precio }) => <span>MXN${precio}</span>
+      Render: ({ precio }) => (
+        <span>
+          MXN$
+          {precio}
+        </span>
+      )
+    },
+    {
+      label: 'Usuario',
+      key: 'usuario'
     },
     {
       label: 'Fecha',
@@ -128,7 +137,12 @@ const Columns = () => {
     {
       label: 'Precio',
       key: 'precio',
-      Render: ({ precio }) => <span>MXN${precio}</span>
+      Render: ({ precio }) => (
+        <span>
+          MXN$
+          {precio}
+        </span>
+      )
     },
     {
       label: 'Fecha',
@@ -162,7 +176,10 @@ const Inputs = ({
       <p>Usuario: {nombre}</p>
       <p>Correo: {correo}</p>
       <p>Paquete: {name}</p>
-      <p>Precio: MXN${precio}</p>
+      <p>
+        Precio: MXN$
+        {precio}
+      </p>
       <p>Fecha: {moment(fecha).format('LL')}</p>
       <p>
         Método: {tarjeta} - {last4}

@@ -1,7 +1,7 @@
 import { db } from './firebase-config'
 import moment from 'moment'
 
-export const asignarInscripcion = ({ uid, correo, tipo }) => {
+export const asignarInscripcion = ({ uid, correo, nombre, tipo }) => {
   console.log(uid, correo, tipo)
   return db
     .ref('usuario')
@@ -20,7 +20,8 @@ export const asignarInscripcion = ({ uid, correo, tipo }) => {
           metodo: 'Admin',
           last4: tipo,
           tarjeta: 'Sucursal',
-          correo
+          correo,
+          usuario: nombre
         })
         .then(pid => {
           const id = pid.key
@@ -49,7 +50,8 @@ export const asignarCreditos = ({
   paquete,
   sucursal,
   correo,
-  tipo
+  tipo,
+  usuario
 }) => {
   const ref = db.ref(model).child(id)
   return ref.once('value').then(r => {
@@ -69,7 +71,8 @@ export const asignarCreditos = ({
         metodo: 'Admin',
         last4: tipo,
         tarjeta: 'Sucursal',
-        correo
+        correo,
+        usuario
       })
       .then(r => {
         const pid = r.key
