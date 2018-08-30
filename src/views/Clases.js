@@ -263,7 +263,7 @@ export default class Gimnasio extends Component {
             cancelText="Regresar"
             okText="Cancelar clase"
           >
-            <Tabs defaultActiveKey="1">
+            <Tabs defaultActiveKey="2">
               <TabPane tab="Cancelar clase" key="1">
                 <div className="row">
                   <div className="col-12">

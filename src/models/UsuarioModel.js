@@ -1,8 +1,10 @@
 import React from 'react'
 import Datatable from '../components/Datatable'
 import DatatableActions from '../components/DatatableActions'
+import { Tooltip } from 'antd'
 import Input from '../components/Input'
 import { registerUser } from '../actions/firebase_auth'
+import moment from 'moment'
 
 export default () => {
   return (
@@ -18,7 +20,7 @@ export default () => {
 const submit = async model => {
   // return { direccion: { calle: model.nombre, cp: model.contrasena }, ...model }
   const response = registerUser(model)
-  if(response) return false
+  if (response) return false
 }
 
 const Columns = showModal => {
@@ -29,6 +31,37 @@ const Columns = showModal => {
       Render: element => <span>{element.nombre}</span>
     },
     { label: 'Correo', key: 'correo' },
+    {
+      label: 'Créditos',
+      Render: ({ creditos, ilimitado }) => (
+        <span>
+          {ilimitado ? (
+            moment(ilimitado.fin).format() > moment().format() ? (
+              <Tooltip title="Tiene paquete ilímitado">
+                {creditos['-LJ5w7hFuZxYmwiprTIY']} •
+              </Tooltip>
+            ) : (
+              creditos['-LJ5w7hFuZxYmwiprTIY']
+            )
+          ) : (
+            creditos['-LJ5w7hFuZxYmwiprTIY']
+          )}
+        </span>
+      )
+      // <span>{creditos['-LJ5w7hFuZxYmwiprTIY']}</span>
+    },
+    {
+      label: 'Fecha de corte',
+      Render: ({ ilimitado }) => (
+        <span>
+          {ilimitado
+            ? moment(ilimitado.fin).format() > moment().format()
+              ? moment(ilimitado.fin).format('LL')
+              : 'Ya venció'
+            : 'No tiene mes(es) ilimitados'}
+        </span>
+      )
+    },
     {
       label: 'Acciones',
       key: 'actions',

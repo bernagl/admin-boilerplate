@@ -30,7 +30,7 @@ export default class Login extends Component {
         <div className="container">
           <div
             id="login"
-            className="row justify-content-center align-items-center center-text"
+            className="row justify-content-center align-items-center center-text p-2 p-md-0"
           >
             <div className="login-box col-12 col-md-6 col-lg-4 p-4">
               <div className="row">

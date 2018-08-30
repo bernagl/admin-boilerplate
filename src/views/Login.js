@@ -20,10 +20,10 @@ export default class Login extends Component {
 
   Links = () => (
     <React.Fragment>
-      <div className="col-12 col-md-4 col-lg-4 mt-4">
+      {/* <div className="col-12 col-md-4 col-lg-4 mt-4">
         <Link to="/registro">Registro</Link>
-      </div>
-      <div className="col-12 col-md-8 col-lg-8  mt-4">
+      </div> */}
+      <div className="col-12 mt-4">
         <Link to="/recover">Recuperar contraseña</Link>
       </div>
     </React.Fragment>

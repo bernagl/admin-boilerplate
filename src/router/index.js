@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link, Route, Switch } from 'react-router-dom'
+import { Link, Redirect, Route, Switch } from 'react-router-dom'
 // import Model from '../views/Model'
 import Usuario from '../models/UsuarioModel'
 import Clases from '../views/Clases'
@@ -19,7 +19,7 @@ import Register from '../views/Register'
 export const Router = () => {
   return (
     <Switch>
-      {/* <Route path="/" component={Admin} exact /> */}
+      <Route path="/" component={Clases} exact />
       <Route path="/calendario" component={Clases} />
       <Route path="/test" component={Test} />
       <Route path="/usuario" component={Usuario} />
@@ -41,19 +41,14 @@ export const Router = () => {
 
 export const RouterAuth = () => (
   <Switch>
-    <Route path="/registro" component={Register} />
+    {/* <Route path="/registro" component={Register} /> */}
     <Route path="/recover" component={Recover} />
     <Route component={Login} />
   </Switch>
 )
 
 const Ekk = () => {
-  return (
-    <div>
-      <Link to="/model/testeando">Hola</Link>
-      <h5>Error 404 :(</h5>
-    </div>
-  )
+  return <Redirect to="/" />
 }
 
 const Test = () => {

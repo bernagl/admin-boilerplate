@@ -33,7 +33,7 @@ export default class SalonModel extends Component {
 const Columns = (showModal, setDataToState) => {
   return [
     { label: 'Nombre', key: 'nombre' },
-    { label: 'Creditos', key: 'creditos' },
+    { label: 'Créditos', key: 'creditos' },
     {
       label: 'Precio',
       key: 'precio',
