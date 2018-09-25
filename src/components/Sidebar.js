@@ -21,7 +21,10 @@ class Sidebar extends Component {
           }))
         }
       >
-        <div className="logo p-4">
+        <div
+          className="logo p-4"
+          onClick={() => (window.location.href = 'https://impulsefitness.mx/')}
+        >
           <img alt="" src={logo} />
         </div>
         <Menu theme="dark" defaultSelectedKeys={[path]} mode="inline">
@@ -80,7 +83,7 @@ class Sidebar extends Component {
             </NavLink>
           </Menu.Item>
           <Menu.Item key="usuario">
-            <NavLink activeClassName="active" to="/usuario">
+            <NavLink activeClassName="active" to="/usr">
               <Icon type="user" />
               <span>Usuarios</span>
             </NavLink>

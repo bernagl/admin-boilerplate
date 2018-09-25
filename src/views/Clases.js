@@ -184,29 +184,30 @@ export default class Gimnasio extends Component {
       <AnimationWrapper>
         <div className="col-12 my-4">
           <div className="row">
-            <div className="col-12 mb-5">
+            {/* <div className="col-12 mb-5">
               <div className="row">
                 <div className="col-4">
                   <Card title="Pagos">
-                    <p>Ganancia total: ${ganancia} MXN</p>
+                    <p>
+                      Ganancia total: $
+                      {ganancia.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}{' '}
+                      MXN
+                    </p>
                     <p>Total pagos: {totalPagos}</p>
                   </Card>
                 </div>
                 <div className="col-4">
                   <Card title="Usuarios">
                     <p>Total: {totalUsuarios}</p>
-                    {/* <p>Activos: 150</p> */}
                   </Card>
                 </div>
                 <div className="col-4">
                   <Card title="Clases">
                     Total: {totalClases}
-                    {/* <p>Clases este mes: 70</p>
-                    <p>Mes pasado: 55</p> */}
                   </Card>
                 </div>
               </div>
-            </div>
+            </div> */}
             <div className="col-12 container-shadow p-2 p-md-4">
               <div className="row">
                 <div className="col-12 center-text my-4 my-md-0">
@@ -264,6 +265,13 @@ export default class Gimnasio extends Component {
             okText="Cancelar clase"
           >
             <Tabs defaultActiveKey="2">
+            <TabPane tab="Usuarios inscritos" key="2">
+                {usuarios.length > 0 ? (
+                  usuarios.map(({ id, nombre }) => <div key={id}>{nombre}</div>)
+                ) : (
+                  <div>No hay usuarios inscritos</div>
+                )}
+              </TabPane>
               <TabPane tab="Cancelar clase" key="1">
                 <div className="row">
                   <div className="col-12">
@@ -295,13 +303,6 @@ export default class Gimnasio extends Component {
                     )}
                   </div>
                 </div>
-              </TabPane>
-              <TabPane tab="Usuarios inscritos" key="2">
-                {usuarios.length > 0 ? (
-                  usuarios.map(({ id, nombre }) => <div key={id}>{nombre}</div>)
-                ) : (
-                  <div>No hay usuarios inscritos</div>
-                )}
               </TabPane>
             </Tabs>
           </Modal>

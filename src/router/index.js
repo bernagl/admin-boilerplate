@@ -15,6 +15,8 @@ import Sucursal from '../models/Sucursal'
 import Login from '../views/Login'
 import Recover from '../views/Recover'
 import Register from '../views/Register'
+import Usr from '../views/User'
+import UsrModel from '../models/UsrModel';
 
 export const Router = () => {
   return (
@@ -31,6 +33,8 @@ export const Router = () => {
       <Route path="/horario" component={Horario} />
       <Route path="/sucursal" component={Sucursal} />
       <Route path="/paquete" component={Paquete} />
+      <Route path="/usr" exact component={UsrModel} />
+      <Route path="/usr/:id" component={Usr} />
       {/* <Route path="/model/:id" component={Model} /> */}
       <Route path="/salon" component={SalonModel} />
       {/* <Route path="/sucursal/:id?" component={SucursalForm} /> */}
@@ -41,7 +45,7 @@ export const Router = () => {
 
 export const RouterAuth = () => (
   <Switch>
-    {/* <Route path="/registro" component={Register} /> */}
+    <Route path="/registro" component={Register} />
     <Route path="/recover" component={Recover} />
     <Route component={Login} />
   </Switch>

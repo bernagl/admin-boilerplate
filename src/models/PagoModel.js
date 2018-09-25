@@ -11,24 +11,26 @@ export default class Pago extends React.Component {
   state = { data: [], dataCopy: [] }
   async componentDidMount() {
     const data = await getDocumentsByModel('pago')
-    this.setState({ data, dataCopy: data, type: null, dates: null })
+    const dataOrdered = data.sort(
+      (a, b) =>
+        moment(a.fecha) < moment(b.fecha)
+          ? 1
+          : moment(a.fecha) > moment(b.fecha)
+            ? -1
+            : 0
+    )
+
+    this.setState({
+      data: dataOrdered,
+      dataCopy: dataOrdered,
+      type: null,
+      dates: null
+    })
   }
 
   columns = [
-    { label: 'Créditos', key: 'creditos' },
-    { label: 'Tipo', key: 'tipo', Render: ({ name }) => <span>{name}</span> },
     {
-      label: 'Precio',
-      key: 'precio',
-      Render: ({ precio }) => (
-        <span>
-          MXN$
-          {precio}
-        </span>
-      )
-    },
-    {
-      label: 'Usuario',
+      label: 'Nombre',
       key: 'usuario'
     },
     {
@@ -36,12 +38,23 @@ export default class Pago extends React.Component {
       key: 'fecha',
       Render: ({ fecha }) => <span>{moment(fecha).format('LL')}</span>
     },
+    { label: 'Paquete', key: 'tipo', Render: ({ name }) => <span>{name}</span> },
     {
       label: 'Método',
       key: 'metodo',
       Render: ({ tarjeta, last4 }) => (
         <span>
           {tarjeta} - {last4}
+        </span>
+      )
+    },
+    {
+      label: 'Precio',
+      key: 'precio',
+      Render: ({ precio }) => (
+        <span>
+          MXN$
+          {precio}
         </span>
       )
     }

@@ -13,6 +13,10 @@
   background: #242a33 !important;
 }
 
+.logo {
+  cursor: pointer;
+}
+
 .ant-layout-sider-trigger {
   background: #22262d !important;
 }
