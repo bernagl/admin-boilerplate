@@ -61,6 +61,7 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -80,4 +81,42 @@
 .dt-toggle-status-btn {
   color: #1890ff;
   cursor: pointer;
+}
+
+
+/* Form */
+.ant-form-item-label label:after {
+  content: '' !important;
+}
+
+.ant-row.ant-form-item {
+  margin-bottom: 5px !important;
+}
+
+.ant-form-item-control {
+  line-height: 0% !important;
+  position: unset;
+  zoom: 1;
+}
+
+.input-form-label {
+  position: relative;
+  top: 8px;
+  opacity: 1;
+  animation: fadein;
+  animation-duration: 1s;
+  z-index: 99;
+}
+
+.input-has-error {
+  color: red;
+}
+
+.input-has-feedback {
+  color: #1890ff;
+  cursor: pointer;
+}
+
+.ant-form-item-control.has-error {
+  margin-bottom: 18px;
 }

@@ -1,20 +1,36 @@
 import React from 'react'
 import Tabs from 'antd/lib/tabs'
-import Input from 'antd/lib/input'
-import InputNumber from 'antd/lib/input-number'
-import Form from 'antd/lib/form'
-import Datepicker from 'antd/lib/date-picker'
+// import Datepicker from 'antd/lib/date-picker'
 import Table from '../components/EraserTable'
-import { Popconfirm, Button, Popover, Tag } from 'antd'
+import { Popconfirm, Collapse, Button, Popover, Tag } from 'antd'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
 import Clases from '../views/Clases'
+import Form from '../Form/Form'
+import Input from '../Form/Input'
+import TextArea from '../Form/Textarea'
+import Datepicker from '../Form/Datepicker'
+import { getDocument, getDocumentsByModel } from '../actions/firebase_actions'
+import Select from 'antd/lib/select'
+import AntdForm from 'antd/lib/form'
 
-const { Item } = Form
+const { Option } = Select
+const { Item } = AntdForm
 
 const { TabPane } = Tabs
+const { Panel } = Collapse
 
 export default class extends React.Component {
+  state = { user: null, sucursales: [], activeSucursal: 0 }
+
+  async componentDidMount() {
+    const { id } = this.props.match.params
+    const sucursales = await getDocumentsByModel('sucursal')
+    const user = await getDocument('usuario')(id)
+    console.log(user)
+    this.setState({ user, sucursales })
+  }
+
   logsCol = () => [
     { label: 'Log', key: 'type' },
     { label: 'Fecha', Render: ({ date }) => moment(date).format('LL') },
@@ -104,40 +120,86 @@ export default class extends React.Component {
   ]
 
   render() {
-    return (
+    const { user, sucursales, activeSucursal } = this.state
+    const hasUnlimited = user ? (user.ilimitado ? true : false) : false
+    const unlimitedActive = user
+      ? moment() > moment(user.ilimitado.fin)
+        ? false
+        : true
+      : false
+    const creditos = user ? user.creditos[sucursales[activeSucursal].id] : 0
+    return !user ? (
+      <span>Cargando</span>
+    ) : (
       <div className="row">
         <div className="col-12">
-          <h2>Luis García</h2>
+          <h2>{user.nombre}</h2>
           <Tag color="green">Suscripción activa</Tag>
+          <h4>
+            {unlimitedActive
+              ? `Paquete ilímitado vence: ${moment(user.ilimitado.fin).format(
+                  'LL'
+                )}`
+              : `Créditos ${creditos}`}
+          </h4>
         </div>
         <div className="col-12">
           <Tabs defaultActiveKey="1" onChange={e => console.log(e)}>
             <TabPane tab="Perfil" key="1">
               <div className="row">
                 <div className="col-6">
-                  <Form layout={{ formLayout: 'horizontal' }}>
-                    <Item label="Nombre">
-                      <Input placeholder="Nombre completo" />
+                  <div>
+                    <Item label="Sucursal">
+                      <Select
+                        name="sucursal"
+                        onChange={activeSucursal =>
+                          this.setState({ activeSucursal })
+                        }
+                        style={{ width: 200 }}
+                        defaultValue={sucursales[activeSucursal].id}
+                      >
+                        {sucursales.map(sucursal => (
+                          <Option key={sucursal.id}>{sucursal.nombre}</Option>
+                        ))}
+                      </Select>
                     </Item>
-                    <Item label="Correo">
-                      <Input placeholder="Correo" />
-                    </Item>
-                    <Item label="Teléfono">
-                      <Input placeholder="Teléfono" />
-                    </Item>
-                    <Item label="Créditos">
-                      <InputNumber
-                        min={1}
-                        max={10}
-                        defaultValue={3}
-                        onChange={e => console.log(e)}
-                      />
-                    </Item>
-                    <Item label="Fin de paquete ilímitado">
-                      <Datepicker />
-                    </Item>
-                    <Button type="primary" className="fw">Guardar</Button>
-                  </Form>
+                  </div>
+                  <Collapse defaultActiveKey={['1']} style={{ width: '90%' }}>
+                    <Panel header="Actualizar créditos" key="1">
+                      <Form>
+                        <Input
+                          name="creditos"
+                          placeholder="Créditos"
+                          label="Créditos"
+                          required
+                          validations="isNumeric"
+                          validationError="Los créditos es un número positivo"
+                          defaultValue={creditos}
+                        />
+                        <TextArea
+                          name="Mótivo"
+                          label="Mótivo"
+                          placeholder="Ingresa el mótivo del ajuste"
+                        />
+                      </Form>
+                    </Panel>
+                    <Panel header="Actualizar créditos" key="2">
+                      <Form>
+                        <Datepicker
+                          name="ilimitado"
+                          placeholder="Paquete ilímitado"
+                          label="Páquete ilímitado"
+                          required
+                          defaultValue={moment(user.ilimitado.fin)}
+                        />
+                        <TextArea
+                          name="Mótivo"
+                          label="Mótivo"
+                          placeholder="Ingresa el mótivo del ajuste"
+                        />
+                      </Form>
+                    </Panel>
+                  </Collapse>
                 </div>
               </div>
             </TabPane>
@@ -145,6 +207,13 @@ export default class extends React.Component {
               <Table
                 title="Clase(s)"
                 data={[
+                  {
+                    clase: { nombre: 'SPINNING' },
+                    instructor: { nombre: 'Pamela' },
+                    inicio: moment().format(),
+                    costo: 1,
+                    status: 0
+                  },
                   {
                     clase: { nombre: 'SPINNING' },
                     instructor: { nombre: 'Pamela' },
