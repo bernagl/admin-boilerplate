@@ -21,14 +21,17 @@ const { TabPane } = Tabs
 const { Panel } = Collapse
 
 export default class extends React.Component {
-  state = { user: null, sucursales: [], activeSucursal: 0 }
+  state = { clases: [], user: null, sucursales: [], activeSucursal: 0 }
 
   async componentDidMount() {
     const { id } = this.props.match.params
     const sucursales = await getDocumentsByModel('sucursal')
     const user = await getDocument('usuario')(id)
-    console.log(user)
-    this.setState({ user, sucursales })
+    const clasesPromise = Object.keys(user.clases).map(id =>
+      getDocument('horario')(id)
+    )
+    const clases = await Promise.all(clasesPromise)
+    this.setState({ clases, user, sucursales })
   }
 
   logsCol = () => [
@@ -120,7 +123,7 @@ export default class extends React.Component {
   ]
 
   render() {
-    const { user, sucursales, activeSucursal } = this.state
+    const { clases, user, sucursales, activeSucursal } = this.state
     const hasUnlimited = user ? (user.ilimitado ? true : false) : false
     const unlimitedActive = user
       ? moment() > moment(user.ilimitado.fin)
@@ -204,26 +207,7 @@ export default class extends React.Component {
               </div>
             </TabPane>
             <TabPane tab="Clases" key="2">
-              <Table
-                title="Clase(s)"
-                data={[
-                  {
-                    clase: { nombre: 'SPINNING' },
-                    instructor: { nombre: 'Pamela' },
-                    inicio: moment().format(),
-                    costo: 1,
-                    status: 0
-                  },
-                  {
-                    clase: { nombre: 'SPINNING' },
-                    instructor: { nombre: 'Pamela' },
-                    inicio: moment().format(),
-                    costo: 1,
-                    status: 1
-                  }
-                ]}
-                cols={this.clasesCol()}
-              />
+              <Table title="Clase(s)" data={clases} cols={this.clasesCol()} />
             </TabPane>
             <TabPane tab="Calendario" key="3">
               <Clases />
