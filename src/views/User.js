@@ -10,7 +10,12 @@ import Form from '../Form/Form'
 import Input from '../Form/Input'
 import TextArea from '../Form/Textarea'
 import Datepicker from '../Form/Datepicker'
-import { getDocument, getDocumentsByModel } from '../actions/firebase_actions'
+import {
+  getDocument,
+  getDocumentsByModel,
+  updateDocument
+} from '../actions/firebase_actions'
+import { updateUser } from '../actions/user_actions'
 import Select from 'antd/lib/select'
 import AntdForm from 'antd/lib/form'
 
@@ -21,23 +26,89 @@ const { TabPane } = Tabs
 const { Panel } = Collapse
 
 export default class extends React.Component {
-  state = { clases: [], user: null, sucursales: [], activeSucursal: 0 }
+  state = {
+    clases: [],
+    user: null,
+    sucursales: [],
+    activeSucursal: 0,
+    activeSucursalId: null
+  }
 
   async componentDidMount() {
+    this.getData()
+  }
+
+  getData = async () => {
     const { id } = this.props.match.params
     const sucursales = await getDocumentsByModel('sucursal')
-    const user = await getDocument('usuario')(id)
+    const user = await this.getUser(id)
     const clasesPromise = Object.keys(user.clases).map(id =>
       getDocument('horario')(id)
     )
-    const clases = await Promise.all(clasesPromise)
-    this.setState({ clases, user, sucursales })
+    const logsPromise = Object.keys(user.logs).map(id => getDocument('log')(id))
+    const clasesResolve = await Promise.all(clasesPromise)
+    const logsResolve = await Promise.all(logsPromise)
+    const clases = this.orderByDate('inicio')(clasesResolve)
+    const logs = this.orderByDate('fecha')(logsResolve)
+    this.setState({
+      clases,
+      user,
+      logs,
+      sucursales,
+      activeSucursalId: sucursales[0].id
+    })
   }
 
+  getUser = async id => await getDocument('usuario')(id)
+
+  updateCreditosSubmit = async model => {
+    const {
+      user: { creditos, logs },
+      activeSucursalId,
+      activeSucursal,
+      sucursales,
+      user
+    } = this.state
+    const { id } = this.props.match.params
+
+    const userResponse = await updateUser({
+      ...model,
+      uid: id,
+      fecha: moment().format(),
+      sucursalId: activeSucursalId,
+      sucursalName: sucursales[activeSucursal].nombre,
+      lastCreditos: user.creditos[activeSucursalId]
+    })
+    if (userResponse !== 404) {
+      const doc = {
+        id,
+        creditos: { ...creditos, [activeSucursalId]: model.creditos },
+        logs: { ...logs, [userResponse]: true }
+      }
+      const response = await updateDocument('usuario')(doc)
+      this.getData()
+    }
+  }
+
+  updateSubmit = model => {
+    console.log(model)
+  }
+
+  orderByDate = key => arr =>
+    arr.sort(
+      (a, b) =>
+        moment(a[key]) >= moment(b[key])
+          ? -1
+          : moment(a[key]) <= moment(b[key])
+            ? 1
+            : 0
+    )
+
   logsCol = () => [
-    { label: 'Log', key: 'type' },
-    { label: 'Fecha', Render: ({ date }) => moment(date).format('LL') },
-    { label: 'Usuario', key: 'user' }
+    { label: 'Log', key: 'log' },
+    { label: 'Mótivo', key: 'motivo' },
+    { label: 'Fecha', Render: ({ fecha }) => moment(fecha).format('LLL') }
+    // { label: 'Usuario', key: 'user' }
   ]
 
   clasesCol = () => [
@@ -123,7 +194,7 @@ export default class extends React.Component {
   ]
 
   render() {
-    const { clases, user, sucursales, activeSucursal } = this.state
+    const { logs, clases, user, sucursales, activeSucursal } = this.state
     const hasUnlimited = user ? (user.ilimitado ? true : false) : false
     const unlimitedActive = user
       ? moment() > moment(user.ilimitado.fin)
@@ -156,7 +227,10 @@ export default class extends React.Component {
                       <Select
                         name="sucursal"
                         onChange={activeSucursal =>
-                          this.setState({ activeSucursal })
+                          this.setState({
+                            activeSucursal,
+                            activeSucursalId: sucursales[activeSucursal].id
+                          })
                         }
                         style={{ width: 200 }}
                         defaultValue={sucursales[activeSucursal].id}
@@ -169,7 +243,7 @@ export default class extends React.Component {
                   </div>
                   <Collapse defaultActiveKey={['1']} style={{ width: '90%' }}>
                     <Panel header="Actualizar créditos" key="1">
-                      <Form>
+                      <Form submit={this.updateCreditosSubmit} shouldUpdate>
                         <Input
                           name="creditos"
                           placeholder="Créditos"
@@ -180,14 +254,15 @@ export default class extends React.Component {
                           defaultValue={creditos}
                         />
                         <TextArea
-                          name="Mótivo"
+                          name="motivo"
                           label="Mótivo"
+                          required
                           placeholder="Ingresa el mótivo del ajuste"
                         />
                       </Form>
                     </Panel>
                     <Panel header="Actualizar créditos" key="2">
-                      <Form>
+                      <Form submit={this.updateSubmit} shouldUpdate>
                         <Datepicker
                           name="ilimitado"
                           placeholder="Paquete ilímitado"
@@ -198,6 +273,7 @@ export default class extends React.Component {
                         <TextArea
                           name="Mótivo"
                           label="Mótivo"
+                          required
                           placeholder="Ingresa el mótivo del ajuste"
                         />
                       </Form>
@@ -213,32 +289,7 @@ export default class extends React.Component {
               <Clases />
             </TabPane>
             <TabPane tab="Logs" key="4">
-              <Table
-                title="Log(s)"
-                data={[
-                  {
-                    type: '+3 Créditos',
-                    date: moment().format(),
-                    user: 'Admin'
-                  },
-                  {
-                    type: '+3 días',
-                    date: moment().format(),
-                    user: 'Admin'
-                  },
-                  {
-                    type: 'Clase reservada',
-                    date: moment().format(),
-                    user: 'Usuario'
-                  },
-                  {
-                    type: 'Clase reservada',
-                    date: moment().format(),
-                    user: 'Admin'
-                  }
-                ]}
-                cols={this.logsCol()}
-              />
+              <Table title="Log(s)" data={logs} cols={this.logsCol()} />
             </TabPane>
           </Tabs>
         </div>
