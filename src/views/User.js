@@ -1,6 +1,5 @@
 import React from 'react'
 import Tabs from 'antd/lib/tabs'
-// import Datepicker from 'antd/lib/date-picker'
 import Table from '../components/EraserTable'
 import { Popconfirm, Collapse, Popover, Tag } from 'antd'
 import moment from 'moment'
@@ -9,6 +8,7 @@ import Form from '../Form/Form'
 import Input from '../Form/Input'
 import TextArea from '../Form/Textarea'
 import Datepicker from '../Form/Datepicker'
+import UserClasesTable from './UsrClasesTable'
 import {
   getDocument,
   getDocumentsByModel,
@@ -47,7 +47,10 @@ export default class extends React.Component {
     const clasesPromise =
       typeof user.clases === 'undefined'
         ? []
-        : Object.keys(user.clases).map(id => getDocument('horario')(id))
+        : Object.keys(user.clases).map(async id => {
+            const clase = await getDocument('horario')(id)
+            return { ...clase, status: user.clases[id] }
+          })
     const logsPromise =
       typeof user.logs === 'undefined'
         ? []
@@ -145,90 +148,9 @@ export default class extends React.Component {
     // { label: 'Usuario', key: 'user' }
   ]
 
-  clasesCol = () => [
-    {
-      label: 'Clase',
-      Render: ({ clase: { nombre } }) => <span>{nombre}</span>
-    },
-    {
-      label: 'Coach',
-      Render: ({ instructor: { nombre } }) => <span>{nombre}</span>
-    },
-    {
-      label: 'Fecha',
-      key: 'fecha',
-      Render: ({ inicio }) => <span>{moment(inicio).format('LL')}</span>
-    },
-    {
-      label: 'Hora',
-      key: 'hora',
-      Render: ({ inicio }) => <span>{moment(inicio).format('LT')}</span>
-    },
-    { label: 'Créditos', key: 'costo' },
-    {
-      label: 'Estatus',
-      key: 'status',
-      Render: item => {
-        return (
-          <React.Fragment>
-            <Popover
-              content={
-                <p>
-                  {item.status === 0
-                    ? 'La fecha aún no se cumple'
-                    : item.status === 2
-                      ? 'Cancelaste la clase'
-                      : item.status === 3
-                        ? 'Estas en la lista de espera, si algún usuario cancela se te notificará por correo'
-                        : 'La clase ya pasó'}
-                </p>
-              }
-              title={
-                item.status === 0
-                  ? 'Pendiente'
-                  : item.status === 1
-                    ? 'Cumplida'
-                    : item.status === 3
-                      ? 'En cola'
-                      : 'Cancelada'
-              }
-            >
-              <Tag
-                color={`${
-                  item.status === 0
-                    ? 'green'
-                    : item.status === 3
-                      ? 'blue'
-                      : 'volcano'
-                }`}
-              >
-                {item.status === 0
-                  ? 'Pendiente'
-                  : item.status === 2
-                    ? 'Cancelada'
-                    : item.status === 3
-                      ? 'En lista de espera'
-                      : 'Cumplida'}
-              </Tag>
-            </Popover>
-            {item.status === 0 && (
-              <Popconfirm
-                title="¿Deseas cancelar la clase?"
-                okText="Si"
-                cancelText="No"
-                onConfirm={() => this.cancelarClase(item)}
-              >
-                <Tag color="red">Cancelar</Tag>
-              </Popconfirm>
-            )}
-          </React.Fragment>
-        )
-      }
-    }
-  ]
-
   render() {
     const { logs, clases, user, sucursales, activeSucursal } = this.state
+    const { id } = this.props.match.params
     const hasUnlimited = user ? (user.ilimitado ? true : false) : false
     const suscription = user
       ? user.last_class
@@ -335,7 +257,7 @@ export default class extends React.Component {
               </div>
             </TabPane>
             <TabPane tab="Clases" key="2">
-              <Table title="Clase(s)" data={clases} cols={this.clasesCol()} />
+              <UserClasesTable clases={clases} uid={id} />
             </TabPane>
             <TabPane tab="Calendario" key="3">
               <Clases />

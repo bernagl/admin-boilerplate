@@ -57,6 +57,7 @@ export default class Horario extends Component {
       <AnimationWrapper>
         <div className="row">
           <div className="col-6">
+            <h2>Asignar inscripción</h2>
             <div className="row">
               <div className="col-6">
                 {/* <Item label="Usuario" layout="vertical"> */}

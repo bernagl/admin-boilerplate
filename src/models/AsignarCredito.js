@@ -94,11 +94,11 @@ export default class Horario extends Component {
   render() {
     const { data, paquetes: p, sucursales, sselected } = this.state
     const paquetes = p.filter(paq => sselected === paq.sucursal)
-    console.log(this.state)
     return (
       <AnimationWrapper>
         <div className="row">
           <div className="col-6">
+            <h2>Asignar créditos</h2>
             <div className="row">
               <div className="col-6 my-3">
                 {/* <Item label="Usuario" layout="vertical"> */}
