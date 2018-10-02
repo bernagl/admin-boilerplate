@@ -265,6 +265,8 @@ export default class extends React.Component {
                 userClases={user.clases}
                 creditos={user.creditos}
                 ilimitado={unlimitedActive ? user.ilimitado : null}
+                updateData={this.getData}
+                uid={id}
               />
             </TabPane>
             <TabPane tab="Logs" key="4">

@@ -6,6 +6,7 @@ import moment from 'moment'
 import message from 'antd/lib/message'
 import Button from 'antd/lib/button'
 import '../userCalendar.css'
+import { confirmCheckout } from '../actions/user_actions'
 
 export default class extends Component {
   state = {
@@ -18,7 +19,13 @@ export default class extends Component {
   async componentDidMount() {
     const { userClases, creditos, ilimitado } = this.props
     const clases = await getDocumentsByModel('horario')
-    this.setState({ clases, userClases, creditos, ilimitado })
+
+    this.setState({
+      clases,
+      userClases: userClases ? userClases : {},
+      creditos,
+      ilimitado
+    })
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -30,7 +37,8 @@ export default class extends Component {
     const { id, inicio, fin, instructor, clase } = event
     const { userClases, cart } = this.state
     const isReserved = Object.keys(userClases).find(cid => cid === id)
-    const status = userClases[isReserved] === 1 ? 1 : 0
+    const status =
+      userClases[isReserved] === 0 ? 1 : userClases[isReserved] === 1 ? 2 : 0
     const itsOnCart = typeof cart[event.id] === 'undefined' ? false : true
     return (
       <div
@@ -88,6 +96,14 @@ export default class extends Component {
     this.setState({ creditos, cart })
   }
 
+  submit = async () => {
+    const { cart, ilimitado: isIlimitado } = this.state
+    const { uid, updateData } = this.props
+    const clases = Object.keys(cart).map(id => cart[id])
+    const response = await confirmCheckout({ clases, isIlimitado, uid })
+    updateData()
+  }
+
   render() {
     const { clases, creditos, cart, ilimitado } = this.state
     const cartLength = Object.keys(cart).length
@@ -102,6 +118,7 @@ export default class extends Component {
           )}
           <h4>Clases seleccionadas: {cartLength}</h4>
           <Button
+            onClick={this.submit}
             type="primary"
             disabled={cartLength > 0 ? false : true}
             className="btn-reservar"

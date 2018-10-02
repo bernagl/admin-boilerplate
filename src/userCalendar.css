@@ -20,6 +20,12 @@
 }
 
 .class-container.status-2 {
+    background-color: lightgray;
+    color: white;
+    transition: 1s;
+}
+
+.class-container.status-2 {
     background-color: blue;
     color: white;
     transition: 1s;

@@ -13,9 +13,9 @@ export default class ClasesTable extends Component {
     this.setState({ clases })
   }
 
-  componentWillUpdate(newProps) {
+  componentDidUpdate(oldProps) {
     const { clases } = this.props
-    if (newProps.clases === clases) return
+    if (oldProps.clases === clases) return
     this.setState({ clases })
   }
 
@@ -33,7 +33,6 @@ export default class ClasesTable extends Component {
 
   render() {
     const { clases } = this.state
-    console.log(clases)
     return <Table title="Clase(s)" data={clases} cols={this.clasesCol()} />
   }
 
