@@ -152,12 +152,20 @@ export default class extends React.Component {
   render() {
     const { logs, clases, user, sucursales, activeSucursal } = this.state
     const { id } = this.props.match.params
-    const hasUnlimited = user ? (user.ilimitado ? true : false) : false
+    const hasUnlimited = user
+      ? user.status === 1
+        ? user.ilimitado
+          ? true
+          : false
+        : false
+      : false
     const suscription = user
-      ? user.last_class
-        ? moment() > moment(user.last_class).add(3, 'M')
-          ? false
-          : true
+      ? user.status === 1
+        ? user.last_class
+          ? moment() > moment(user.last_class).add(3, 'M')
+            ? false
+            : true
+          : false
         : false
       : false
     const unlimitedActive = hasUnlimited
@@ -171,7 +179,9 @@ export default class extends React.Component {
     ) : (
       <div className="row">
         <div className="col-6">
-          <h2>{user.nombre}</h2>
+          <h2 className="mb-1">{user.nombre}</h2>
+          <div>{user.correo}</div>
+          <div className="mb-2">{user.telefono}</div>
           <Tag color={suscription ? 'green' : user.invitado ? 'blue' : 'red'}>
             Suscripción{' '}
             {suscription
