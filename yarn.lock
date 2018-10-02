@@ -6735,6 +6735,10 @@ react-transition-group@^2.2.0, react-transition-group@^2.2.1:
     prop-types "^15.6.2"
     react-lifecycles-compat "^3.0.4"
 
+react-week-events@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/react-week-events/-/react-week-events-1.0.7.tgz#b0bf2064cf7110e12be5799846785f8be9d71601"
+
 react-xtable@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/react-xtable/-/react-xtable-1.1.0.tgz#276959c0efadab2b74e67f180545e5e0eae21673"

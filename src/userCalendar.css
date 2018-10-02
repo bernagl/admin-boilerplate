@@ -1,0 +1,21 @@
+.row.event-list {
+    margin: 0px !important;
+    /* padding: 0 5px !important; */
+}
+
+.class-container {
+    border: 1px solid #e8e8e8;
+    margin-bottom: 5px;
+    padding: 0 5px;
+    text-align: center;
+    width: 100%;
+    cursor: pointer;
+}
+
+.class-container.status-1 {
+    background-color: red;
+}
+
+.class-container.status-2 {
+    background-color: blue;
+}

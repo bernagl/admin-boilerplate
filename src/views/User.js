@@ -8,6 +8,7 @@ import Form from '../Form/Form'
 import Input from '../Form/Input'
 import TextArea from '../Form/Textarea'
 import Datepicker from '../Form/Datepicker'
+import UserCalendar from './UserCalendar'
 import UserClasesTable from './UsrClasesTable'
 import {
   getDocument,
@@ -260,7 +261,7 @@ export default class extends React.Component {
               <UserClasesTable clases={clases} uid={id} />
             </TabPane>
             <TabPane tab="Calendario" key="3">
-              <Clases />
+              <UserCalendar userClases={user.clases} creditos={user.creditos} />
             </TabPane>
             <TabPane tab="Logs" key="4">
               <Table title="Log(s)" data={logs} cols={this.logsCol()} />
