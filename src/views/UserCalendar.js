@@ -4,14 +4,21 @@ import 'react-week-events/dist/styles.css'
 import { getDocumentsByModel } from '../actions/firebase_actions'
 import moment from 'moment'
 import message from 'antd/lib/message'
+import Button from 'antd/lib/button'
 import '../userCalendar.css'
 
 export default class extends Component {
-  state = { userClases: [], clases: [], creditos: {}, cart: {} }
+  state = {
+    userClases: [],
+    clases: [],
+    creditos: {},
+    cart: {},
+    ilimitado: null
+  }
   async componentDidMount() {
-    const { userClases, creditos } = this.props
+    const { userClases, creditos, ilimitado } = this.props
     const clases = await getDocumentsByModel('horario')
-    this.setState({ clases, userClases, creditos })
+    this.setState({ clases, userClases, creditos, ilimitado })
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -46,11 +53,21 @@ export default class extends Component {
   }
 
   eventHandler = clase => {
-    const { cart: stateCart, creditos: stateCreditos } = this.state
+    const { cart: stateCart, creditos: stateCreditos, ilimitado } = this.state
     const itsOnCart = typeof stateCart[clase.id] === 'undefined' ? false : true
-    if (stateCreditos['-LJ5w7hFuZxYmwiprTIY'] === 0 && !itsOnCart) {
+    if (
+      stateCreditos['-LJ5w7hFuZxYmwiprTIY'] === 0 &&
+      !itsOnCart &&
+      !ilimitado
+    ) {
       message.error('No tienes créditos')
       return
+    }
+    if (ilimitado) {
+      if (moment(clase.inicio) > moment(ilimitado.fin)) {
+        message.info('Tu paquete ilímitado no alcanza la fecha seleccionada')
+        return
+      }
     }
     let cart = stateCart
     let creditos = stateCreditos
@@ -72,16 +89,36 @@ export default class extends Component {
   }
 
   render() {
-    const { clases, creditos } = this.state
-    console.log(creditos)
+    const { clases, creditos, cart, ilimitado } = this.state
+    const cartLength = Object.keys(cart).length
     return (
-      <WeekCalendar
-        events={clases}
-        emptyRender={() => 'No clases'}
-        eventRender={this.eventRender}
-        past={true}
-        dateLabel="inicio"
-      />
+      <div className="row">
+        <div className="col-12">
+          <h2>Calendario</h2>
+          {ilimitado ? (
+            <h4>Paquete ilímitado</h4>
+          ) : (
+            <h4>Créditos disponibles: {creditos['-LJ5w7hFuZxYmwiprTIY']}</h4>
+          )}
+          <h4>Clases seleccionadas: {cartLength}</h4>
+          <Button
+            type="primary"
+            disabled={cartLength > 0 ? false : true}
+            className="btn-reservar"
+          >
+            Reservar clases
+          </Button>
+        </div>
+        <div className="col-12">
+          <WeekCalendar
+            events={clases}
+            emptyRender={() => 'No clases'}
+            eventRender={this.eventRender}
+            past={true}
+            dateLabel="inicio"
+          />
+        </div>
+      </div>
     )
   }
 }

@@ -261,7 +261,11 @@ export default class extends React.Component {
               <UserClasesTable clases={clases} uid={id} />
             </TabPane>
             <TabPane tab="Calendario" key="3">
-              <UserCalendar userClases={user.clases} creditos={user.creditos} />
+              <UserCalendar
+                userClases={user.clases}
+                creditos={user.creditos}
+                ilimitado={unlimitedActive ? user.ilimitado : null}
+              />
             </TabPane>
             <TabPane tab="Logs" key="4">
               <Table title="Log(s)" data={logs} cols={this.logsCol()} />
