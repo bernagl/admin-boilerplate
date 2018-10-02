@@ -4,12 +4,12 @@ import {
   Button,
   Form as F,
   message,
-  InputNumber,
+  Checkbox,
   Select
 } from 'antd'
 import AnimationWrapper from '../components/AnimationWrapper'
 import { getDocumentsByModel } from '../actions/firebase_actions'
-import { asignarCreditos } from '../actions/credito_actions'
+import { asignarCreditos, asignarInscripcion } from '../actions/credito_actions'
 const { Item } = F
 
 export default class Horario extends Component {
@@ -25,7 +25,8 @@ export default class Horario extends Component {
       sucursales: [],
       paquetes: [],
       sselected: 0,
-      pselected: 0
+      pselected: 0,
+      checked: false
     }
   }
 
@@ -39,6 +40,7 @@ export default class Horario extends Component {
 
   submit = async () => {
     const {
+      checked,
       creditos,
       usuario: correo,
       dataSource,
@@ -76,6 +78,16 @@ export default class Horario extends Component {
       text = `Se asignaron ${paquete.creditos} creditos correctamente`
     }
     message.success(text)
+    if (checked) {
+      message.info('Asignando inscripción')
+      await asignarInscripcion({
+        uid: id,
+        correo,
+        nombre,
+        tipo
+      })
+      message.success('Inscripción agregada')
+    }
   }
 
   setValue = (key, value) => {
@@ -92,7 +104,7 @@ export default class Horario extends Component {
   }
 
   render() {
-    const { data, paquetes: p, sucursales, sselected } = this.state
+    const { checked, data, paquetes: p, sucursales, sselected } = this.state
     const paquetes = p.filter(paq => sselected === paq.sucursal)
     return (
       <AnimationWrapper>
@@ -101,15 +113,15 @@ export default class Horario extends Component {
             <h2>Asignar créditos</h2>
             <div className="row">
               <div className="col-6 my-3">
-                {/* <Item label="Usuario" layout="vertical"> */}
-                <AutoComplete
-                  dataSource={data}
-                  placeholder="Seleccionar usuario"
-                  onSearch={this.handleSearch}
-                  className="fw"
-                  onSelect={usuario => this.setValue('usuario', usuario)}
-                />
-                {/* </Item> */}
+                <Item label="Usuario" layout="vertical">
+                  <AutoComplete
+                    dataSource={data}
+                    placeholder="Seleccionar usuario"
+                    onSearch={this.handleSearch}
+                    className="fw"
+                    onSelect={usuario => this.setValue('usuario', usuario)}
+                  />
+                </Item>
               </div>
               {/* <div className="col-6">
             <Item label="Créditos" layout="vertical">
@@ -122,37 +134,55 @@ export default class Horario extends Component {
             </Item>
           </div> */}
               <div className="col-6 my-3">
-                <Select
-                  placeholder="Selecciona una sucursal"
-                  onChange={i => this.setState({ sselected: i })}
-                  className="fw"
-                >
-                  {sucursales.map((suc, i) => (
-                    <Select.Option key={suc.id}>{suc.nombre}</Select.Option>
-                  ))}
-                </Select>
+                <Item label="Sucursal" layout="vertical">
+                  <Select
+                    placeholder="Selecciona una sucursal"
+                    onChange={i => this.setState({ sselected: i })}
+                    className="fw"
+                  >
+                    {sucursales.map((suc, i) => (
+                      <Select.Option key={suc.id}>{suc.nombre}</Select.Option>
+                    ))}
+                  </Select>
+                </Item>
               </div>
               <div className="col-6">
-                <Select
-                  placeholder="Selecciona un paquete"
-                  onChange={id => this.setState({ pselected: id })}
-                  className="fw"
-                >
-                  {paquetes.map((paq, i) => (
-                    <Select.Option key={paq.id}>{paq.nombre}</Select.Option>
-                  ))}
-                </Select>
+                <Item label="Paquete" layout="vertical">
+                  <Select
+                    placeholder="Selecciona un paquete"
+                    onChange={id => this.setState({ pselected: id })}
+                    className="fw"
+                  >
+                    {paquetes.map((paq, i) => (
+                      <Select.Option key={paq.id}>{paq.nombre}</Select.Option>
+                    ))}
+                  </Select>
+                </Item>
               </div>
               <div className="col-6">
-                <Select
-                  placeholder="Método de pago"
-                  onChange={tipo => this.setState({ tipo })}
-                  className="fw"
-                >
-                  <Select.Option key="Deposito">Depósito</Select.Option>
-                  <Select.Option key="Efectivo">Efectivo</Select.Option>
-                  <Select.Option key="Terminal">Terminal</Select.Option>
-                </Select>
+                <Item label="Método de pago" layout="vertical">
+                  <Select
+                    placeholder="Método de pago"
+                    onChange={tipo => this.setState({ tipo })}
+                    className="fw"
+                  >
+                    <Select.Option key="Deposito">Depósito</Select.Option>
+                    <Select.Option key="Efectivo">Efectivo</Select.Option>
+                    <Select.Option key="Terminal">Terminal</Select.Option>
+                  </Select>
+                </Item>
+              </div>
+              <div className="col-6">
+                <Item label="Asignar inscripción">
+                  <Checkbox
+                    checked={checked}
+                    onChange={({ target: { checked } }) =>
+                      this.setState({ checked })
+                    }
+                  >
+                    {checked ? 'Sí' : 'No'}
+                  </Checkbox>
+                </Item>
               </div>
               <div className="col-6 my-3">
                 <Button type="primary" onClick={this.submit}>

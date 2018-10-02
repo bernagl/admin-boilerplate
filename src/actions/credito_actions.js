@@ -2,7 +2,6 @@ import { db } from './firebase-config'
 import moment from 'moment'
 
 export const asignarInscripcion = ({ uid, correo, nombre, tipo }) => {
-  console.log(uid, correo, tipo)
   return db
     .ref('usuario')
     .child(uid)
