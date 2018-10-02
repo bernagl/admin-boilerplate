@@ -24,7 +24,8 @@ export default class extends Component {
       clases,
       userClases: userClases ? userClases : {},
       creditos,
-      ilimitado
+      ilimitado,
+      loading: false
     })
   }
 
@@ -46,9 +47,13 @@ export default class extends Component {
           isReserved ? status : itsOnCart ? 1 : 0
         }`}
         onClick={() =>
-          status !== 1
+          status === 0
             ? this.eventHandler(event)
-            : message.info('Para cancelar la clase es en el apartado de clases')
+            : status === 1
+              ? message.info(
+                  'Para cancelar la clase es en el apartado de clases'
+                )
+              : message.info('La clase ya se venció')
         }
       >
         <div className="">{clase.nombre}</div>
@@ -100,12 +105,16 @@ export default class extends Component {
     const { cart, ilimitado: isIlimitado } = this.state
     const { uid, updateData } = this.props
     const clases = Object.keys(cart).map(id => cart[id])
+    this.setState({ loading: true })
+    message.info('Inscribiendo al usuario en la(s) clase(s)')
     const response = await confirmCheckout({ clases, isIlimitado, uid })
+    message.success('El usuario fue inscrito en la(s) clase(s)')
     updateData()
+    this.setState({ loading: false, cart: {} })
   }
 
   render() {
-    const { clases, creditos, cart, ilimitado } = this.state
+    const { clases, creditos, cart, ilimitado, loading } = this.state
     const cartLength = Object.keys(cart).length
     return (
       <div className="row">
@@ -122,6 +131,7 @@ export default class extends Component {
             type="primary"
             disabled={cartLength > 0 ? false : true}
             className="btn-reservar"
+            loading={loading}
           >
             Reservar clases
           </Button>

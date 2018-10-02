@@ -25,10 +25,12 @@ export default class ClasesTable extends Component {
       costo,
       id: cid
     } = clase
-    const { uid } = this.props
+    const { uid, updateData } = this.props
     const response = await cancelarClase({ sid, costo, cid, uid })
-    if (response === 202) message.success('Clase cancelada')
-    else message.error('Ocurrió un error, por favor vuelve a intentarlo')
+    if (response === 202) {
+      message.success('Clase cancelada')
+      updateData()
+    } else message.error('Ocurrió un error, por favor vuelve a intentarlo')
   }
 
   render() {

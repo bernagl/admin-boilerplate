@@ -258,7 +258,11 @@ export default class extends React.Component {
               </div>
             </TabPane>
             <TabPane tab="Clases" key="2">
-              <UserClasesTable clases={clases} uid={id} />
+              <UserClasesTable
+                clases={clases}
+                uid={id}
+                updateData={this.getData}
+              />
             </TabPane>
             <TabPane tab="Calendario" key="3">
               <UserCalendar

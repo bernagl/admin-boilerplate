@@ -91,7 +91,13 @@ export default class Gimnasio extends Component {
 
   daysHandler = sum => {
     const { gimnasios, gymSelected, events, dias, week } = this.state
-    const weekNumber = sum ? week + 1 : week === 0 ? 0 : week - 1
+    const weekNumber = sum
+      ? week + 1
+      : sum === 0
+        ? week - 1
+        : week === 0
+          ? 0
+          : week - 1
     var startOfWeek = moment()
       .add(weekNumber, 'weeks')
       .startOf('isoWeek')
@@ -265,7 +271,7 @@ export default class Gimnasio extends Component {
             okText="Cancelar clase"
           >
             <Tabs defaultActiveKey="2">
-            <TabPane tab="Usuarios inscritos" key="2">
+              <TabPane tab="Usuarios inscritos" key="2">
                 {usuarios.length > 0 ? (
                   usuarios.map(({ id, nombre }) => <div key={id}>{nombre}</div>)
                 ) : (

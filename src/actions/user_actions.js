@@ -93,7 +93,10 @@ export const confirmCheckout = ({ clases, isIlimitado, uid }) => {
               .child(clase.id)
               .update({ inscritos, inscritos_numero: c.inscritos_numero + 1 })
               .then(r => {
-                uclases = { ...uclases, [clase.id]: 0 }
+                uclases = {
+                  ...uclases,
+                  [clase.id]: moment() > moment(clase.inicio) ? 1 : 0
+                }
                 const last_class =
                   moment(usuario.last_class).format() >
                   moment(clase.inicio).format()
