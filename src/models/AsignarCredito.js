@@ -61,7 +61,7 @@ export default class Horario extends Component {
     const response = await asignarCreditos({
       model: 'usuario',
       creditos,
-      id,
+      uid: id,
       correo,
       tipo,
       sid: sselected,

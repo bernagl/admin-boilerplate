@@ -10,13 +10,15 @@ export default class ClasesTable extends Component {
   state = { clases: [] }
   componentDidMount() {
     const { clases } = this.props
-    this.setState({ clases })
+    const c = this.setStatusToClase(clases)
+    this.setState({ clases: c })
   }
 
   componentDidUpdate(oldProps) {
     const { clases } = this.props
     if (oldProps.clases === clases) return
-    this.setState({ clases })
+    const c = this.setStatusToClase(clases)
+    this.setState({ clases: c })
   }
 
   cancelarClase = async clase => {
@@ -32,6 +34,17 @@ export default class ClasesTable extends Component {
       updateData()
     } else message.error('Ocurrió un error, por favor vuelve a intentarlo')
   }
+
+  setStatusToClase = clases =>
+    clases.map(clase => ({
+      ...clase,
+      status:
+        clase.status === 1
+          ? moment(clase.fin) > moment()
+            ? 0
+            : 1
+          : clase.status
+    }))
 
   render() {
     const { clases } = this.state

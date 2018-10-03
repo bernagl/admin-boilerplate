@@ -39,10 +39,10 @@ export const addDocument = collection => document => {
     .catch(e => 404)
 }
 
-export const updateDocument = collection => data => {
+export const updateDocument = collection => ({ id, ...data }) => {
   return db
     .ref(collection)
-    .child(data.id)
+    .child(id)
     .update({ ...data })
     .then(r => 202)
     .catch(e => 404)

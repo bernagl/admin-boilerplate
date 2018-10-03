@@ -44,16 +44,24 @@ export default class extends Component {
   eventRender = event => {
     const { id, inicio, fin, instructor, clase } = event
     const { userClases, cart } = this.state
-    const isReserved = Object.keys(userClases).find(cid => cid === id)
+    const isReserved = Object.keys(userClases).find(
+      cid => cid === id && userClases[cid] !== 2
+    )
+
     const status =
-      userClases[isReserved] === 0 ? 1 : userClases[isReserved] === 1 ? 2 : 0
+      userClases[isReserved] === 0
+        ? 1
+        : userClases[isReserved]
+          ? userClases[isReserved]
+          : 0
     const itsOnCart = typeof cart[event.id] === 'undefined' ? false : true
     return (
       <div
         className={`class-container status-${
           isReserved ? status : itsOnCart ? 1 : 0
         }`}
-        onClick={() =>
+        onClick={() => {
+          console.log(status)
           status === 0
             ? this.eventHandler(event)
             : status === 1
@@ -61,9 +69,11 @@ export default class extends Component {
                   'Para cancelar la clase es en el apartado de clases'
                 )
               : message.info('La clase ya se venció')
-        }
+        }}
       >
-        <div className="">{clase.nombre}</div>
+        <div className="">
+          {clase.nombre} - {status}
+        </div>
         <div className="">{instructor.nombre}</div>
         <div className="">
           {moment(inicio).format('LT')} - {moment(fin).format('LT')}

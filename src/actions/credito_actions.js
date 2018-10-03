@@ -43,7 +43,7 @@ export const asignarInscripcion = ({ uid, correo, nombre, tipo }) => {
 
 export const asignarCreditos = ({
   creditos: compra,
-  id,
+  uid,
   model,
   sid,
   paquete,
@@ -52,7 +52,7 @@ export const asignarCreditos = ({
   tipo,
   usuario
 }) => {
-  const ref = db.ref(model).child(id)
+  const ref = db.ref(model).child(uid)
   return ref.once('value').then(r => {
     let { creditos, pagos, ilimitado } = r.val()
     let screditos = 0
@@ -65,7 +65,7 @@ export const asignarCreditos = ({
         ...paquete,
         name: paquete.nombre,
         sucursal: sucursal.nombre,
-        id,
+        uid,
         fecha: moment().format(),
         metodo: 'Admin',
         last4: tipo,

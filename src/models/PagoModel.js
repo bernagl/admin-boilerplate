@@ -1,7 +1,10 @@
 import React from 'react'
 import Table from 'react-xtable'
-import { DatePicker, Icon, Select } from 'antd'
-import { getDocumentsByModel } from '../actions/firebase_actions'
+import { DatePicker, Icon, message, Select, Popconfirm } from 'antd'
+import {
+  getDocumentsByModel,
+  updateDocument
+} from '../actions/firebase_actions'
 import { CSVLink } from 'react-csv'
 import moment from 'moment'
 
@@ -10,6 +13,10 @@ const { RangePicker } = DatePicker
 export default class Pago extends React.Component {
   state = { data: [], dataCopy: [] }
   async componentDidMount() {
+    this.getData()
+  }
+
+  getData = async () => {
     const data = await getDocumentsByModel('pago')
     const dataOrdered = data.sort(
       (a, b) =>
@@ -28,6 +35,15 @@ export default class Pago extends React.Component {
     })
   }
 
+  cancelarPago = async id => {
+    console.log(id)
+    const response = await updateDocument('pago')({ status: 2, id })
+    if (response === 202) {
+      this.getData()
+      message.success('El pago ha sido cancelado')
+    } else message.info('Ocurrió un error, por favor vuelve a intentarlo')
+  }
+
   columns = [
     {
       label: 'Nombre',
@@ -38,7 +54,11 @@ export default class Pago extends React.Component {
       key: 'fecha',
       Render: ({ fecha }) => <span>{moment(fecha).format('LL')}</span>
     },
-    { label: 'Paquete', key: 'tipo', Render: ({ name }) => <span>{name}</span> },
+    {
+      label: 'Paquete',
+      key: 'tipo',
+      Render: ({ name }) => <span>{name}</span>
+    },
     {
       label: 'Método',
       key: 'metodo',
@@ -57,6 +77,28 @@ export default class Pago extends React.Component {
           {precio}
         </span>
       )
+    },
+    {
+      label: 'Acciones',
+      Render: ({ id, precio, name, status, usuario }) =>
+        status === 2 ? (
+          'Cancelado'
+        ) : (
+          <Popconfirm
+            title={
+              <span>
+                ¿Desea cancelar <b>{name} </b> de <b>{usuario}</b> por{' '}
+                <b>${precio}</b> MXN ?
+              </span>
+            }
+            placement="left"
+            okText="Si"
+            cancelText="No"
+            onConfirm={() => this.cancelarPago(id)}
+          >
+            <Icon type="close-circle" theme="outlined" /> {' Cancelar '}
+          </Popconfirm>
+        )
     }
   ]
 
