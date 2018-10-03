@@ -30,8 +30,15 @@ export default class extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.userClases === this.props.userClases) return
-    this.setState({ userClases: this.props.userClases })
+    if (
+      prevProps.userClases === this.props.userClases &&
+      prevProps.creditos === this.props.creditos
+    )
+      return
+    this.setState({
+      userClases: this.props.userClases,
+      creditos: this.props.creditos
+    })
   }
 
   eventRender = event => {

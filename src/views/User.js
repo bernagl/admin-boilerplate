@@ -117,8 +117,6 @@ export default class extends React.Component {
       sucursalName: sucursales[activeSucursal].nombre
     })
 
-    console.log(userResponse)
-
     if (userResponse !== 404) {
       const doc = {
         id,
