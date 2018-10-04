@@ -19,7 +19,6 @@ export default class Pago extends React.Component {
 
   getData = async () => {
     const data = await getDocumentsByModel('pago')
-    console.log(data)
     const dataOrdered = data.sort(
       (a, b) =>
         moment(a.fecha) < moment(b.fecha)
@@ -38,7 +37,6 @@ export default class Pago extends React.Component {
   }
 
   cancelarPago = async id => {
-    console.log(id)
     const response = await updateDocument('pago')({ status: 2, id })
     if (response === 202) {
       this.getData()
@@ -115,18 +113,18 @@ export default class Pago extends React.Component {
     }
   ]
 
-  handleSelect = type => {
-    const { dataCopy, dates } = this.state
+  handleSelect = (t, d) => {
+    const type = t ? t : this.state.type
+    const dates = d ? (d.length > 0 ? d : null) : this.state.dates
+    const { dataCopy } = this.state
     let data = []
-    if (type === 'todos') data = dataCopy
+    if (type === 'todos'  ) data = dataCopy
     else data = dataCopy.filter(pago => pago.type === type)
-    if (dates) this.handleDates(data)(dates)
-    else this.setState({ data, type })
+    if (dates) this.handleDates(data, type)(dates)
+    else this.setState({ data, type, dates })
   }
 
-  handleDates = d => dates => {
-    // const { data: d, dataCopy, type } = this.state
-    // const dFilter = type ? (type === 'todos' ? dataCopy : d) : dataCopy
+  handleDates = (d, type) => dates => {
     const data = d.filter(pago => {
       const f = moment(pago.fecha)
       let status = false
@@ -136,12 +134,11 @@ export default class Pago extends React.Component {
       return status
     })
 
-    this.setState({ data, dates })
+    this.setState({ data, dates, type })
   }
 
   render() {
     const { data, dataCopy, type } = this.state
-    console.log(dataCopy)
     return (
       <div className="row">
         <div className="col-12 my-3">
@@ -151,7 +148,7 @@ export default class Pago extends React.Component {
         </div>
         <div className="col-6">
           <Select
-            onChange={this.handleSelect}
+            onChange={type => this.handleSelect(type, null)}
             placeholder="Filtar por..."
             className="fw"
           >
@@ -164,7 +161,7 @@ export default class Pago extends React.Component {
           <RangePicker
             placeholder={['Desde', 'Hasta']}
             format="DD-MM-YYYY"
-            onChange={dates => this.handleDates(type ? data : dataCopy)(dates)}
+            onChange={dates => this.handleSelect(null, dates)}
           />
         </div>
         <div className="col-12 my-3">

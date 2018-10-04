@@ -20,7 +20,8 @@ export const asignarInscripcion = ({ uid, correo, nombre, tipo }) => {
           last4: tipo,
           tarjeta: 'Sucursal',
           correo,
-          usuario: nombre
+          usuario: nombre,
+          type: 'subscripcion'
         })
         .then(pid => {
           const id = pid.key
@@ -73,7 +74,8 @@ export const asignarCreditos = ({
         last4: tipo,
         tarjeta: 'Sucursal',
         correo,
-        usuario
+        usuario,
+        type: 'paquete'
       })
       .then(r => {
         const pid = r.key
