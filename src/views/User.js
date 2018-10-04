@@ -1,9 +1,8 @@
 import React from 'react'
 import Tabs from 'antd/lib/tabs'
 import Table from '../components/EraserTable'
-import { Popconfirm, Collapse, Popover, Tag } from 'antd'
+import { message, Collapse, Tag } from 'antd'
 import moment from 'moment'
-import Clases from '../views/Clases'
 import Form from '../Form/Form'
 import Input from '../Form/Input'
 import TextArea from '../Form/Textarea'
@@ -17,7 +16,8 @@ import {
 } from '../actions/firebase_actions'
 import {
   updateUserCreditos,
-  updateUserIlimitado
+  updateUserIlimitado,
+  updateInscripcionLog
 } from '../actions/user_actions'
 import Select from 'antd/lib/select'
 import AntdForm from 'antd/lib/form'
@@ -56,10 +56,10 @@ export default class extends React.Component {
       typeof user.logs === 'undefined'
         ? []
         : Object.keys(user.logs).map(id => getDocument('log')(id))
-    const clasesResolve = await Promise.all(clasesPromise)
     const logsResolve = await Promise.all(logsPromise)
-    const clases = this.orderByDate('inicio')(clasesResolve)
     const logs = this.orderByDate('fecha')(logsResolve)
+    const clasesResolve = await Promise.all(clasesPromise)
+    const clases = this.orderByDate('inicio')(clasesResolve)
     this.setState({
       clases,
       user,
@@ -96,6 +96,10 @@ export default class extends React.Component {
         logs: { ...logs, [userResponse]: true }
       }
       const response = await updateDocument('usuario')(doc)
+
+      response === 202
+        ? message.success('Créditos actualizados')
+        : message.error('Ocurrió un error, por favor vuelve a intentarlo')
       this.getData()
     }
   }
@@ -113,7 +117,9 @@ export default class extends React.Component {
       uid: id,
       fecha: moment().format(),
       nuevaFecha: moment(fechaFin).format('LL'),
-      lastFecha: moment(ilimitado.fin).format('LL'),
+      lastFecha: ilimitado
+        ? moment(ilimitado.fin).format('LL')
+        : moment().format('LL'),
       sucursalName: sucursales[activeSucursal].nombre
     })
 
@@ -124,10 +130,38 @@ export default class extends React.Component {
         ilimitado: { ...ilimitado, fin: moment(fechaFin).format() }
       }
       const response = await updateDocument('usuario')(doc)
+      response === 202
+        ? message.success('Fecha ilímitada actualizada')
+        : message.error('Ocurrió un error, por favor vuelve a intentarlo')
       this.getData()
     }
+  }
 
-    this.getData()
+  agregarInscripcion = async ({ motivo }) => {
+    const {
+      user: { id, logs }
+    } = this.state
+
+    const userResponse = await updateInscripcionLog({
+      motivo,
+      uid: id,
+      fecha: moment().format()
+    })
+
+    if (userResponse !== 404) {
+      const doc = {
+        id,
+        logs: { ...logs, [userResponse]: true },
+        last_class: moment().format(),
+        status: 1
+      }
+
+      const response = await updateDocument('usuario')(doc)
+      response === 202
+        ? message.success('Inscripción actualizada')
+        : message.error('Ocurrió un error, por favor vuelve a intentarlo')
+      this.getData()
+    }
   }
 
   orderByDate = key => arr =>
@@ -195,7 +229,7 @@ export default class extends React.Component {
               ? `Paquete ilímitado vence: ${moment(user.ilimitado.fin).format(
                   'LL'
                 )}`
-              : `Créditos ${creditos}`}
+              : `${creditos} Créditos`}
           </h3>
         </div>
         <div className="col-12">
@@ -253,6 +287,16 @@ export default class extends React.Component {
                             hasUnlimited ? moment(user.ilimitado.fin) : moment()
                           }
                         />
+                        <TextArea
+                          name="motivo"
+                          label="Mótivo"
+                          required
+                          placeholder="Ingresa el mótivo del ajuste"
+                        />
+                      </Form>
+                    </Panel>
+                    <Panel header="Asignar inscripción " key="3">
+                      <Form submit={this.agregarInscripcion} shouldUpdate>
                         <TextArea
                           name="motivo"
                           label="Mótivo"

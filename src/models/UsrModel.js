@@ -6,6 +6,7 @@ import Input from '../components/Input'
 import { registerUser } from '../actions/firebase_auth'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
+import Icon from 'antd/lib/icon'
 
 export default () => {
   return (
@@ -64,9 +65,13 @@ const Columns = showModal => {
       )
     },
     {
-      label: 'Acciones',
+      label: 'Calendario',
       key: 'actions',
-      Render: selected => <Link to={`/usr/${selected.id}`}>Ver</Link>
+      Render: selected => (
+        <Link to={`/usr/${selected.id}`}>
+          <Icon type="eye" /> Ver
+        </Link>
+      )
     },
     {
       label: 'Acciones',

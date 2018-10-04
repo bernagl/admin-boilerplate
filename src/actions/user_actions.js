@@ -26,6 +26,15 @@ export const updateUserIlimitado = ({
     .catch(e => 404)
 }
 
+export const updateInscripcionLog = data => {
+  const log = 'Se agregó suscripción'
+  return db
+    .ref('log')
+    .push({ status: 1, log, ...data })
+    .then(lr => lr.key)
+    .catch(e => 404)
+}
+
 /**
  * Cancela la clase de un usuario y le regresa los créditos si no tiene suscripción ilímitada
  * @param {sid} sucursalId

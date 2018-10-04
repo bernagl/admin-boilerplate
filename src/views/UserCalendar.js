@@ -49,11 +49,7 @@ export default class extends Component {
     )
 
     const status =
-      userClases[isReserved] === 0
-        ? 1
-        : userClases[isReserved]
-          ? userClases[isReserved]
-          : 0
+      userClases[isReserved] === 0 ? 2 : userClases[isReserved] === 1 ? 2 : 0
     const itsOnCart = typeof cart[event.id] === 'undefined' ? false : true
     return (
       <div
@@ -61,19 +57,16 @@ export default class extends Component {
           isReserved ? status : itsOnCart ? 1 : 0
         }`}
         onClick={() => {
-          console.log(status)
           status === 0
             ? this.eventHandler(event)
-            : status === 1
+            : status === 2
               ? message.info(
                   'Para cancelar la clase es en el apartado de clases'
                 )
               : message.info('La clase ya se venció')
         }}
       >
-        <div className="">
-          {clase.nombre} - {status}
-        </div>
+        <div className="">{clase.nombre}</div>
         <div className="">{instructor.nombre}</div>
         <div className="">
           {moment(inicio).format('LT')} - {moment(fin).format('LT')}
@@ -94,7 +87,7 @@ export default class extends Component {
       return
     }
     if (ilimitado) {
-      if (moment(clase.inicio) > moment(ilimitado.fin)) {
+      if (moment(clase.inicio) > moment(ilimitado.fin).add(1, 'day')) {
         message.info('Tu paquete ilímitado no alcanza la fecha seleccionada')
         return
       }
