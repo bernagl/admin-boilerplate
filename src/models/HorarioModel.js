@@ -50,7 +50,6 @@ export default class Horario extends Component {
   getSalones = async gimnasio => {
     const { gimnasios } = this.state
     const salones = await getSalones(gimnasios[gimnasio].id)
-    console.log(salones)
     this.setState({ salones })
   }
 
@@ -217,7 +216,7 @@ export default class Horario extends Component {
                 <div className="col-12">
                   <Item label="Fechas" layout="vertical">
                     <RangePicker
-                      onChange={e => console.log(e)}
+                      // onChange={e => console.log(e)}
                       placeholder={['Inicio', 'Fin']}
                       className="fw"
                       onChange={fechas => this.setValue('fechas', fechas)}

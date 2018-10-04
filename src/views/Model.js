@@ -26,7 +26,6 @@ class Model extends Component {
 
   componentDidUpdate(prevProps) {
     const model = this.props.match.params.id
-    // console.log(model, this.props.match.params.id)
     model !== prevProps.match.params.id &&
       (this.props.setSchemaTitle(model), this.setDataToState(model))
   }
@@ -34,7 +33,6 @@ class Model extends Component {
   setDataToState = async model => {
     this.setState({ data: [] })
     const data = await getDocumentsByModel(this.props.match.params.id)
-    // console.table(data)
     this.setState({ data })
   }
 
@@ -43,7 +41,6 @@ class Model extends Component {
   }
 
   render() {
-    // console.log(this.state)
     const { data, selected } = this.state
     const { id } = this.props.match.params
     const action = selected ? updateDocument(id) : addDocument(id)

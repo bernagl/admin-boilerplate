@@ -59,7 +59,6 @@ export default class Form extends Component {
       message.error('Ocurrió un error, por favor vuelve a intentarlo')
     }
 
-    console.log(selected, model, schema)
     // const { action, uid, error, history, redirect, success } = this.props
     // this.setState({ loading: true })
     // const r = await action({ ...model, uid })

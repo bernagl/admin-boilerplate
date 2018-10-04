@@ -233,7 +233,7 @@ export default class extends React.Component {
           </h3>
         </div>
         <div className="col-12">
-          <Tabs defaultActiveKey="1" onChange={e => console.log(e)}>
+          <Tabs defaultActiveKey="1">
             <TabPane tab="Perfil" key="1">
               <div className="row">
                 <div className="col-6">

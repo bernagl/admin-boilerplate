@@ -20,8 +20,6 @@ export default class ModalForm extends React.Component {
   }
 
   handleCancel = e => {
-    // console.log(this.formRef.current)
-    // this.formRef.current.reset()
     this.setState({
       visible: false
     })
