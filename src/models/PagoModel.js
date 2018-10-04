@@ -7,6 +7,7 @@ import {
 } from '../actions/firebase_actions'
 import { CSVLink } from 'react-csv'
 import moment from 'moment'
+import { Link } from 'react-router-dom'
 
 const { RangePicker } = DatePicker
 
@@ -18,6 +19,7 @@ export default class Pago extends React.Component {
 
   getData = async () => {
     const data = await getDocumentsByModel('pago')
+    console.log(data)
     const dataOrdered = data.sort(
       (a, b) =>
         moment(a.fecha) < moment(b.fecha)
@@ -80,25 +82,36 @@ export default class Pago extends React.Component {
     },
     {
       label: 'Acciones',
-      Render: ({ id, precio, name, status, usuario }) =>
-        status === 2 ? (
-          'Cancelado'
-        ) : (
-          <Popconfirm
-            title={
-              <span>
-                ¿Desea cancelar <b>{name} </b> de <b>{usuario}</b> por{' '}
-                <b>${precio}</b> MXN ?
-              </span>
-            }
-            placement="left"
-            okText="Si"
-            cancelText="No"
-            onConfirm={() => this.cancelarPago(id)}
-          >
-            <Icon type="close-circle" theme="outlined" /> {' Cancelar '}
-          </Popconfirm>
-        )
+      Render: ({ id, precio, name, status, usuario, uid }) => (
+        <div>
+          <div>
+            <Link to={`/usr/${uid}`}>
+              <Icon type="user" /> Ver usuario
+            </Link>
+          </div>
+          <div>
+            {status === 2 ? (
+              'Cancelado'
+            ) : (
+              <Popconfirm
+                title={
+                  <span>
+                    ¿Desea cancelar <b>{name} </b> de <b>{usuario}</b> por{' '}
+                    <b>${precio}</b> MXN ?
+                  </span>
+                }
+                placement="left"
+                okText="Si"
+                cancelText="No"
+                onConfirm={() => this.cancelarPago(id)}
+                className="a-warning"
+              >
+                <Icon type="close-circle" theme="outlined" /> {' Cancelar '}
+              </Popconfirm>
+            )}
+          </div>
+        </div>
+      )
     }
   ]
 
@@ -128,6 +141,7 @@ export default class Pago extends React.Component {
 
   render() {
     const { data, dataCopy, type } = this.state
+    console.log(dataCopy)
     return (
       <div className="row">
         <div className="col-12 my-3">

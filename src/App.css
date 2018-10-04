@@ -78,6 +78,14 @@
   color: #1890ff;
 }
 
+.a {
+  color: #1890ff;
+}
+
+.a-warning {
+  color: #b71540;
+}
+
 .dt-toggle-status-btn {
   color: #1890ff;
   cursor: pointer;

@@ -46,18 +46,20 @@ export const asignarCreditos = ({
   uid,
   model,
   sid,
-  paquete,
+  paquete: paq,
   sucursal,
   correo,
   tipo,
   usuario
 }) => {
+  const paquete = { ...paq }
+  delete paquete['id']
   const ref = db.ref(model).child(uid)
   return ref.once('value').then(r => {
     let { creditos, pagos, ilimitado } = r.val()
     let screditos = 0
     if (typeof creditos !== 'undefined')
-      screditos = creditos[sid] + +paquete.creditos
+      screditos = +creditos[sid] + +paquete.creditos
     if (typeof pagos === 'undefined') pagos = {}
     return db
       .ref('pago')

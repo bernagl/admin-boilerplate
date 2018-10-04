@@ -65,23 +65,19 @@ const Columns = showModal => {
       )
     },
     {
-      label: 'Calendario',
-      key: 'actions',
-      Render: selected => (
-        <Link to={`/usr/${selected.id}`}>
-          <Icon type="eye" /> Ver
-        </Link>
-      )
-    },
-    {
       label: 'Acciones',
       key: 'actions',
       Render: selected => (
-        <DatatableActions
-          model="usuario"
-          selected={selected}
-          showModal={showModal}
-        />
+        <div>
+          <Link to={`/usr/${selected.id}`}>
+            <Icon type="eye" /> Ver calendario
+          </Link>
+          <DatatableActions
+            model="usuario"
+            selected={selected}
+            showModal={showModal}
+          />
+        </div>
       )
     }
   ]

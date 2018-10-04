@@ -28,11 +28,10 @@ export default ({ model, selected, showModal, setDataToState }) => {
           </a>
         </Dropdown>
       )}
-      <Icon
-        type="edit"
-        onClick={() => showModal(selected)}
-        className="dt-edit-button"
-      />
+      <span onClick={() => showModal(selected)} className="a">
+        <Icon type="edit" className="dt-edit-button" />
+        {' Editar'}
+      </span>
     </div>
   )
 }
