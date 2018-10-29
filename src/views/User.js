@@ -183,6 +183,8 @@ export default class extends React.Component {
 
   render() {
     const { logs, clases, user, sucursales, activeSucursal } = this.state
+    console.log(sucursales)
+    console.log(activeSucursal)
     const { id } = this.props.match.params
     const hasUnlimited = user
       ? user.status === 1
@@ -229,7 +231,7 @@ export default class extends React.Component {
               ? `Paquete ilímitado vence: ${moment(user.ilimitado.fin).format(
                   'LL'
                 )}`
-              : `${creditos} Créditos`}
+              : `${creditos ? creditos : 0} Créditos`}
           </h3>
         </div>
         <div className="col-12">
@@ -241,17 +243,18 @@ export default class extends React.Component {
                     <Item label="Sucursal">
                       <Select
                         name="sucursal"
-                        onChange={activeSucursal =>
+                        onChange={activeSucursal => {
+                          console.log(activeSucursal)
                           this.setState({
                             activeSucursal,
                             activeSucursalId: sucursales[activeSucursal].id
                           })
-                        }
+                        }}
                         style={{ width: 200 }}
-                        defaultValue={sucursales[activeSucursal].id}
+                        defaultValue={sucursales[activeSucursal].nombre}
                       >
-                        {sucursales.map(sucursal => (
-                          <Option key={sucursal.id}>{sucursal.nombre}</Option>
+                        {sucursales.map((sucursal, i) => (
+                          <Option key={i}>{sucursal.nombre}</Option>
                         ))}
                       </Select>
                     </Item>

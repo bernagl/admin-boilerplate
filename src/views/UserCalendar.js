@@ -5,27 +5,34 @@ import { getDocumentsByModel } from '../actions/firebase_actions'
 import moment from 'moment'
 import message from 'antd/lib/message'
 import Button from 'antd/lib/button'
+import { Radio } from 'antd'
 import '../userCalendar.css'
 import { confirmCheckout } from '../actions/user_actions'
+
+const RadioButton = Radio.Button
+const RadioGroup = Radio.Group
 
 export default class extends Component {
   state = {
     userClases: [],
+    sucursales: [],
     clases: [],
     creditos: {},
     cart: {},
-    ilimitado: null
+    ilimitado: null,
+    gymSelected: '-LJ5w7hFuZxYmwiprTIY'
   }
   async componentDidMount() {
     const { userClases, creditos, ilimitado } = this.props
     const clases = await getDocumentsByModel('horario')
-
+    const sucursales = await getDocumentsByModel('sucursal')
     this.setState({
       clases,
       userClases: userClases ? userClases : {},
       creditos,
       ilimitado,
-      loading: false
+      loading: false,
+      sucursales
     })
   }
 
@@ -41,9 +48,14 @@ export default class extends Component {
     })
   }
 
+  handleGym = gymSelected => {
+    this.setState({ gymSelected })
+  }
+
   eventRender = event => {
     const { id, inicio, fin, instructor, clase } = event
-    const { userClases, cart } = this.state
+    const { gymSelected, userClases, cart } = this.state
+    if (event.gimnasio.id !== gymSelected) return false
     const isReserved = Object.keys(userClases).find(
       cid => cid === id && userClases[cid] !== 2
     )
@@ -76,13 +88,18 @@ export default class extends Component {
   }
 
   eventHandler = clase => {
-    const { cart: stateCart, creditos: stateCreditos, ilimitado } = this.state
+    const {
+      gymSelected,
+      cart: stateCart,
+      creditos: stateCreditos,
+      ilimitado
+    } = this.state
     const itsOnCart = typeof stateCart[clase.id] === 'undefined' ? false : true
-    if (
-      stateCreditos['-LJ5w7hFuZxYmwiprTIY'] === 0 &&
-      !itsOnCart &&
-      !ilimitado
-    ) {
+    const sucursalCredits =
+      typeof stateCreditos[gymSelected] === 'undefined'
+        ? 0
+        : stateCreditos[gymSelected]
+    if (sucursalCredits === 0 && !itsOnCart && !ilimitado) {
       message.error('No tienes créditos')
       return
     }
@@ -99,13 +116,13 @@ export default class extends Component {
         message.info('Clase devuelta'),
         (creditos = {
           ...creditos,
-          ['-LJ5w7hFuZxYmwiprTIY']: +creditos['-LJ5w7hFuZxYmwiprTIY'] + 1
+          [gymSelected]: +creditos[gymSelected] + 1
         }))
       : ((cart = { ...stateCart, [clase.id]: clase }),
         message.success('Clase agregada'),
         (creditos = {
           ...creditos,
-          ['-LJ5w7hFuZxYmwiprTIY']: +creditos['-LJ5w7hFuZxYmwiprTIY'] - 1
+          [gymSelected]: +creditos[gymSelected] - 1
         }))
 
     this.setState({ creditos, cart })
@@ -124,8 +141,20 @@ export default class extends Component {
   }
 
   render() {
-    const { clases, creditos, cart, ilimitado, loading } = this.state
+    const {
+      gymSelected,
+      sucursales,
+      clases,
+      creditos,
+      cart,
+      ilimitado,
+      loading
+    } = this.state
     const cartLength = Object.keys(cart).length
+    const sucursalCredits =
+      typeof creditos[gymSelected] === 'undefined'
+        ? 0
+        : creditos[gymSelected]
     return (
       <div className="row">
         <div className="col-12">
@@ -133,7 +162,7 @@ export default class extends Component {
           {ilimitado ? (
             <h4>Paquete ilímitado</h4>
           ) : (
-            <h4>Créditos disponibles: {creditos['-LJ5w7hFuZxYmwiprTIY']}</h4>
+            <h4>Créditos disponibles: {sucursalCredits}</h4>
           )}
           <h4>Clases seleccionadas: {cartLength}</h4>
           <Button
@@ -145,6 +174,22 @@ export default class extends Component {
           >
             Reservar clases
           </Button>
+        </div>
+        <div className="col-12 center-text my-4 my-md-0">
+          <RadioGroup defaultValue={gymSelected} size="large">
+            {sucursales.map(
+              (gym, i) =>
+                gym.status === 1 && (
+                  <RadioButton
+                    value={gym.id}
+                    onClick={() => this.handleGym(gym.id)}
+                    key={i}
+                  >
+                    {gym.nombre}
+                  </RadioButton>
+                )
+            )}
+          </RadioGroup>
         </div>
         <div className="col-12">
           <WeekCalendar

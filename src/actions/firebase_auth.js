@@ -70,7 +70,7 @@ export const registerUser = async ({
         status: 1,
         telefono,
         clases: {},
-        creditos: { '-LJ5w7hFuZxYmwiprTIY': 1 },
+        creditos: { '-LJ5w7hFuZxYmwiprTIY': 1, '-LPrNpstwZt7J3NLUJXc': 1 },
         created_at: moment().format(),
         tarjetas: {},
         invitado: true

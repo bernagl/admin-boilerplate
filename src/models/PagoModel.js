@@ -12,7 +12,7 @@ import { Link } from 'react-router-dom'
 const { RangePicker } = DatePicker
 
 export default class Pago extends React.Component {
-  state = { data: [], dataCopy: [] }
+  state = { data: [], dataCopy: [], showCancelled: true }
   async componentDidMount() {
     this.getData()
   }
@@ -31,7 +31,7 @@ export default class Pago extends React.Component {
     this.setState({
       data: dataOrdered,
       dataCopy: dataOrdered,
-      type: null,
+      type: 'todos',
       dates: null
     })
   }
@@ -58,6 +58,11 @@ export default class Pago extends React.Component {
       label: 'Paquete',
       key: 'tipo',
       Render: ({ name }) => <span>{name}</span>
+    },
+    {
+      label: 'Sucursal',
+      key: 'sucursal',
+      // Render: ({ name }) => <span>{name}</span>
     },
     {
       label: 'Método',
@@ -114,17 +119,29 @@ export default class Pago extends React.Component {
   ]
 
   handleSelect = (t, d) => {
+    const { showCancelled: sc } = this.state
+    const showCancelled = !sc
     const type = t ? t : this.state.type
     const dates = d ? (d.length > 0 ? d : null) : this.state.dates
     const { dataCopy } = this.state
     let data = []
-    if (type === 'todos'  ) data = dataCopy
-    else data = dataCopy.filter(pago => pago.type === type)
-    if (dates) this.handleDates(data, type)(dates)
-    else this.setState({ data, type, dates })
+    if (type === 'todos') {
+      data = showCancelled
+        ? dataCopy
+        : dataCopy.filter(({ status }) => {
+            console.log(status)
+            return status !== 2
+          })
+    } else {
+      data = showCancelled
+        ? dataCopy.filter(pago => pago.type === type)
+        : dataCopy.filter(({ type: t, status }) => t === type && status !== 2)
+    }
+    if (dates) this.handleDates(data, type, showCancelled)(dates)
+    else this.setState({ data, type, dates, showCancelled })
   }
 
-  handleDates = (d, type) => dates => {
+  handleDates = (d, type, showCancelled) => dates => {
     const data = d.filter(pago => {
       const f = moment(pago.fecha)
       let status = false
@@ -134,11 +151,16 @@ export default class Pago extends React.Component {
       return status
     })
 
-    this.setState({ data, dates, type })
+    this.setState({ data, dates, type, showCancelled })
   }
 
+  // handleCancelled = () => {
+  //   const { showCancelled } = this.state
+  //   this.handleSelect(null, null, !showCancelled)
+  // }
+
   render() {
-    const { data, dataCopy, type } = this.state
+    const { data, showCancelled } = this.state
     return (
       <div className="row">
         <div className="col-12 my-3">
@@ -146,11 +168,19 @@ export default class Pago extends React.Component {
             Exportar <Icon type="file-excel" />
           </CSVLink>
         </div>
+        <div className="col-12 mb-3">
+          <a onClick={() => this.handleSelect()}>
+            {showCancelled
+              ? 'Ocultar pagos cancelados'
+              : 'Mostrar pagos cancelados'}
+          </a>
+        </div>
         <div className="col-6">
           <Select
             onChange={type => this.handleSelect(type, null)}
             placeholder="Filtar por..."
             className="fw"
+            // value={select}
           >
             <Select.Option key="todos">Todos</Select.Option>
             <Select.Option key="subscripcion">Suscripción</Select.Option>

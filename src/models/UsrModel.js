@@ -25,7 +25,7 @@ const submit = async model => {
   if (response) return false
 }
 
-const Columns = showModal => {
+const Columns = (showModal, setDataToState) => {
   return [
     {
       label: 'Nombre',
@@ -62,6 +62,17 @@ const Columns = showModal => {
               : 'Ya venció'
             : 'No tiene mes(es) ilimitados'}
         </span>
+      )
+    },
+    {
+      label: 'Status',
+      key: 'actions',
+      Render: selected => (
+        <DatatableActions
+          model="usuario"
+          selected={selected}
+          setDataToState={setDataToState}
+        />
       )
     },
     {

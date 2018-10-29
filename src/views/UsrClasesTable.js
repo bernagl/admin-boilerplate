@@ -57,6 +57,10 @@ export default class ClasesTable extends Component {
       Render: ({ clase: { nombre } }) => <span>{nombre}</span>
     },
     {
+      label: 'Sucursal',
+      Render: ({ gimnasio: { nombre } }) => <span>{nombre}</span>
+    },
+    {
       label: 'Coach',
       Render: ({ instructor: { nombre } }) => <span>{nombre}</span>
     },

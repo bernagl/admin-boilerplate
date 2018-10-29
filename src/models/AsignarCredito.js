@@ -58,6 +58,7 @@ export default class Horario extends Component {
     const { id, nombre } = dataSource.find(usuario => usuario.correo === correo)
     const paquete = paquetes.find(p => p.id === pselected)
     const sucursal = sucursales.find(suc => suc.id === sselected)
+    console.log(sucursal)
     const response = await asignarCreditos({
       model: 'usuario',
       creditos,
@@ -104,8 +105,8 @@ export default class Horario extends Component {
   }
 
   render() {
-    const { checked, data, paquetes: p, sucursales, sselected } = this.state
-    const paquetes = p.filter(paq => sselected === paq.sucursal)
+    const { checked, data, paquetes, sucursales, sselected } = this.state
+    // const paquetes = p.filter(paq => sselected === paq.sucursal)
     return (
       <AnimationWrapper>
         <div className="row">
