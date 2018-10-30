@@ -118,7 +118,7 @@ export default class Datatable extends Component {
             columns={Columns(this.showModal, this.setDataToState)}
             data={data}
             emptyText={() => 'Esta tabla aún no tiene ningún dato'}
-            footer={false}
+            footer={true}
             // header={true}
             pagination={50}
             search={true}
