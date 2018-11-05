@@ -33,25 +33,24 @@ const Columns = (showModal, setDataToState) => {
       Render: element => <span>{element.nombre}</span>
     },
     { label: 'Correo', key: 'correo' },
-    {
-      label: 'Créditos',
-      Render: ({ creditos, ilimitado }) => (
-        <span>
-          {ilimitado ? (
-            moment(ilimitado.fin).format() > moment().format() ? (
-              <Tooltip title="Tiene paquete ilímitado">
-                {creditos['-LJ5w7hFuZxYmwiprTIY']} •
-              </Tooltip>
-            ) : (
-              creditos['-LJ5w7hFuZxYmwiprTIY']
-            )
-          ) : (
-            creditos['-LJ5w7hFuZxYmwiprTIY']
-          )}
-        </span>
-      )
-      // <span>{creditos['-LJ5w7hFuZxYmwiprTIY']}</span>
-    },
+    // {
+    //   label: 'Créditos',
+    //   Render: ({ creditos, ilimitado }) => (
+    //     <span>
+    //       {ilimitado ? (
+    //         moment(ilimitado.fin).format() > moment().format() ? (
+    //           <Tooltip title="Tiene paquete ilímitado">
+    //             {creditos['-LJ5w7hFuZxYmwiprTIY']} •
+    //           </Tooltip>
+    //         ) : (
+    //           creditos['-LJ5w7hFuZxYmwiprTIY']
+    //         )
+    //       ) : (
+    //         creditos['-LJ5w7hFuZxYmwiprTIY']
+    //       )}
+    //     </span>
+    //   )
+    // },
     {
       label: 'Fecha de corte',
       Render: ({ ilimitado }) => (

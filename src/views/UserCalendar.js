@@ -26,6 +26,7 @@ export default class extends Component {
     const { userClases, creditos, ilimitado } = this.props
     const clases = await getDocumentsByModel('horario')
     const sucursales = await getDocumentsByModel('sucursal')
+    clases.sort((a, b) => moment(a.inicio) - moment(b.inicio))
     this.setState({
       clases,
       userClases: userClases ? userClases : {},
@@ -53,7 +54,8 @@ export default class extends Component {
   }
 
   eventRender = event => {
-    const { id, inicio, fin, instructor, clase } = event
+    const { id, inicio, fin, instructor, clase, status:s } = event
+    if(s===2) return
     const { gymSelected, userClases, cart } = this.state
     if (event.gimnasio.id !== gymSelected) return false
     const isReserved = Object.keys(userClases).find(
@@ -152,9 +154,7 @@ export default class extends Component {
     } = this.state
     const cartLength = Object.keys(cart).length
     const sucursalCredits =
-      typeof creditos[gymSelected] === 'undefined'
-        ? 0
-        : creditos[gymSelected]
+      typeof creditos[gymSelected] === 'undefined' ? 0 : creditos[gymSelected]
     return (
       <div className="row">
         <div className="col-12">
