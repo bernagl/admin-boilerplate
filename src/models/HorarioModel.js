@@ -94,7 +94,7 @@ export default class Horario extends Component {
     fechasFinal.map(async (fecha, key) => {
       const r = await createHorario({
         cupo,
-        fecha: moment(fecha).format('L'),
+        fecha: moment(fecha).format(),
         gimnasio: gimnasios[gimnasio],
         clase: clases[clase],
         inscritos_numero: 0,

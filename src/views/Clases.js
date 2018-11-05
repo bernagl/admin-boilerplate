@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import AnimationWrapper from '../components/AnimationWrapper'
-import { Button, Card, Icon, Input, message, Modal, Radio, Tabs } from 'antd'
+import { Button, Icon, Input, message, Modal, Radio, Tabs } from 'antd'
 import moment from 'moment'
 import 'moment/locale/es'
 import { Body, Header } from '../components/Calendario'
@@ -13,7 +13,7 @@ import {
   getUsuarios,
   getGanancias
 } from '../actions/clase_actions'
-// import { sendMail } from '../actions/mail_actions'
+import EditarClase from '../components/EditarClase'
 import '../assets/calendar.css'
 
 const RadioButton = Radio.Button
@@ -117,7 +117,7 @@ export default class Gimnasio extends Component {
     days.map((day, i) => {
       const evts = events.filter(
         (e, j) =>
-          moment(day).format('L') === e.fecha && e.gimnasio.id === id_gym
+          moment(day).format() === e.fecha && e.gimnasio.id === id_gym
       )
       return (d[i] = { events: evts, name: d[i].name })
     })
@@ -158,6 +158,14 @@ export default class Gimnasio extends Component {
       message.error('Ocurrió un error, por favor intentalo de nuevo')
     }
   }
+
+  updatedClass = async () => {
+    const clases = await getDocumentsByModel('horario')
+    this.setState({ clases, events: clases, modal: false }, () =>
+      this.daysHandler()
+    )
+  }
+
   cancel = () => {
     this.setState({ modal: false, usuarios: [] })
   }
@@ -178,10 +186,6 @@ export default class Gimnasio extends Component {
       dias,
       clases,
       modal,
-      ganancia,
-      totalPagos,
-      totalUsuarios,
-      totalClases,
       gymSelected,
       gimnasios,
       usuarios
@@ -190,30 +194,6 @@ export default class Gimnasio extends Component {
       <AnimationWrapper>
         <div className="col-12 my-4">
           <div className="row">
-            {/* <div className="col-12 mb-5">
-              <div className="row">
-                <div className="col-4">
-                  <Card title="Pagos">
-                    <p>
-                      Ganancia total: $
-                      {ganancia.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}{' '}
-                      MXN
-                    </p>
-                    <p>Total pagos: {totalPagos}</p>
-                  </Card>
-                </div>
-                <div className="col-4">
-                  <Card title="Usuarios">
-                    <p>Total: {totalUsuarios}</p>
-                  </Card>
-                </div>
-                <div className="col-4">
-                  <Card title="Clases">
-                    Total: {totalClases}
-                  </Card>
-                </div>
-              </div>
-            </div> */}
             <div className="col-12 container-shadow p-2 p-md-4">
               <div className="row">
                 <div className="col-12 center-text my-4 my-md-0">
@@ -266,19 +246,23 @@ export default class Gimnasio extends Component {
             title="Detalle de la clase"
             visible={modal}
             onCancel={this.cancel}
-            onOk={this.cancelarClase}
-            cancelText="Regresar"
-            okText="Cancelar clase"
+            onOk={this.cancel}
+            // onOk={this.cancelarClase}
+            cancelText=""
+            okText="Cerrar"
           >
-            <Tabs defaultActiveKey="2">
-              <TabPane tab="Usuarios inscritos" key="2">
+            <Tabs defaultActiveKey="1">
+              <TabPane tab="Usuarios inscritos" key="1">
                 {usuarios.length > 0 ? (
                   usuarios.map(({ id, nombre }) => <div key={id}>{nombre}</div>)
                 ) : (
                   <div>No hay usuarios inscritos</div>
                 )}
               </TabPane>
-              <TabPane tab="Cancelar clase" key="1">
+              <TabPane tab="Editar clase" key="2">
+                <EditarClase event={event} updatedClass={this.updatedClass} />
+              </TabPane>
+              <TabPane tab="Cancelar clase" key="3">
                 <div className="row">
                   <div className="col-12">
                     <span>Clase: {event.clase.nombre}</span>
@@ -307,6 +291,11 @@ export default class Gimnasio extends Component {
                         inicio
                       </span>
                     )}
+                  </div>
+                  <div className="col-12 mt-2">
+                    <Button type="primary" onClick={this.cancelarClase}>
+                      Cancelar clase
+                    </Button>
                   </div>
                 </div>
               </TabPane>
