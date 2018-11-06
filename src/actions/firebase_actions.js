@@ -40,7 +40,6 @@ export const addDocument = collection => document => {
 }
 
 export const updateDocument = collection => ({ id, ...data }) => {
-  console.log({ collection, id, data })
   return db
     .ref(collection)
     .child(id)

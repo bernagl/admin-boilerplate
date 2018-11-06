@@ -61,7 +61,7 @@ export default class Pago extends React.Component {
     },
     {
       label: 'Sucursal',
-      key: 'sucursal',
+      key: 'sucursal'
       // Render: ({ name }) => <span>{name}</span>
     },
     {
@@ -129,7 +129,6 @@ export default class Pago extends React.Component {
       data = showCancelled
         ? dataCopy
         : dataCopy.filter(({ status }) => {
-            console.log(status)
             return status !== 2
           })
     } else {

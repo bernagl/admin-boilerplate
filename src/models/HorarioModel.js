@@ -216,17 +216,10 @@ export default class Horario extends Component {
                 <div className="col-12">
                   <Item label="Fechas" layout="vertical">
                     <RangePicker
-                      // onChange={e => console.log(e)}
                       placeholder={['Inicio', 'Fin']}
                       className="fw"
                       onChange={fechas => this.setValue('fechas', fechas)}
                     />
-                    {/* 
-                <MultipleDatePicker
-                  onSubmit={fechas => this.setValue('fechas', fechas)}
-                  className="ant-input-number-input-wrap"
-                />
-              */}
                   </Item>
                 </div>
                 <div className="col-3">

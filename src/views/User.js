@@ -183,8 +183,6 @@ export default class extends React.Component {
 
   render() {
     const { logs, clases, user, sucursales, activeSucursal } = this.state
-    console.log(sucursales)
-    console.log(activeSucursal)
     const { id } = this.props.match.params
     const hasUnlimited = user
       ? user.status === 1
@@ -244,7 +242,6 @@ export default class extends React.Component {
                       <Select
                         name="sucursal"
                         onChange={activeSucursal => {
-                          console.log(activeSucursal)
                           this.setState({
                             activeSucursal,
                             activeSucursalId: sucursales[activeSucursal].id

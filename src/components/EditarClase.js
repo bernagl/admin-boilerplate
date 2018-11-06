@@ -1,7 +1,8 @@
 import React, { Component, Fragment } from 'react'
-import { Form as F, InputNumber, Button, message, TimePicker } from 'antd'
+import { Form as F, Button, message } from 'antd'
 import Form from '../Form/Form'
-import Input from '../Form/Input'
+import TimePicker from '../Form/Timepicker'
+import InputNumber from '../Form/Inputnumber'
 import { Select, Option } from '../Form/Select'
 import Datepicker from '../Form/Datepicker'
 import {
@@ -30,6 +31,11 @@ export default class extends Component {
     this.setData()
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.event.id === nextProps.event.id) return
+    this.setData()
+  }
+
   setData = async () => {
     const { gimnasio, inicio, fin, cupo, costo } = this.props.event
     const salones = await getSalones(gimnasio.id)
@@ -42,7 +48,7 @@ export default class extends Component {
       event: { id },
       updatedClass
     } = this.props
-    const { inicio, fin, cupo, costo, salones, instructores } = this.state
+    const { inicio, fin, salones, instructores } = this.state
     const salon = salones.find(s => s.id === model.salon)
     const instructor = instructores.find(s => s.id === model.instructor)
     await updateDocument('horario')({
@@ -50,17 +56,15 @@ export default class extends Component {
       ...model,
       fecha: moment(model.fecha).format(),
       inicio: moment(
-        `${moment(model.fecha).format('YYYY-MM-DD')}T${moment(inicio).format(
-          'HH:mm'
-        )}`
+        `${moment(model.fecha).format('YYYY-MM-DD')}T${moment(
+          model.inicio
+        ).format('HH:mm')}`
       ).format(),
       fin: moment(
-        `${moment(model.fecha).format('YYYY-MM-DD')}T${moment(fin).format(
+        `${moment(model.fecha).format('YYYY-MM-DD')}T${moment(model.fin).format(
           'HH:mm'
         )}`
       ).format(),
-      cupo,
-      costo,
       salon,
       instructor
     })
@@ -118,40 +122,40 @@ export default class extends Component {
             />
           </div>
           <div className="col-4">
-            <Item label="Hora inicio" layout="vertical">
-              <TimePicker
-                onChange={inicio => this.setValue('inicio', inicio)}
-                defaultValue={moment(inicio)}
-              />
-            </Item>
+            <TimePicker
+              defaultValue={moment(inicio)}
+              name="inicio"
+              label="Inicio"
+              placeholder="Selecciona una hora de inicio"
+            />
           </div>
           <div className="col-4">
-            <Item label="Hora fin" layout="vertical">
-              <TimePicker
-                onChange={fin => this.setValue('fin', fin)}
-                defaultValue={moment(fin)}
-              />
-            </Item>
+            <TimePicker
+              name="fin"
+              label="fin"
+              placeholder="Selecciona una hora de fin"
+              defaultValue={moment(fin)}
+            />
           </div>
-          <div className="col-3">
-            <Item label="Cupo" layout="vertical">
-              <InputNumber
-                min={1}
-                max={100}
-                defaultValue={cupo}
-                onChange={cupo => this.setValue('cupo', cupo)}
-              />
-            </Item>
+          <div className="col-6">
+            <InputNumber
+              name="cupo"
+              label="Cupo (total de alumnas)"
+              placeholder="Selecciona un cupo"
+              min={1}
+              max={100}
+              defaultValue={cupo}
+            />
           </div>
-          <div className="col-3">
-            <Item label="Costo (créditos)" layout="vertical">
-              <InputNumber
-                min={1}
-                max={100}
-                defaultValue={costo}
-                onChange={costo => this.setValue('costo', costo)}
-              />
-            </Item>
+          <div className="col-6">
+            <InputNumber
+              name="costo"
+              label="Costo (créditos)"
+              placeholder="Selecciona el costo de la clase"
+              min={1}
+              max={100}
+              defaultValue={costo}
+            />
           </div>
         </div>
       </Form>

@@ -58,7 +58,6 @@ export default class Horario extends Component {
     const { id, nombre } = dataSource.find(usuario => usuario.correo === correo)
     const paquete = paquetes.find(p => p.id === pselected)
     const sucursal = sucursales.find(suc => suc.id === sselected)
-    console.log(sucursal)
     const response = await asignarCreditos({
       model: 'usuario',
       creditos,

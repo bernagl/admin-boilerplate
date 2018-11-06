@@ -63,8 +63,6 @@ export const asignarCreditos = ({
       screditos = creditos[sid]
         ? +creditos[sid] + +paquete.creditos
         : +paquete.creditos
-    console.log(screditos)
-    console.log(creditos)
     if (typeof pagos === 'undefined') pagos = {}
     return db
       .ref('pago')
