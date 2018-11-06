@@ -74,9 +74,11 @@ export default class extends Component {
           status === 0
             ? this.eventHandler(event)
             : status === 2
-              ? message.info(
-                  'Para cancelar la clase es en el apartado de clases'
-                )
+              ? moment(event.inicio) > moment()
+                ? message.info(
+                    'Para cancelar la clase es en el apartado de clases'
+                  )
+                : message.info('La clase ya concluyó y no se puede cancelar')
               : message.info('La clase ya se venció')
         }}
       >
@@ -96,6 +98,11 @@ export default class extends Component {
       creditos: stateCreditos,
       ilimitado
     } = this.state
+    console.log(moment(clase.inicio), moment())
+    if (moment(clase.inicio) < moment()) {
+      message.info('Esta clase ya se cumplió y no puedes cancelarla')
+      return
+    }
     const itsOnCart = typeof stateCart[clase.id] === 'undefined' ? false : true
     const sucursalCredits =
       typeof stateCreditos[gymSelected] === 'undefined'
