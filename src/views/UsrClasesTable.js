@@ -48,6 +48,7 @@ export default class ClasesTable extends Component {
 
   render() {
     const { clases } = this.state
+    console.log(clases)
     return <Table title="Clase(s)" data={clases} cols={this.clasesCol()} />
   }
 
@@ -74,7 +75,13 @@ export default class ClasesTable extends Component {
       key: 'hora',
       Render: ({ inicio }) => <span>{moment(inicio).format('LT')}</span>
     },
-    { label: 'Créditos', key: 'costo' },
+    {
+      label: 'Créditos',
+      key: 'costo',
+      Render: ({ costo, status }) => (
+        <span>{status === 4 || status === 2 ? 0 : costo}</span>
+      )
+    },
     {
       label: 'Estatus',
       key: 'status',
@@ -90,7 +97,9 @@ export default class ClasesTable extends Component {
                       ? 'Cancelaste la clase'
                       : item.status === 3
                         ? 'Estas en la lista de espera, si algún usuario cancela se te notificará por correo'
-                        : 'La clase ya pasó'}
+                        : item.status === 4
+                          ? 'La clase fue cancelada para todas las alumnas'
+                          : 'La clase ya pasó'}
                 </p>
               }
               title={
@@ -100,7 +109,9 @@ export default class ClasesTable extends Component {
                     ? 'Cumplida'
                     : item.status === 3
                       ? 'En cola'
-                      : 'Cancelada'
+                      : item.status === 4
+                        ? 'Cancelada por Administración'
+                        : 'Cancelada'
               }
             >
               <Tag
@@ -118,7 +129,9 @@ export default class ClasesTable extends Component {
                     ? 'Cancelada'
                     : item.status === 3
                       ? 'En lista de espera'
-                      : 'Cumplida'}
+                      : item.status === 4
+                        ? 'Cancelada [Admin]'
+                        : 'Cumplida'}
               </Tag>
             </Popover>
             {item.status === 0 && (

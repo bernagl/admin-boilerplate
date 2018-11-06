@@ -50,7 +50,12 @@ export default class extends React.Component {
         ? []
         : Object.keys(user.clases).map(async id => {
             const clase = await getDocument('horario')(id)
-            return { ...clase, status: user.clases[id] }
+            const status = clase['status']
+              ? clase['status'] === 2
+                ? 4
+                : user.clases[id]
+              : user.clases[id]
+            return { ...clase, status }
           })
     const logsPromise =
       typeof user.logs === 'undefined'

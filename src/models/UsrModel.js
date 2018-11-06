@@ -53,15 +53,21 @@ const Columns = (showModal, setDataToState) => {
     // },
     {
       label: 'Fecha de corte',
-      Render: ({ ilimitado }) => (
-        <span>
-          {ilimitado
-            ? moment(ilimitado.fin).format() > moment().format()
-              ? moment(ilimitado.fin).format('LL')
-              : 'Ya venció'
-            : 'No tiene mes(es) ilimitados'}
-        </span>
-      )
+      Render: ({ creditos, ilimitado }) => {
+        const rioja = creditos ? +creditos['-LJ5w7hFuZxYmwiprTIY'] : 0
+        const valle = creditos ? +creditos['-LPqzwORZYklJWDEgtv0'] : 0
+        return (
+          <span>
+            {ilimitado
+              ? moment(ilimitado.fin).format() > moment().format()
+                ? moment(ilimitado.fin).format('LL')
+                : creditos
+                  ? rioja + valle
+                  : 'Ya venció'
+              : 'No tiene mes(es) ilimitados'}
+          </span>
+        )
+      }
     },
     {
       label: 'Status',

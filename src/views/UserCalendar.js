@@ -14,7 +14,7 @@ const RadioGroup = Radio.Group
 
 export default class extends Component {
   state = {
-    userClases: [],
+    userClases: {},
     sucursales: [],
     clases: [],
     creditos: {},
@@ -44,7 +44,7 @@ export default class extends Component {
     )
       return
     this.setState({
-      userClases: this.props.userClases,
+      userClases: this.props.userClases ? this.props.userClases : {},
       creditos: this.props.creditos
     })
   }
@@ -54,8 +54,8 @@ export default class extends Component {
   }
 
   eventRender = event => {
-    const { id, inicio, fin, instructor, clase, status:s } = event
-    if(s===2) return
+    const { id, inicio, fin, instructor, clase, status: s } = event
+    if (s === 2) return
     const { gymSelected, userClases, cart } = this.state
     if (event.gimnasio.id !== gymSelected) return false
     const isReserved = Object.keys(userClases).find(
