@@ -15,6 +15,7 @@ import {
 } from '../actions/clase_actions'
 import EditarClase from '../components/EditarClase'
 import '../assets/calendar.css'
+import { sendMail } from '../actions/mail_actions'
 
 const RadioButton = Radio.Button
 const RadioGroup = Radio.Group
@@ -116,8 +117,7 @@ export default class Gimnasio extends Component {
     let id_gym = gimnasios[gymSelected].id
     days.map((day, i) => {
       const evts = events.filter(
-        (e, j) =>
-          moment(day).format() === e.fecha && e.gimnasio.id === id_gym
+        (e, j) => moment(day).format() === e.fecha && e.gimnasio.id === id_gym
       )
       return (d[i] = { events: evts, name: d[i].name })
     })
@@ -132,7 +132,7 @@ export default class Gimnasio extends Component {
   }
 
   cancelarClase = async () => {
-    const { event, motivo, cancelClass } = this.state
+    const { event, motivo, cancelClass, usuarios } = this.state
     if (!cancelClass) {
       message.error(
         'Las clases solo se pueden cancelar 3 horas antes de su inicio'
@@ -149,6 +149,15 @@ export default class Gimnasio extends Component {
     if (response === 202) {
       message.success(
         'La clase se ha cancelado y los usuarios han sido notificados'
+      )
+      // sendMail(usuarios, motivo)
+      sendMail(
+        usuarios,
+        {
+          instructora: event.instructor.nombre,
+          inicio: moment(event.inicio).format('LLLL')
+        },
+        motivo
       )
       const clases = await getDocumentsByModel('horario')
       this.setState({ clases, events: clases, modal: false }, () =>
@@ -283,7 +292,9 @@ export default class Gimnasio extends Component {
                     {cancelClass ? (
                       <Input.TextArea
                         placeholder="Motivo de cancelamiento"
-                        onChange={motivo => this.setState({ motivo })}
+                        onChange={({ target: { value } }) =>
+                          this.setState({ motivo: value })
+                        }
                       />
                     ) : (
                       <span>
