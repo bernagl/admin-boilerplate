@@ -1,14 +1,29 @@
 import { db } from './firebase-config'
 
-export const cancelarClase = ({ clase, motivo }) => {
+export const cancelarClase = ({ clase, motivo, usuarios }) => {
+  console.log(usuarios)
+  const sid = clase.gimnasio.id
   const ref = db.ref('horario').child(clase.id)
   return ref
     .once('value')
     .then(snapshot => {
-      // const clase = snapshot.val()
       return ref
         .update({ status: 2 })
-        .then(r => 202)
+        .then(async r => {
+          const responsePromise = usuarios.map(async ({ id }) => {
+            const userRef = db.ref('usuario').child(id)
+            await userRef.once('value', usnap => {
+              const user = usnap.val()
+              let creditos = +user.creditos[sid] + 1
+              userRef.update({
+                creditos: { ...user.creditos, [sid]: creditos }
+              })
+            })
+          })
+
+          await Promise.all(responsePromise)
+          return 202
+        })
         .catch(e => 404)
     })
     .catch(e => 404)

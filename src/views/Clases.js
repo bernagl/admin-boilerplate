@@ -145,7 +145,7 @@ export default class Gimnasio extends Component {
       )
       return
     }
-    const response = await cancelarClase({ clase: event, motivo })
+    const response = await cancelarClase({ clase: event, motivo, usuarios })
     if (response === 202) {
       message.success(
         'La clase se ha cancelado y los usuarios han sido notificados'
