@@ -65,13 +65,12 @@ export default class Gimnasio extends Component {
     const totalClases = await getCollectionLength('horario')
     const totalPagos = await getCollectionLength('pago')
     const ganancia = await getGanancias()
-    const clasesOrdered = clases.sort(
-      (a, b) =>
-        moment(a.inicio) > moment(b.inicio)
-          ? 1
-          : moment(a.inicio) < moment(b.inicio)
-            ? -1
-            : 0
+    const clasesOrdered = clases.sort((a, b) =>
+      moment(a.inicio) > moment(b.inicio)
+        ? 1
+        : moment(a.inicio) < moment(b.inicio)
+        ? -1
+        : 0
     )
     this.setState(
       {
@@ -95,10 +94,10 @@ export default class Gimnasio extends Component {
     const weekNumber = sum
       ? week + 1
       : sum === 0
-        ? week - 1
-        : week === 0
-          ? 0
-          : week - 1
+      ? week - 1
+      : week === 0
+      ? 0
+      : week - 1
     var startOfWeek = moment()
       .add(weekNumber, 'weeks')
       .startOf('isoWeek')
@@ -117,7 +116,9 @@ export default class Gimnasio extends Component {
     let id_gym = gimnasios[gymSelected].id
     days.map((day, i) => {
       const evts = events.filter(
-        (e, j) => moment(day).format() === e.fecha && e.gimnasio.id === id_gym
+        (e, j) =>
+          (moment(day).format() === e.fecha && e.gimnasio.id === id_gym) ||
+          (moment(day).format('L') === e.fecha && e.gimnasio.id === id_gym)
       )
       return (d[i] = { events: evts, name: d[i].name })
     })
