@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import AnimationWrapper from '../components/AnimationWrapper'
-import { Button, Icon, Input, message, Modal, Radio, Tabs } from 'antd'
+import { Button, Divider, Icon, Input, message, Modal, Radio, Tabs } from 'antd'
 import moment from 'moment'
 import 'moment/locale/es'
 import { Body, Header } from '../components/Calendario'
@@ -29,6 +29,7 @@ message.config({
 
 export default class Gimnasio extends Component {
   state = {
+    activeWeek: false,
     cancelClass: true,
     gymSelected: 0,
     gimnasios: [],
@@ -97,7 +98,7 @@ export default class Gimnasio extends Component {
       ? week - 1
       : week === 0
       ? 0
-      : week - 1
+      : week
     var startOfWeek = moment()
       .add(weekNumber, 'weeks')
       .startOf('isoWeek')
@@ -115,11 +116,19 @@ export default class Gimnasio extends Component {
     let d = [...dias]
     let id_gym = gimnasios[gymSelected].id
     days.map((day, i) => {
-      const evts = events.filter(
-        (e, j) =>
-          (moment(day).format() === e.fecha && e.gimnasio.id === id_gym) ||
+      const evts = events.filter((e, j) => {
+        // if (e.id === '-LTxfSKrIgupAolimTza') {
+        //   console.log(e)
+        //   console.log(moment(day).format(), e.fecha, e.gimnasio.id, id_gym)
+        //   console.log(moment(day).format('L'), e.fecha, e.gimnasio.id, id_gym)
+        // }
+        return (
+          (moment(day).format('MM-DD-YYYY') ===
+            moment(e.fecha).format('MM-DD-YYYY') &&
+            e.gimnasio.id === id_gym) ||
           (moment(day).format('L') === e.fecha && e.gimnasio.id === id_gym)
-      )
+        )
+      })
       return (d[i] = { events: evts, name: d[i].name })
     })
 
@@ -182,7 +191,7 @@ export default class Gimnasio extends Component {
 
   eventHandler = async (event, cola) => {
     const difference = moment.duration(moment(event.inicio).diff(moment()))
-    const cancelClass = difference.asHours() > 3 ? true : false
+    const cancelClass = difference.asMinutes() > 1 ? true : false
     const usuarios = await getUsuarios(event.id)
     this.setState({ modal: true, event, cancelClass, usuarios })
     // sendMail()
@@ -261,57 +270,63 @@ export default class Gimnasio extends Component {
             cancelText=""
             okText="Cerrar"
           >
-            <Tabs defaultActiveKey="1">
-              <TabPane tab="Usuarios inscritos" key="1">
-                {usuarios.length > 0 ? (
-                  usuarios.map(({ id, nombre }) => <div key={id}>{nombre}</div>)
-                ) : (
-                  <div>No hay usuarios inscritos</div>
-                )}
-              </TabPane>
-              <TabPane tab="Editar clase" key="2">
-                <EditarClase event={event} updatedClass={this.updatedClass} />
-              </TabPane>
-              <TabPane tab="Cancelar clase" key="3">
-                <div className="row">
-                  <div className="col-12">
-                    <span>Clase: {event.clase.nombre}</span>
-                  </div>
-                  <div className="col-12">
-                    <span>Fecha: {event.fecha}</span>
-                  </div>
-                  <div className="col-12">
-                    <span>Instructor: {event.instructor.nombre}</span>
-                  </div>
-                  <div className="col-12">
-                    <span>
-                      De: {moment(event.inicio).format('LT')} a{' '}
-                      {moment(event.fin).format('LT')}
-                    </span>
-                  </div>
-                  <div className="col-12 mt-3">
-                    {cancelClass ? (
-                      <Input.TextArea
-                        placeholder="Motivo de cancelamiento"
-                        onChange={({ target: { value } }) =>
-                          this.setState({ motivo: value })
-                        }
-                      />
-                    ) : (
+            <Fragment>
+              <div>Clase ID: {event.id}</div>
+              <Divider />
+              <Tabs defaultActiveKey="1">
+                <TabPane tab="Usuarios inscritos" key="1">
+                  {usuarios.length > 0 ? (
+                    usuarios.map(({ id, nombre }) => (
+                      <div key={id}>{nombre}</div>
+                    ))
+                  ) : (
+                    <div>No hay usuarios inscritos</div>
+                  )}
+                </TabPane>
+                <TabPane tab="Editar clase" key="2">
+                  <EditarClase event={event} updatedClass={this.updatedClass} />
+                </TabPane>
+                <TabPane tab="Cancelar clase" key="3">
+                  <div className="row">
+                    <div className="col-12">
+                      <span>Clase: {event.clase.nombre}</span>
+                    </div>
+                    <div className="col-12">
+                      <span>Fecha: {event.fecha}</span>
+                    </div>
+                    <div className="col-12">
+                      <span>Instructor: {event.instructor.nombre}</span>
+                    </div>
+                    <div className="col-12">
                       <span>
-                        Las clases solo se pueden cancelar 3 horas antes de su
-                        inicio
+                        De: {moment(event.inicio).format('LT')} a{' '}
+                        {moment(event.fin).format('LT')}
                       </span>
-                    )}
+                    </div>
+                    <div className="col-12 mt-3">
+                      {cancelClass ? (
+                        <Input.TextArea
+                          placeholder="Motivo de cancelamiento"
+                          onChange={({ target: { value } }) =>
+                            this.setState({ motivo: value })
+                          }
+                        />
+                      ) : (
+                        <span>
+                          Las clases solo se pueden cancelar antes de que haya
+                          comenzado
+                        </span>
+                      )}
+                    </div>
+                    <div className="col-12 mt-2">
+                      <Button type="primary" onClick={this.cancelarClase}>
+                        Cancelar clase
+                      </Button>
+                    </div>
                   </div>
-                  <div className="col-12 mt-2">
-                    <Button type="primary" onClick={this.cancelarClase}>
-                      Cancelar clase
-                    </Button>
-                  </div>
-                </div>
-              </TabPane>
-            </Tabs>
+                </TabPane>
+              </Tabs>
+            </Fragment>
           </Modal>
         )}
       </AnimationWrapper>

@@ -12,8 +12,6 @@ import {
 import { getSalones } from '../actions/horario_actions'
 import moment from 'moment'
 
-const { Item } = F
-
 export default class extends Component {
   state = {
     instructores: [],
@@ -53,6 +51,7 @@ export default class extends Component {
     const instructor = instructores.find(s => s.id === model.instructor)
     await updateDocument('horario')({
       id,
+      status: 1,
       ...model,
       fecha: moment(model.fecha).format(),
       inicio: moment(
@@ -87,6 +86,7 @@ export default class extends Component {
       cupo,
       costo
     } = this.props.event
+    console.log(this.props.event)
     const { instructores, salones } = this.state
     return (
       <Form submit={this.submit} shouldUpdate>
@@ -115,7 +115,7 @@ export default class extends Component {
           </div>
           <div className="col-4">
             <Datepicker
-              defaultValue={moment(fecha)}
+              defaultValue={moment(inicio)}
               name="fecha"
               label="Fecha"
               placeholder="Selecciona una fecha"

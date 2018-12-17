@@ -1,17 +1,23 @@
 import { auth, db } from './firebase-config'
 import { message } from 'antd'
 import moment from 'moment'
+let e = null
+let p = null
 
 export const login = async (correo, contrasena) => {
   try {
     const { user } = await auth.signInWithEmailAndPassword(correo, contrasena)
+    console.log(user)
     return db
       .ref(`admin/${user.uid}`)
       .once('value')
       .then(result => {
         const usuario = result.val()
-        if (usuario) return 202
-        else return 404
+        if (usuario) {
+          localStorage.setItem('e', correo)
+          localStorage.setItem('p', contrasena)
+          return 202
+        } else return 404
       })
   } catch (e) {
     return 404
@@ -75,8 +81,11 @@ export const registerUser = async ({
         tarjetas: {},
         invitado: true
       })
-      .then(result => {
+      .then(async result => {
         message.success('Usuario agregado correctamente')
+        const e = localStorage.getItem('e')
+        const p = localStorage.getItem('p')
+        await login(e, p)
         return 202
       })
   } catch ({ code }) {
@@ -114,7 +123,7 @@ export const authState = async context => {
               loading: false
             })
           } else {
-            logout()
+            // logout()
             return 404
           }
         })
@@ -127,7 +136,10 @@ export const authState = async context => {
 export const logout = () => {
   auth
     .signOut()
-    .then(() => console.log('logout'))
+    .then(() => {
+      localStorage.removeItem('e')
+      localStorage.removeItem('p')
+    })
     .catch(e => console.log(e))
 }
 

@@ -18,6 +18,7 @@ export default class ClasesTable extends Component {
     const { clases } = this.props
     if (oldProps.clases === clases) return
     const c = this.setStatusToClase(clases)
+    console.log(c)
     this.setState({ clases: c })
   }
 
@@ -94,24 +95,24 @@ export default class ClasesTable extends Component {
                   {item.status === 0
                     ? 'La fecha aún no se cumple'
                     : item.status === 2
-                      ? 'Cancelaste la clase'
-                      : item.status === 3
-                        ? 'Estas en la lista de espera, si algún usuario cancela se te notificará por correo'
-                        : item.status === 4
-                          ? 'La clase fue cancelada para todas las alumnas'
-                          : 'La clase ya pasó'}
+                    ? 'Cancelaste la clase'
+                    : item.status === 3
+                    ? 'Estas en la lista de espera, si algún usuario cancela se te notificará por correo'
+                    : item.status === 4
+                    ? 'La clase fue cancelada para todas las alumnas'
+                    : 'La clase ya pasó'}
                 </p>
               }
               title={
                 item.status === 0
                   ? 'Pendiente'
                   : item.status === 1
-                    ? 'Cumplida'
-                    : item.status === 3
-                      ? 'En cola'
-                      : item.status === 4
-                        ? 'Cancelada por Administración'
-                        : 'Cancelada'
+                  ? 'Cumplida'
+                  : item.status === 3
+                  ? 'En cola'
+                  : item.status === 4
+                  ? 'Cancelada por Administración'
+                  : 'Cancelada'
               }
             >
               <Tag
@@ -119,19 +120,19 @@ export default class ClasesTable extends Component {
                   item.status === 0
                     ? 'green'
                     : item.status === 3
-                      ? 'blue'
-                      : 'volcano'
+                    ? 'blue'
+                    : 'volcano'
                 }`}
               >
                 {item.status === 0
                   ? 'Pendiente'
                   : item.status === 2
-                    ? 'Cancelada'
-                    : item.status === 3
-                      ? 'En lista de espera'
-                      : item.status === 4
-                        ? 'Cancelada [Admin]'
-                        : 'Cumplida'}
+                  ? 'Cancelada'
+                  : item.status === 3
+                  ? 'En lista de espera'
+                  : item.status === 4
+                  ? 'Cancelada [Admin]'
+                  : 'Cumplida'}
               </Tag>
             </Popover>
             {item.status === 0 && (
