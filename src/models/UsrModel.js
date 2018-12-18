@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import Datatable from '../components/Datatable'
 import DatatableActions from '../components/DatatableActions'
 import { Tooltip } from 'antd'
@@ -6,7 +6,9 @@ import Input from '../components/Input'
 import { registerUser } from '../actions/firebase_auth'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
+import message from 'antd/lib/message'
 import Icon from 'antd/lib/icon'
+import { updateDocument } from '../actions/firebase_actions'
 
 export default () => {
   return (
@@ -21,8 +23,15 @@ export default () => {
 
 const submit = async model => {
   // return { direccion: { calle: model.nombre, cp: model.contrasena }, ...model }
-  const response = registerUser(model)
-  if (response) return false
+  const { id } = model
+  // console.log(id)
+  const response = id
+    ? await updateDocument('usuario')(model)
+    : await registerUser(model)
+  
+  // if (id && response === 202) message.success('Usuario actualizado')
+  // else message.error('Ocurrió un error,por favor vuelve a intentarlo')
+  return response
 }
 
 const Columns = (showModal, setDataToState) => {
@@ -33,24 +42,6 @@ const Columns = (showModal, setDataToState) => {
       Render: element => <span>{element.nombre}</span>
     },
     { label: 'Correo', key: 'correo' },
-    // {
-    //   label: 'Créditos',
-    //   Render: ({ creditos, ilimitado }) => (
-    //     <span>
-    //       {ilimitado ? (
-    //         moment(ilimitado.fin).format() > moment().format() ? (
-    //           <Tooltip title="Tiene paquete ilímitado">
-    //             {creditos['-LJ5w7hFuZxYmwiprTIY']} •
-    //           </Tooltip>
-    //         ) : (
-    //           creditos['-LJ5w7hFuZxYmwiprTIY']
-    //         )
-    //       ) : (
-    //         creditos['-LJ5w7hFuZxYmwiprTIY']
-    //       )}
-    //     </span>
-    //   )
-    // },
     {
       label: 'Fecha de corte',
       Render: ({ creditos, ilimitado }) => {
@@ -62,8 +53,8 @@ const Columns = (showModal, setDataToState) => {
               ? moment(ilimitado.fin).format() > moment().format()
                 ? moment(ilimitado.fin).format('LL')
                 : creditos
-                  ? rioja + valle
-                  : 'Ya venció'
+                ? rioja + valle
+                : 'Ya venció'
               : 'No tiene mes(es) ilimitados'}
           </span>
         )
@@ -99,7 +90,7 @@ const Columns = (showModal, setDataToState) => {
   ]
 }
 
-const Inputs = ({ nombre, edad, telefono, correo, contrasena }) => {
+const Inputs = ({ id, nombre, edad, telefono, correo, contrasena }) => {
   return (
     <React.Fragment>
       <Input
@@ -118,14 +109,16 @@ const Inputs = ({ nombre, edad, telefono, correo, contrasena }) => {
         validationError="Ingresa una edad válida"
         required
       />
-      <Input
-        name="correo"
-        label="Correo"
-        value={correo}
-        validations="isEmail"
-        validationError="Ingresa un email válido"
-        required
-      />
+      {!id && (
+        <Input
+          name="correo"
+          label="Correo"
+          value={correo}
+          validations="isEmail"
+          validationError="Ingresa un email válido"
+          required
+        />
+      )}
       <Input
         name="telefono"
         label="Teléfono"
@@ -134,23 +127,28 @@ const Inputs = ({ nombre, edad, telefono, correo, contrasena }) => {
         validationError="Ingresa un número de teléfono válido"
         required
       />
-      <Input
-        name="contrasena"
-        label="Contraseña"
-        value={contrasena}
-        validations="minLength:6"
-        type="password"
-        validationError="Ingresa una contraseña válida"
-        required
-      />
-      <Input
-        name="confirmar"
-        label="Confirmar contraseña"
-        validations="equalsField:contrasena"
-        type="password"
-        validationError="Las contraseñas no coinciden"
-        required
-      />
+      {!id && (
+        <Fragment>
+          <Input
+            name="contrasena"
+            label="Contraseña"
+            value={contrasena}
+            validations="minLength:6"
+            type="password"
+            validationError="Ingresa una contraseña válida"
+            required
+          />
+          <Input
+            name="confirmar"
+            label="Confirmar contraseña"
+            validations="equalsField:contrasena"
+            type="password"
+            validationError="Las contraseñas no coinciden"
+            required
+          />
+        </Fragment>
+      )}
+      <Input name="id" type="hidden" hidden value={id} />
     </React.Fragment>
   )
 }

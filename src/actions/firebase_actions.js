@@ -44,6 +44,6 @@ export const updateDocument = collection => ({ id, ...data }) => {
     .ref(collection)
     .child(id)
     .update({ ...data })
-    .then(r => 202)
-    .catch(e => 404)
+    .then(() => 202)
+    .catch(() => 404)
 }
