@@ -10,21 +10,26 @@ export const cancelarClase = ({ clase, motivo, usuarios }) => {
       return ref
         .update({ status: 2 })
         .then(async r => {
-          const responsePromise = usuarios.map(async ({ id }) => {
-            const userRef = db.ref('usuario').child(id)
-            await userRef.once('value', usnap => {
-              const user = usnap.val()
-              let creditos = +user.creditos[sid] + 1
-              userRef.update({
-                creditos: { ...user.creditos, [sid]: creditos }
+          if (usuarios) {
+            const responsePromise = usuarios.map(async ({ id }) => {
+              const userRef = db.ref('usuario').child(id)
+              await userRef.once('value', usnap => {
+                const user = usnap.val()
+                let creditos = +user.creditos[sid] + 1
+                userRef.update({
+                  creditos: { ...user.creditos, [sid]: creditos }
+                })
               })
             })
-          })
 
-          await Promise.all(responsePromise)
+            await Promise.all(responsePromise)
+          }
           return 202
         })
-        .catch(e => 404)
+        .catch(e => {
+          console.log(e)
+          return 404
+        })
     })
     .catch(e => 404)
 }

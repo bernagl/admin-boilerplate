@@ -16,6 +16,7 @@ import Login from '../views/Login'
 import Recover from '../views/Recover'
 import Register from '../views/Register'
 import Usr from '../views/User'
+import Cancelar from '../views/Cancelar'
 import UsrModel from '../models/UsrModel';
 
 export const Router = () => {
@@ -23,6 +24,7 @@ export const Router = () => {
     <Switch>
       <Route path="/" component={Clases} exact />
       <Route path="/calendario" component={Clases} />
+      <Route path="/cancelar" component={Cancelar} />
       <Route path="/test" component={Test} />
       <Route path="/usuario" component={Usuario} />
       <Route path="/clase" component={Clase} />

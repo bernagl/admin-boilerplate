@@ -108,6 +108,12 @@ class Sidebar extends Component {
               </NavLink>
             </Menu.Item>
           </SubMenu>
+          <Menu.Item key="cancelar">
+            <NavLink activeClassName="active" to="/cancelar">
+              <Icon type="minus-circle" />
+              <span>Cancelar clases</span>
+            </NavLink>
+          </Menu.Item>
           <Menu.Item key="logout" onClick={logout}>
             <Icon type="logout" />
             <span>Salir</span>
