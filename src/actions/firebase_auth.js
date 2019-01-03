@@ -77,6 +77,9 @@ export const registerUser = async ({
         telefono,
         clases: {},
         creditos: { '-LJ5w7hFuZxYmwiprTIY': 1, '-LPrNpstwZt7J3NLUJXc': 1 },
+        expires: moment()
+          .add('1', 'M')
+          .format(),
         created_at: moment().format(),
         tarjetas: {},
         invitado: true

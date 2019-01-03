@@ -120,6 +120,15 @@
   color: red;
 }
 
+.lightgray {
+  color: #a0a0a0;
+}
+
+.line-through {
+  text-decoration: line-through;
+}
+
+
 .input-has-feedback {
   color: #1890ff;
   cursor: pointer;

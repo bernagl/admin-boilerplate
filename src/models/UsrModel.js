@@ -28,7 +28,7 @@ const submit = async model => {
   const response = id
     ? await updateDocument('usuario')(model)
     : await registerUser(model)
-  
+
   // if (id && response === 202) message.success('Usuario actualizado')
   // else message.error('Ocurrió un error,por favor vuelve a intentarlo')
   return response
@@ -44,18 +44,33 @@ const Columns = (showModal, setDataToState) => {
     { label: 'Correo', key: 'correo' },
     {
       label: 'Fecha de corte',
-      Render: ({ creditos, ilimitado }) => {
-        const rioja = creditos ? +creditos['-LJ5w7hFuZxYmwiprTIY'] : 0
-        const valle = creditos ? +creditos['-LPqzwORZYklJWDEgtv0'] : 0
+      Render: ({ expires, ilimitado }) => {
+        // const rioja = creditos ? +creditos['-LJ5w7hFuZxYmwiprTIY'] : 0
+        // const valle = creditos ? +creditos['-LPqzwORZYklJWDEgtv0'] : 0
         return (
           <span>
-            {ilimitado
+            {ilimitado ? (
+              moment(ilimitado.fin) > moment() ? (
+                moment(ilimitado.fin).format('LL') + ' (ilimitado)'
+              ) : moment(expires) > moment() ? (
+                moment(expires).format('LL')
+              ) : (
+                <span className="lightgray line-through">
+                  {moment(expires).format('LL')}
+                </span>
+              )
+            ) : (
+              <span className="lightgray line-through">
+                {moment(expires).format('LL')}
+              </span>
+            )}
+            {/* {ilimitado
               ? moment(ilimitado.fin).format() > moment().format()
                 ? moment(ilimitado.fin).format('LL')
                 : creditos
                 ? rioja + valle
                 : 'Ya venció'
-              : 'No tiene mes(es) ilimitados'}
+              : 'No tiene mes(es) ilimitados'} */}
           </span>
         )
       }
