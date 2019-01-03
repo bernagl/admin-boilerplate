@@ -167,7 +167,7 @@ export default class extends Component {
       // ilimitado,
       loading
     } = this.state
-    const { ilimitado } = this.props
+    const { expires, ilimitado } = this.props
 
     const cartLength = Object.keys(cart).length
     const sucursalCredits =
@@ -179,7 +179,10 @@ export default class extends Component {
           {ilimitado ? (
             <h4>Paquete ilímitado</h4>
           ) : (
-            <h4>Créditos disponibles: {sucursalCredits}</h4>
+            [
+              <h4 className="mb-0">Créditos disponibles: {sucursalCredits}</h4>,
+              <h6>Expiran en: {moment(expires).format('LL')}</h6>
+            ]
           )}
           <h4>Clases seleccionadas: {cartLength}</h4>
           <Button
