@@ -19,12 +19,12 @@ export default class extends Component {
     clases: [],
     creditos: {},
     cart: {},
-    ilimitado: null,
+    // ilimitado: null,
     gymSelected: '-LJ5w7hFuZxYmwiprTIY'
   }
-  
+
   async componentDidMount() {
-    const { userClases, creditos, ilimitado } = this.props
+    const { userClases, creditos } = this.props
     const clases = await getDocumentsByModel('horario')
     const sucursales = await getDocumentsByModel('sucursal')
     clases.sort((a, b) => moment(a.inicio) - moment(b.inicio))
@@ -32,7 +32,7 @@ export default class extends Component {
       clases,
       userClases: userClases ? userClases : {},
       creditos,
-      ilimitado,
+      // ilimitado,
       loading: false,
       sucursales
     })
@@ -96,10 +96,10 @@ export default class extends Component {
     const {
       gymSelected,
       cart: stateCart,
-      creditos: stateCreditos,
-      ilimitado
+      creditos: stateCreditos
+      // ilimitado
     } = this.state
-    const { expires } = this.props
+    const { expires, ilimitado } = this.props
 
     if (moment(clase.inicio) < moment()) {
       message.info('Esta clase ya concluyó')
@@ -146,8 +146,8 @@ export default class extends Component {
   }
 
   submit = async () => {
-    const { cart, ilimitado: isIlimitado } = this.state
-    const { uid, updateData } = this.props
+    const { cart } = this.state
+    const { uid, updateData, ilimitado: isIlimitado } = this.props
     const clases = Object.keys(cart).map(id => cart[id])
     this.setState({ loading: true })
     message.info('Inscribiendo al usuario en la(s) clase(s)')
@@ -164,9 +164,11 @@ export default class extends Component {
       clases,
       creditos,
       cart,
-      ilimitado,
+      // ilimitado,
       loading
     } = this.state
+    const { ilimitado } = this.props
+
     const cartLength = Object.keys(cart).length
     const sucursalCredits =
       typeof creditos[gymSelected] === 'undefined' ? 0 : creditos[gymSelected]
