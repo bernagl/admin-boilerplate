@@ -22,6 +22,7 @@ export default class extends Component {
     ilimitado: null,
     gymSelected: '-LJ5w7hFuZxYmwiprTIY'
   }
+  
   async componentDidMount() {
     const { userClases, creditos, ilimitado } = this.props
     const clases = await getDocumentsByModel('horario')
@@ -74,12 +75,12 @@ export default class extends Component {
           status === 0
             ? this.eventHandler(event)
             : status === 2
-              ? moment(event.inicio) > moment()
-                ? message.info(
-                    'Para cancelar la clase es en el apartado de clases'
-                  )
-                : message.info('La clase ya concluyó y no se puede cancelar')
-              : message.info('La clase ya se venció')
+            ? moment(event.inicio) > moment()
+              ? message.info(
+                  'Para cancelar la clase es en el apartado de clases'
+                )
+              : message.info('La clase ya concluyó y no se puede cancelar')
+            : message.info('La clase ya se venció')
         }}
       >
         <div className="">{clase.nombre}</div>
@@ -98,9 +99,10 @@ export default class extends Component {
       creditos: stateCreditos,
       ilimitado
     } = this.state
-    console.log(moment(clase.inicio), moment())
+    const { expires } = this.props
+
     if (moment(clase.inicio) < moment()) {
-      message.info('Esta clase ya se cumplió y no puedes cancelarla')
+      message.info('Esta clase ya concluyó')
       return
     }
     const itsOnCart = typeof stateCart[clase.id] === 'undefined' ? false : true
@@ -117,7 +119,13 @@ export default class extends Component {
         message.info('Tu paquete ilímitado no alcanza la fecha seleccionada')
         return
       }
+    } else {
+      if (moment(clase.inicio) > moment(expires).add(1, 'day')) {
+        message.info('Tus créditos expiran antes de la clase seleccionada')
+        return
+      }
     }
+
     let cart = stateCart
     let creditos = stateCreditos
     itsOnCart

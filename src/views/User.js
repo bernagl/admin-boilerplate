@@ -93,6 +93,8 @@ export default class extends React.Component {
       sucursalId: activeSucursalId,
       sucursalName: sucursales[activeSucursal].nombre,
       lastCreditos: user.creditos[activeSucursalId]
+        ? user.creditos[activeSucursalId]
+        : 0
     })
     if (userResponse !== 404) {
       const doc = {
@@ -142,6 +144,37 @@ export default class extends React.Component {
     }
   }
 
+  updateExpiredCredit = async ({ motivo, fechaFin }) => {
+    const {
+      sucursales,
+      activeSucursal,
+      user: { expires, logs }
+    } = this.state
+    const { id } = this.props.match.params
+
+    const userResponse = await updateUserIlimitado({
+      motivo,
+      uid: id,
+      fecha: moment().format(),
+      nuevaFecha: moment(fechaFin).format('LL'),
+      lastFecha: expires ? moment(expires).format('LL') : moment().format('LL'),
+      sucursalName: sucursales[activeSucursal].nombre
+    })
+
+    if (userResponse !== 404) {
+      const doc = {
+        id,
+        logs: { ...logs, [userResponse]: true },
+        expires: moment(fechaFin).format()
+      }
+      const response = await updateDocument('usuario')(doc)
+      response === 202
+        ? message.success('Fecha de expiración de créditos actualizada')
+        : message.error('Ocurrió un error, por favor vuelve a intentarlo')
+      this.getData()
+    }
+  }
+
   agregarInscripcion = async ({ motivo }) => {
     const {
       user: { id, logs }
@@ -170,13 +203,12 @@ export default class extends React.Component {
   }
 
   orderByDate = key => arr =>
-    arr.sort(
-      (a, b) =>
-        moment(a[key]) >= moment(b[key])
-          ? -1
-          : moment(a[key]) <= moment(b[key])
-            ? 1
-            : 0
+    arr.sort((a, b) =>
+      moment(a[key]) >= moment(b[key])
+        ? -1
+        : moment(a[key]) <= moment(b[key])
+        ? 1
+        : 0
     )
 
   logsCol = () => [
@@ -189,6 +221,12 @@ export default class extends React.Component {
   render() {
     const { logs, clases, user, sucursales, activeSucursal } = this.state
     const { id } = this.props.match.params
+    const expires = user
+      ? typeof user['expires'] !== 'undefined'
+        ? moment(user.expires)
+        : moment()
+      : moment()
+
     const hasUnlimited = user
       ? user.status === 1
         ? user.ilimitado
@@ -224,8 +262,8 @@ export default class extends React.Component {
             {suscription
               ? 'activa'
               : user.invitado
-                ? 'de prueba (1 clase grátis)'
-                : 'inactiva'}
+              ? 'de prueba (1 clase grátis)'
+              : 'inactiva'}
           </Tag>
         </div>
         <div className="col-6">
@@ -281,7 +319,30 @@ export default class extends React.Component {
                         />
                       </Form>
                     </Panel>
-                    <Panel header="Actualizar fecha" key="2">
+                    <Panel
+                      header="Actualizar fecha de expiración (créditos)"
+                      key="2"
+                    >
+                      <Form submit={this.updateExpiredCredit} shouldUpdate>
+                        <Datepicker
+                          name="fechaFin"
+                          placeholder="Paquete ilímitado"
+                          label="Páquete ilímitado"
+                          required
+                          defaultValue={expires}
+                        />
+                        <TextArea
+                          name="motivo"
+                          label="Mótivo"
+                          required
+                          placeholder="Ingresa el mótivo del ajuste"
+                        />
+                      </Form>
+                    </Panel>
+                    <Panel
+                      header="Actualizar fecha (paquete ilímitado)"
+                      key="3"
+                    >
                       <Form submit={this.updateSubmit} shouldUpdate>
                         <Datepicker
                           name="fechaFin"
@@ -300,7 +361,7 @@ export default class extends React.Component {
                         />
                       </Form>
                     </Panel>
-                    <Panel header="Asignar inscripción " key="3">
+                    <Panel header="Asignar inscripción " key="4">
                       <Form submit={this.agregarInscripcion} shouldUpdate>
                         <TextArea
                           name="motivo"
@@ -326,6 +387,7 @@ export default class extends React.Component {
                 userClases={user.clases}
                 creditos={user.creditos}
                 ilimitado={unlimitedActive ? user.ilimitado : null}
+                expires={expires.format()}
                 updateData={this.getData}
                 uid={id}
               />
