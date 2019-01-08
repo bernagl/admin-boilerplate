@@ -60,7 +60,11 @@ const Columns = (showModal, setDataToState) => {
                 </span>
               )
             ) : (
-              <span className="lightgray line-through">
+              <span
+                className={`${
+                  moment(expires) > moment() ? '' : 'lightgray line-through'
+                }`}
+              >
                 {moment(expires).format('LL')}
               </span>
             )}
