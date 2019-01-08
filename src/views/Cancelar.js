@@ -9,6 +9,7 @@ import Button from 'antd/lib/button'
 import message from 'antd/lib/message'
 import Tag from 'antd/lib/tag'
 import { cancelarClase, getUsuarios } from '../actions/clase_actions'
+import { sendMail } from '../actions/mail_actions'
 
 export default class extends React.Component {
   state = { clasesToCancel: null }
@@ -67,6 +68,14 @@ export default class extends React.Component {
     )
     const responsePromise = clasesToCancel.map(async (clase, i) => {
       const usuarios = await getUsuarios(clase.id)
+      await sendMail(
+        usuarios,
+        {
+          instructora: clase.instructor.nombre,
+          inicio: moment(clase.inicio).format('LLLL')
+        },
+        'Cancelamiento de clases'
+      )
       return await cancelarClase({ clase, usuarios })
     })
 

@@ -1,7 +1,6 @@
 import { db } from './firebase-config'
 
 export const cancelarClase = ({ clase, motivo, usuarios }) => {
-  console.log(usuarios)
   const sid = clase.gimnasio.id
   const ref = db.ref('horario').child(clase.id)
   return ref
