@@ -272,7 +272,9 @@ export default class extends React.Component {
               ? `Paquete ilímitado vence: ${moment(user.ilimitado.fin).format(
                   'LL'
                 )}`
-              : `${creditos ? creditos : 0} Créditos`}
+              : `${creditos ? creditos : 0} Créditos en ${
+                  sucursales[activeSucursal].nombre
+                }`}
           </h3>
         </div>
         <div className="col-12">

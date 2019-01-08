@@ -8,7 +8,7 @@ import { getDocumentsByModel } from '../actions/firebase_actions'
 import Button from 'antd/lib/button'
 import message from 'antd/lib/message'
 import Tag from 'antd/lib/tag'
-import { cancelarClase } from '../actions/clase_actions'
+import { cancelarClase, getUsuarios } from '../actions/clase_actions'
 
 export default class extends React.Component {
   state = { clasesToCancel: null }
@@ -62,10 +62,13 @@ export default class extends React.Component {
 
   cancelledConfirm = async () => {
     const { clasesToCancel } = this.state
-    const responsePromise = clasesToCancel.map(
-      async (clase, i) =>
-        await cancelarClase({ clase, usuarios: clase.usuarios })
+    message.info(
+      'Obteniendo usuarios inscritos en clases para notificarles y restaurar sus creditos'
     )
+    const responsePromise = clasesToCancel.map(async (clase, i) => {
+      const usuarios = await getUsuarios(clase.id)
+      return await cancelarClase({ clase, usuarios })
+    })
 
     const responseResolve = await Promise.all(responsePromise)
     this.setState({ clasesToCancel: null }, () =>

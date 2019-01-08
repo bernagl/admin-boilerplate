@@ -292,7 +292,7 @@ export default class Gimnasio extends Component {
                       <span>Clase: {event.clase.nombre}</span>
                     </div>
                     <div className="col-12">
-                      <span>Fecha: {event.fecha}</span>
+                      <span>Fecha: {moment(event.fecha).format('LL')}</span>
                     </div>
                     <div className="col-12">
                       <span>Instructor: {event.instructor.nombre}</span>
