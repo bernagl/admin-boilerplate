@@ -272,9 +272,24 @@ export default class extends React.Component {
               ? `Paquete ilímitado vence: ${moment(user.ilimitado.fin).format(
                   'LL'
                 )}`
-              : `${creditos ? creditos : 0} Créditos en ${
-                  sucursales[activeSucursal].nombre
-                }`}
+              : [
+                  <div>
+                    {user
+                      ? user.creditos['-LJ5w7hFuZxYmwiprTIY']
+                        ? user.creditos['-LJ5w7hFuZxYmwiprTIY']
+                        : 0
+                      : 0}{' '}
+                    crédito(s) en La Rioja
+                  </div>,
+                  <div>
+                    {user
+                      ? user.creditos['-LPrNpstwZt7J3NLUJXc']
+                        ? user.creditos['-LPrNpstwZt7J3NLUJXc']
+                        : 0
+                      : 0}{' '}
+                    crédito(s) en Valle
+                  </div>
+                ]}
           </h3>
         </div>
         <div className="col-12">
