@@ -7,7 +7,6 @@ let p = null
 export const login = async (correo, contrasena) => {
   try {
     const { user } = await auth.signInWithEmailAndPassword(correo, contrasena)
-    console.log(user)
     return db
       .ref(`admin/${user.uid}`)
       .once('value')

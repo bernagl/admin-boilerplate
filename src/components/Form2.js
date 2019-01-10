@@ -45,7 +45,6 @@ export default class Form extends Component {
       return
     }
     const customModel = await submit(schema)
-
     if (!customModel) {
       if (setLoadingToFalse) setLoadingToFalse()
       return

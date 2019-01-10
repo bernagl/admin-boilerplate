@@ -31,7 +31,7 @@ const submit = async model => {
 
   // if (id && response === 202) message.success('Usuario actualizado')
   // else message.error('Ocurrió un error,por favor vuelve a intentarlo')
-  return response
+  return false
 }
 
 const Columns = (showModal, setDataToState) => {

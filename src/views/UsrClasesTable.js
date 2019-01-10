@@ -18,7 +18,6 @@ export default class ClasesTable extends Component {
     const { clases } = this.props
     if (oldProps.clases === clases) return
     const c = this.setStatusToClase(clases)
-    console.log(c)
     this.setState({ clases: c })
   }
 
@@ -40,8 +39,8 @@ export default class ClasesTable extends Component {
     clases.map(clase => ({
       ...clase,
       status:
-        clase.status === 1
-          ? moment(clase.fin) > moment()
+        clase.status === 0
+          ? moment(clase.inicio) > moment()
             ? 0
             : 1
           : clase.status
@@ -49,7 +48,6 @@ export default class ClasesTable extends Component {
 
   render() {
     const { clases } = this.state
-    console.log(clases)
     return <Table title="Clase(s)" data={clases} cols={this.clasesCol()} />
   }
 
