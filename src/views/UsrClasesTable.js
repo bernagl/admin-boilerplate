@@ -39,7 +39,7 @@ export default class ClasesTable extends Component {
     clases.map(clase => ({
       ...clase,
       status:
-        clase.status === 0
+        clase.status === 1 || clase.status === 0
           ? moment(clase.inicio) > moment()
             ? 0
             : 1
