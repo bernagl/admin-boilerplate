@@ -89,7 +89,7 @@ export const asignarCreditos = ({
             inicio = now.format()
             fin = now.add(paquete.meses, 'M')
           } else {
-            if (moment(fin).format() < now.format()) {
+            if (moment(ilimitado['fin']) < now) {
               inicio = now.format()
               fin = now.add(paquete.meses, 'M')
             } else {
@@ -97,6 +97,7 @@ export const asignarCreditos = ({
               fin = moment(ilimitado.fin).add(paquete.meses, 'M')
             }
           }
+          // returnss
           return ref
             .update({
               ilimitado: {
