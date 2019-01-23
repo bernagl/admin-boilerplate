@@ -89,12 +89,17 @@ export const asignarCreditos = ({
             inicio = now.format()
             fin = now.add(paquete.meses, 'M')
           } else {
-            if (moment(ilimitado['fin']) < now) {
-              inicio = now.format()
-              fin = now.add(paquete.meses, 'M')
+            if (ilimitado[sid]) {
+              if (ilimitado[sid].fin < now) {
+                inicio = now.format()
+                fin = now.add(paquete.meses, 'M')
+              } else {
+                inicio = ilimitado[sid].inicio
+                fin = moment(ilimitado[sid].fin).add(paquete.meses, 'M')
+              }
             } else {
-              inicio = ilimitado['inicio']
-              fin = moment(ilimitado.fin).add(paquete.meses, 'M')
+              inicio = ilimitado[sid].inicio
+              fin = moment(ilimitado[sid].fin).add(paquete.meses, 'M')
             }
           }
           const ilimitadoSucursal = {
