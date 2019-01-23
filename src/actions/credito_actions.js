@@ -97,13 +97,16 @@ export const asignarCreditos = ({
               fin = moment(ilimitado.fin).add(paquete.meses, 'M')
             }
           }
+          const ilimitadoSucursal = {
+            inicio: moment(inicio).format(),
+            fin: moment(fin).format()
+          }
           // returnss
           return ref
             .update({
-              ilimitado: {
-                inicio: moment(inicio).format(),
-                fin: moment(fin).format()
-              },
+              ilimitado: ilimitado
+                ? { ...ilimitado, [sid]: ilimitadoSucursal }
+                : { [sid]: ilimitadoSucursal },
               pagos
             })
             .then(r => 202)
