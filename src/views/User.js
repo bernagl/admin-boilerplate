@@ -1,7 +1,7 @@
 import React from 'react'
 import Tabs from 'antd/lib/tabs'
 import Table from '../components/EraserTable'
-import { message, Collapse, Tag } from 'antd'
+import { message, Collapse, Tag, Icon } from 'antd'
 import moment from 'moment'
 import Form from '../Form/Form'
 import Input from '../Form/Input'
@@ -255,6 +255,12 @@ export default class extends React.Component {
       <div className="row">
         <div className="col-6">
           <h2 className="mb-1">{user.nombre}</h2>
+          {typeof user.fecha_nacimiento !== 'undefined' && (
+            <h3>
+              {' '}
+              <Icon type="gift" /> {moment(user.fecha_nacimiento).format('LL')}
+            </h3>
+          )}
           <div>{user.correo}</div>
           <div className="mb-2">{user.telefono}</div>
           <Tag color={suscription ? 'green' : user.invitado ? 'blue' : 'red'}>

@@ -1,14 +1,14 @@
 import React, { Fragment } from 'react'
 import Datatable from '../components/Datatable'
 import DatatableActions from '../components/DatatableActions'
-import { Tooltip } from 'antd'
 import Input from '../components/Input'
 import { registerUser } from '../actions/firebase_auth'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
-import message from 'antd/lib/message'
 import Icon from 'antd/lib/icon'
 import { updateDocument } from '../actions/firebase_actions'
+import Datepicker from '../Form/Datepicker'
+import message from 'antd/lib/message'
 
 export default () => {
   return (
@@ -26,11 +26,14 @@ const submit = async model => {
   const { id } = model
   // console.log(id)
   const response = id
-    ? await updateDocument('usuario')(model)
+    ? await updateDocument('usuario')({
+        ...model,
+        fecha_nacimiento: moment(model.fecha_nacimiento).format()
+      })
     : await registerUser(model)
 
-  // if (id && response === 202) message.success('Usuario actualizado')
-  // else message.error('Ocurrió un error,por favor vuelve a intentarlo')
+  if (id && response === 202) message.success('Usuario actualizado')
+  else message.error('Ocurrió un error,por favor vuelve a intentarlo')
   return false
 }
 
@@ -109,7 +112,15 @@ const Columns = (showModal, setDataToState) => {
   ]
 }
 
-const Inputs = ({ id, nombre, edad, telefono, correo, contrasena }) => {
+const Inputs = ({
+  id,
+  nombre,
+  edad,
+  telefono,
+  correo,
+  contrasena,
+  fecha_nacimiento
+}) => {
   return (
     <React.Fragment>
       <Input
@@ -145,6 +156,13 @@ const Inputs = ({ id, nombre, edad, telefono, correo, contrasena }) => {
         validations={{ maxLength: 10, isNumeric: true }}
         validationError="Ingresa un número de teléfono válido"
         required
+      />
+      <Datepicker
+        name="fecha_nacimiento"
+        placeholder="Fecha de nacimiento"
+        label="Fecha de nacimiento"
+        required
+        defaultValue={fecha_nacimiento ? moment(fecha_nacimiento) : moment()}
       />
       {!id && (
         <Fragment>

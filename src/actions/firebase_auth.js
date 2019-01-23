@@ -59,7 +59,8 @@ export const registerUser = async ({
   contrasena,
   nombre,
   telefono,
-  edad
+  edad,
+  fecha_nacimiento
 }) => {
   try {
     const { user } = await auth.createUserWithEmailAndPassword(
@@ -71,6 +72,7 @@ export const registerUser = async ({
       .set({
         correo,
         edad,
+        fecha_nacimiento: moment(fecha_nacimiento).format(),
         nombre,
         status: 1,
         telefono,
@@ -90,7 +92,9 @@ export const registerUser = async ({
         await login(e, p)
         return 202
       })
-  } catch ({ code }) {
+  } catch (error) {
+    console.log(error)
+    const { code } = error
     var errorText = ''
     switch (code) {
       case 'auth/invalid-email':
