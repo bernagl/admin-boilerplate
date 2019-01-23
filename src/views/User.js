@@ -111,11 +111,11 @@ export default class extends React.Component {
     }
   }
 
-  updateSubmit = async ({ motivo, fechaFin }) => {
+  updateSubmit = async ({ motivo, fechaFin, sid }) => {
     const {
       sucursales,
       activeSucursal,
-      user: { ilimitado, logs }
+      user: { ilimitado = {}, logs }
     } = this.state
     const { id } = this.props.match.params
 
@@ -124,8 +124,8 @@ export default class extends React.Component {
       uid: id,
       fecha: moment().format(),
       nuevaFecha: moment(fechaFin).format('LL'),
-      lastFecha: ilimitado
-        ? moment(ilimitado.fin).format('LL')
+      lastFecha: ilimitado[sid]
+        ? moment(ilimitado[sid].fin).format('LL')
         : moment().format('LL'),
       sucursalName: sucursales[activeSucursal].nombre
     })
@@ -134,7 +134,10 @@ export default class extends React.Component {
       const doc = {
         id,
         logs: { ...logs, [userResponse]: true },
-        ilimitado: { ...ilimitado, fin: moment(fechaFin).format() }
+        ilimitado: {
+          ...ilimitado,
+          [sid]: { fin: moment(fechaFin).format() }
+        }
       }
       const response = await updateDocument('usuario')(doc)
       response === 202
@@ -219,7 +222,14 @@ export default class extends React.Component {
   ]
 
   render() {
-    const { logs, clases, user, sucursales, activeSucursal } = this.state
+    const {
+      logs,
+      clases,
+      user,
+      sucursales,
+      activeSucursal,
+      activeSucursalId
+    } = this.state
     const { id } = this.props.match.params
     const expires = user
       ? typeof user['expires'] !== 'undefined'
@@ -227,13 +237,14 @@ export default class extends React.Component {
         : moment()
       : moment()
 
-    const hasUnlimited = user
-      ? user.status === 1
-        ? user.ilimitado
-          ? true
-          : false
-        : false
-      : false
+    // const hasUnlimited = user
+    //   ? user.status === 1
+    //     ? user.ilimitado
+    //       ? true
+    //       : false
+    //     : false
+    //   : false
+
     const suscription = user
       ? user.status === 1
         ? user.last_class
@@ -243,11 +254,44 @@ export default class extends React.Component {
           : false
         : false
       : false
-    const unlimitedActive = hasUnlimited
-      ? moment() > moment(user.ilimitado.fin)
-        ? false
-        : true
-      : false
+
+    // const unlimitedActive = hasUnlimited
+    //   ? moment() > moment(user.ilimitado.fin)
+    //     ? false
+    //     : true
+    //   : false
+    const rioja = user
+      ? typeof user.ilimitado !== 'undefined'
+        ? user.ilimitado['-LJ5w7hFuZxYmwiprTIY']
+        : null
+      : null
+    const valle = user
+      ? typeof user.ilimitado !== 'undefined'
+        ? user.ilimitado['-LPrNpstwZt7J3NLUJXc']
+        : null
+      : null
+
+    const riojaCredits = user ? user.creditos['-LJ5w7hFuZxYmwiprTIY'] : 0
+    const valleCredits = user ? user.creditos['-LPrNpstwZt7J3NLUJXc'] : 0
+
+    const selectedUnlimited = user
+      ? user.ilimitado
+        ? user.ilimitado[activeSucursalId]
+          ? user.ilimitado[activeSucursalId].fin
+          : null
+        : null
+      : null
+
+    const riojaUnlimited =
+      rioja && moment(rioja.fin) > moment()
+        ? moment(rioja.fin).format('LL')
+        : null
+
+    const valleUnlimited =
+      valle && moment(valle.fin) > moment()
+        ? moment(valle.fin).format('LL')
+        : null
+
     const creditos = user ? user.creditos[sucursales[activeSucursal].id] : 0
     return !user ? (
       <span>Cargando</span>
@@ -274,28 +318,24 @@ export default class extends React.Component {
         </div>
         <div className="col-6">
           <h3>
-            {unlimitedActive
-              ? `Paquete ilímitado vence: ${moment(user.ilimitado.fin).format(
-                  'LL'
-                )}`
-              : [
-                  <div>
-                    {user
-                      ? user.creditos['-LJ5w7hFuZxYmwiprTIY']
-                        ? user.creditos['-LJ5w7hFuZxYmwiprTIY']
-                        : 0
-                      : 0}{' '}
-                    crédito(s) en La Rioja
-                  </div>,
-                  <div>
-                    {user
-                      ? user.creditos['-LPrNpstwZt7J3NLUJXc']
-                        ? user.creditos['-LPrNpstwZt7J3NLUJXc']
-                        : 0
-                      : 0}{' '}
-                    crédito(s) en Valle
-                  </div>
-                ]}
+            {[
+              <div>
+                La rioja:{' '}
+                {riojaUnlimited ? (
+                  <span>{riojaUnlimited} paquete ilímitado</span>
+                ) : (
+                  <span>{riojaCredits} créditos</span>
+                )}
+              </div>,
+              <div>
+                Valle:{' '}
+                {valleUnlimited ? (
+                  <span>{valleUnlimited} paquete ilímitado</span>
+                ) : (
+                  <span>{valleCredits} créditos</span>
+                )}
+              </div>
+            ]}
           </h3>
         </div>
         <div className="col-12">
@@ -373,7 +413,14 @@ export default class extends React.Component {
                           label="Páquete ilímitado"
                           required
                           defaultValue={
-                            hasUnlimited ? moment(user.ilimitado.fin) : moment()
+                            // hasUnlimited ? moment(user.ilimitado.fin) : moment()
+                            selectedUnlimited
+                              ? moment(selectedUnlimited)
+                              : moment()
+                            // typeof user.ilimitado[activeSucursalId]['fin'] ===
+                            // 'undefined'
+                            //   ? moment()
+                            //   : moment(user.ilimitado[activeSucursalId].fin)
                           }
                         />
                         <TextArea
@@ -381,6 +428,12 @@ export default class extends React.Component {
                           label="Mótivo"
                           required
                           placeholder="Ingresa el mótivo del ajuste"
+                        />
+                        <Input
+                          type="hidden"
+                          name="sid"
+                          required
+                          defaultValue={activeSucursalId}
                         />
                       </Form>
                     </Panel>
@@ -409,7 +462,7 @@ export default class extends React.Component {
               <UserCalendar
                 userClases={user.clases}
                 creditos={user.creditos}
-                ilimitado={unlimitedActive ? user.ilimitado : null}
+                // ilimitado={unlimitedActive ? user.ilimitado : null}
                 expires={expires.format()}
                 updateData={this.getData}
                 uid={id}
