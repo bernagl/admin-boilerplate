@@ -49,7 +49,12 @@ export const cancelarClase = ({ sid, costo, cid, uid }) => {
     const { clases: uclases, creditos: ucreditos, ilimitado } = snapshot.val()
     let isIlimitado = false
     if (typeof ilimitado === 'undefined') isIlimitado = false
-    else isIlimitado = moment(ilimitado.fin) > moment() ? true : false
+    else
+      isIlimitado = ilimitado[sid]
+        ? moment(ilimitado[sid].fin) > moment()
+          ? true
+          : false
+        : false
     const creditos = {
       ...ucreditos,
       [sid]: isIlimitado ? ucreditos[sid] : ucreditos[sid] + costo
@@ -65,6 +70,8 @@ export const cancelarClase = ({ sid, costo, cid, uid }) => {
     })
   })
 }
+
+// const isUnlimited = ilimitado => sid => {}
 
 /**
  *
