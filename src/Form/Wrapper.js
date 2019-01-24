@@ -19,7 +19,7 @@ class Wrapper extends React.Component {
     if (prevProps.defaultValue === defaultValue) return
     this.setState(
       ({ blurred }) =>
-        defaultValue ? { value: defaultValue, blurred: !blurred } : { blurred },
+        typeof defaultValue !== 'undefined' ? { value: defaultValue, blurred: !blurred } : { blurred },
       () => defaultValue && setValue(defaultValue)
     )
   }

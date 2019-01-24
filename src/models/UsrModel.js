@@ -48,11 +48,25 @@ const Columns = (showModal, setDataToState) => {
     {
       label: 'Fecha de corte',
       Render: ({ expires, ilimitado }) => {
-        // const rioja = creditos ? +creditos['-LJ5w7hFuZxYmwiprTIY'] : 0
-        // const valle = creditos ? +creditos['-LPqzwORZYklJWDEgtv0'] : 0
+        const rioja = ilimitado
+          ? ilimitado['-LJ5w7hFuZxYmwiprTIY']
+            ? ilimitado['-LJ5w7hFuZxYmwiprTIY'].fin
+            : null
+          : null
+        const valle = ilimitado
+          ? ilimitado['-LPrNpstwZt7J3NLUJXc']
+            ? ilimitado['-LPrNpstwZt7J3NLUJXc'].fin
+            : null
+          : null
+
+        const valleActive = valle ? moment(valle) > moment() : false
+        const riojaActive = rioja ? moment(rioja) > moment() : false
         return (
-          <span>
-            {ilimitado ? (
+          <div>
+            {!valleActive && !riojaActive && <div>{moment(expires).format('LL')}</div>}
+            {riojaActive && <div>{moment(rioja).format('LL')} Rioja</div>}
+            {valleActive && <div>{moment(valle).format('LL')} Valle</div>}
+            {/* {ilimitado ? (
               moment(ilimitado.fin) > moment() ? (
                 moment(ilimitado.fin).format('LL') + ' (ilimitado)'
               ) : moment(expires) > moment() ? (
@@ -70,15 +84,8 @@ const Columns = (showModal, setDataToState) => {
               >
                 {moment(expires).format('LL')}
               </span>
-            )}
-            {/* {ilimitado
-              ? moment(ilimitado.fin).format() > moment().format()
-                ? moment(ilimitado.fin).format('LL')
-                : creditos
-                ? rioja + valle
-                : 'Ya venció'
-              : 'No tiene mes(es) ilimitados'} */}
-          </span>
+            )} */}
+          </div>
         )
       }
     },

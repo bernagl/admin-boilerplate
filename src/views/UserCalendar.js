@@ -125,7 +125,7 @@ export default class extends Component {
         return
       }
     } else {
-      if (moment(clase.inicio) > moment(expires).add(1, 'day')) {
+      if (moment(clase.inicio) > moment(expires)) {
         message.info('Tus créditos expiran antes de la clase seleccionada')
         return
       }

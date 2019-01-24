@@ -292,7 +292,12 @@ export default class extends React.Component {
         ? moment(valle.fin).format('LL')
         : null
 
-    const creditos = user ? user.creditos[sucursales[activeSucursal].id] : 0
+    const creditos = user
+      ? user.creditos[activeSucursalId]
+        ? user.creditos[activeSucursalId]
+        : 0
+      : 0
+
     return !user ? (
       <span>Cargando</span>
     ) : (
@@ -322,17 +327,17 @@ export default class extends React.Component {
               <div>
                 La rioja:{' '}
                 {riojaUnlimited ? (
-                  <span>{riojaUnlimited} paquete ilímitado</span>
+                  <span>{riojaUnlimited} (paquete ilímitado)</span>
                 ) : (
-                  <span>{riojaCredits} créditos</span>
+                  <span>{riojaCredits || 0} créditos</span>
                 )}
               </div>,
               <div>
                 Valle:{' '}
                 {valleUnlimited ? (
-                  <span>{valleUnlimited} paquete ilímitado</span>
+                  <span>{valleUnlimited} (paquete ilímitado)</span>
                 ) : (
-                  <span>{valleCredits} créditos</span>
+                  <span>{valleCredits || 0} créditos</span>
                 )}
               </div>
             ]}
@@ -372,7 +377,7 @@ export default class extends React.Component {
                           required
                           validations="isNumeric"
                           validationError="Los créditos es un número positivo"
-                          defaultValue={creditos}
+                          defaultValue={creditos || 0}
                         />
                         <TextArea
                           name="motivo"

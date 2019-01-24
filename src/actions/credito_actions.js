@@ -57,7 +57,17 @@ export const asignarCreditos = ({
   delete paquete['id']
   const ref = db.ref(model).child(uid)
   return ref.once('value').then(r => {
-    let { creditos, pagos, ilimitado } = r.val()
+    let { creditos, pagos, expires, ilimitado } = r.val()
+    console.log(paquete)
+    expires =
+      moment(expires) > moment()
+        ? moment(expires)
+            .add('M', paquete.meses ? paquete.meses : 1)
+            .format()
+        : moment()
+            .add('M', paquete.meses ? paquete.meses : 1)
+            .format()
+
     let screditos = 0
     if (typeof creditos !== 'undefined')
       screditos = creditos[sid]
@@ -98,8 +108,8 @@ export const asignarCreditos = ({
                 fin = moment(ilimitado[sid].fin).add(paquete.meses, 'M')
               }
             } else {
-              inicio = ilimitado[sid].inicio
-              fin = moment(ilimitado[sid].fin).add(paquete.meses, 'M')
+              inicio = now.format()
+              fin = moment().add(paquete.meses, 'M')
             }
           }
           const ilimitadoSucursal = {
@@ -107,25 +117,29 @@ export const asignarCreditos = ({
             fin: moment(fin).format()
           }
           // returnss
+          console.log(sid, ilimitadoSucursal)
           return ref
             .update({
               ilimitado: ilimitado
                 ? { ...ilimitado, [sid]: ilimitadoSucursal }
                 : { [sid]: ilimitadoSucursal },
+              expires,
               pagos
             })
             .then(r => 202)
-            .catch(e => 404)
+            .catch(e => console.log(e))
         } else {
+          console.log('...')
           return ref
             .update({
               creditos: { ...creditos, [sid]: screditos },
+              expires,
               pagos
             })
             .then(r => 202)
-            .catch(e => 404)
+            .catch(e => console.log(e))
         }
       })
-      .catch(e => 404)
+      .catch(e => console.log(e))
   })
 }
