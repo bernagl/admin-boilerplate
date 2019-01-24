@@ -51,7 +51,8 @@ export default class extends Component {
   }
 
   handleGym = gymSelected => {
-    this.setState({ gymSelected })
+    const { creditos } = this.props
+    this.setState({ gymSelected, cart: {}, creditos })
   }
 
   eventRender = event => {
@@ -101,6 +102,8 @@ export default class extends Component {
     } = this.state
     const { expires, ilimitado } = this.props
 
+    const isUnlimited = this.getStatus()
+
     if (moment(clase.inicio) < moment()) {
       message.info('Esta clase ya concluyó')
       return
@@ -110,12 +113,14 @@ export default class extends Component {
       typeof stateCreditos[gymSelected] === 'undefined'
         ? 0
         : stateCreditos[gymSelected]
-    if (sucursalCredits === 0 && !itsOnCart && !ilimitado) {
+    if (sucursalCredits <= 0 && !itsOnCart && !isUnlimited) {
       message.error('No tienes créditos')
       return
     }
-    if (ilimitado) {
-      if (moment(clase.inicio) > moment(ilimitado.fin).add(1, 'day')) {
+    if (isUnlimited) {
+      if (
+        moment(clase.inicio) > moment(ilimitado[gymSelected].fin).add(1, 'day')
+      ) {
         message.info('Tu paquete ilímitado no alcanza la fecha seleccionada')
         return
       }
@@ -147,14 +152,26 @@ export default class extends Component {
 
   submit = async () => {
     const { cart } = this.state
-    const { uid, updateData, ilimitado: isIlimitado } = this.props
+    const { uid, updateData } = this.props
+    const isUnlimited = this.getStatus()
     const clases = Object.keys(cart).map(id => cart[id])
     this.setState({ loading: true })
     message.info('Inscribiendo al usuario en la(s) clase(s)')
-    const response = await confirmCheckout({ clases, isIlimitado, uid })
+    const response = await confirmCheckout({ clases, isUnlimited, uid })
     message.success('El usuario fue inscrito en la(s) clase(s)')
     updateData()
     this.setState({ loading: false, cart: {} })
+  }
+
+  getStatus = () => {
+    const { gymSelected } = this.state
+    const { ilimitado } = this.props
+
+    return ilimitado
+      ? ilimitado[gymSelected]
+        ? moment(ilimitado[gymSelected].fin) > moment()
+        : null
+      : null
   }
 
   render() {
@@ -169,6 +186,14 @@ export default class extends Component {
     } = this.state
     const { expires, ilimitado } = this.props
 
+    const unlimited = ilimitado
+      ? ilimitado[gymSelected]
+        ? ilimitado[gymSelected].fin
+        : null
+      : null
+
+    const isUnlimited = this.getStatus()
+
     const cartLength = Object.keys(cart).length
     const sucursalCredits =
       typeof creditos[gymSelected] === 'undefined' ? 0 : creditos[gymSelected]
@@ -176,8 +201,8 @@ export default class extends Component {
       <div className="row">
         <div className="col-12">
           <h2>Calendario</h2>
-          {ilimitado ? (
-            <h4>Paquete ilímitado</h4>
+          {isUnlimited ? (
+            <h4>Paquete ilímitado, vence: {moment(unlimited).format('LL')}</h4>
           ) : (
             [
               <h4 className="mb-0">Créditos disponibles: {sucursalCredits}</h4>,

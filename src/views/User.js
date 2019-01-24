@@ -99,7 +99,7 @@ export default class extends React.Component {
     if (userResponse !== 404) {
       const doc = {
         id,
-        creditos: { ...creditos, [activeSucursalId]: model.creditos },
+        creditos: { ...creditos, [activeSucursalId]: +model.creditos },
         logs: { ...logs, [userResponse]: true }
       }
       const response = await updateDocument('usuario')(doc)
@@ -462,7 +462,7 @@ export default class extends React.Component {
               <UserCalendar
                 userClases={user.clases}
                 creditos={user.creditos}
-                // ilimitado={unlimitedActive ? user.ilimitado : null}
+                ilimitado={user.ilimitado}
                 expires={expires.format()}
                 updateData={this.getData}
                 uid={id}

@@ -1,0 +1,48 @@
+{
+    "rules": {
+        "admin": {
+            ".write": true,
+            ".read": true
+        },
+        "clase": {
+            ".write": "root.child('admin').hasChild(auth.uid)",
+            ".read": true
+        },
+        "horario": {
+            ".write": "auth.uid !== null",
+            ".read": true
+        },
+        "instructor": {
+            ".write": "root.child('admin').hasChild(auth.uid)",
+            ".read": true
+        },
+        "pago": {
+            ".write": true,
+            ".read": true
+        },
+        "paquete": {
+            ".write": "root.child('admin').hasChild(auth.uid)",
+            ".read": true
+        },
+        "salon": {
+            ".write": "root.child('admin').hasChild(auth.uid)",
+            ".read": true
+        },
+        "sucursal": {
+            ".write": "root.child('admin').hasChild(auth.uid)",
+            ".read": true
+        },
+        "tarjeta": {
+            ".write": true,
+            ".read": true
+        },
+        "usuario": {
+            ".write": true,
+            ".read": true
+        },
+        "log": {
+            ".write": "root.child('admin').hasChild(auth.uid)",
+            ".read": true
+        }
+    }
+}
