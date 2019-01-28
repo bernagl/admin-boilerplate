@@ -58,7 +58,6 @@ export const asignarCreditos = ({
   const ref = db.ref(model).child(uid)
   return ref.once('value').then(r => {
     let { creditos, pagos, expires, ilimitado } = r.val()
-    console.log(paquete)
     expires =
       moment(expires) > moment()
         ? moment(expires)
@@ -117,7 +116,6 @@ export const asignarCreditos = ({
             fin: moment(fin).format()
           }
           // returnss
-          console.log(sid, ilimitadoSucursal)
           return ref
             .update({
               ilimitado: ilimitado
@@ -129,7 +127,6 @@ export const asignarCreditos = ({
             .then(r => 202)
             .catch(e => console.log(e))
         } else {
-          console.log('...')
           return ref
             .update({
               creditos: { ...creditos, [sid]: screditos },
