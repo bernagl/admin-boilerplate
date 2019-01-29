@@ -45,6 +45,7 @@ export default class extends React.Component {
     const { id } = this.props.match.params
     const sucursales = await getDocumentsByModel('sucursal')
     const user = await this.getUser(id)
+    const { activeSucursal } = this.state
     const clasesPromise =
       typeof user.clases === 'undefined'
         ? []
@@ -70,7 +71,7 @@ export default class extends React.Component {
       user,
       logs,
       sucursales,
-      activeSucursalId: sucursales[0].id
+      activeSucursalId: sucursales[activeSucursal].id
     })
   }
 
@@ -218,7 +219,6 @@ export default class extends React.Component {
     { label: 'Log', key: 'log' },
     { label: 'Mótivo', key: 'motivo' },
     { label: 'Fecha', Render: ({ fecha }) => moment(fecha).format('LLL') }
-    // { label: 'Usuario', key: 'user' }
   ]
 
   render() {
@@ -237,14 +237,6 @@ export default class extends React.Component {
         : moment()
       : moment()
 
-    // const hasUnlimited = user
-    //   ? user.status === 1
-    //     ? user.ilimitado
-    //       ? true
-    //       : false
-    //     : false
-    //   : false
-
     const suscription = user
       ? user.status === 1
         ? user.last_class
@@ -255,11 +247,6 @@ export default class extends React.Component {
         : false
       : false
 
-    // const unlimitedActive = hasUnlimited
-    //   ? moment() > moment(user.ilimitado.fin)
-    //     ? false
-    //     : true
-    //   : false
     const rioja = user
       ? typeof user.ilimitado !== 'undefined'
         ? user.ilimitado['-LJ5w7hFuZxYmwiprTIY']
@@ -297,6 +284,8 @@ export default class extends React.Component {
         ? user.creditos[activeSucursalId]
         : 0
       : 0
+
+    console.log(activeSucursal)
 
     return !user ? (
       <span>Cargando</span>
