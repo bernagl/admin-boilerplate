@@ -7,7 +7,7 @@ import message from 'antd/lib/message'
 import Button from 'antd/lib/button'
 import { Radio } from 'antd'
 import '../userCalendar.css'
-import { confirmCheckout } from '../actions/user_actions'
+import { agregarEnEspera, confirmCheckout } from '../actions/user_actions'
 
 const RadioButton = Radio.Button
 const RadioGroup = Radio.Group
@@ -19,7 +19,6 @@ export default class extends Component {
     clases: [],
     creditos: {},
     cart: {},
-    // ilimitado: null,
     gymSelected: '-LJ5w7hFuZxYmwiprTIY'
   }
 
@@ -32,7 +31,6 @@ export default class extends Component {
       clases,
       userClases: userClases ? userClases : {},
       creditos,
-      // ilimitado,
       loading: false,
       sucursales
     })
@@ -65,7 +63,13 @@ export default class extends Component {
     )
 
     const status =
-      userClases[isReserved] === 0 ? 2 : userClases[isReserved] === 1 ? 2 : 0
+      userClases[isReserved] === 0
+        ? 2
+        : userClases[isReserved] === 1
+        ? 2
+        : userClases[isReserved] === 3
+        ? 3
+        : 0
     const itsOnCart = typeof cart[event.id] === 'undefined' ? false : true
     return (
       <div
@@ -76,12 +80,11 @@ export default class extends Component {
           status === 0
             ? this.eventHandler(event)
             : status === 2
-            ? moment(event.inicio) > moment()
-              ? message.info(
-                  'Para cancelar la clase es en el apartado de clases'
-                )
-              : message.info('La clase ya concluyó y no se puede cancelar')
-            : message.info('La clase ya se venció')
+            ? message.info('Para cancelar la clase es en el apartado de clases')
+            : status === 3
+            ? message.info('Estás en lista de espera de esta clase')
+            : // : message.info('La clase ya concluyó y no se puede cancelar')
+              message.info('La clase ya se venció')
         }}
       >
         <div className="">{clase.nombre}</div>
@@ -93,13 +96,8 @@ export default class extends Component {
     )
   }
 
-  eventHandler = clase => {
-    const {
-      gymSelected,
-      cart: stateCart,
-      creditos: stateCreditos
-      // ilimitado
-    } = this.state
+  eventHandler = async clase => {
+    const { gymSelected, cart: stateCart, creditos: stateCreditos } = this.state
     const { expires, ilimitado } = this.props
 
     const isUnlimited = this.getStatus()
@@ -117,6 +115,36 @@ export default class extends Component {
       message.error('No tienes créditos')
       return
     }
+
+    if (clase.cupo <= clase.inscritos_numero) {
+      if (
+        !window.confirm(
+          '¿Esta clase ya está llena, deseas que te agreguemos a la cola?'
+        )
+      )
+        return
+      else {
+        const r = await agregarEnEspera({
+          uid: this.props.uid,
+          cid: clase.id
+        })
+        if (r === 202) {
+          message.success(
+            'Fuiste agregado a la lista de espera, si un usuario cancela la clase se te notificará'
+          )
+          this.setState({
+            creditos: stateCreditos,
+            userClases: {
+              ...this.state.userClases,
+              [clase.id]: 3
+            }
+          })
+          return
+        } else message.error('Ocurrió un error, por favor vuelve a intentarlo')
+        return
+      }
+    }
+
     if (isUnlimited) {
       if (
         moment(clase.inicio) > moment(ilimitado[gymSelected].fin).add(1, 'day')
@@ -181,10 +209,11 @@ export default class extends Component {
       clases,
       creditos,
       cart,
-      // ilimitado,
-      loading
+      loading,
+      userClases
     } = this.state
     const { expires, ilimitado } = this.props
+    console.log(userClases)
 
     const unlimited = ilimitado
       ? ilimitado[gymSelected]
