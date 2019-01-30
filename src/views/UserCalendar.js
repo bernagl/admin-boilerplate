@@ -132,13 +132,16 @@ export default class extends Component {
           message.success(
             'Fuiste agregado a la lista de espera, si un usuario cancela la clase se te notificará'
           )
-          this.setState({
-            creditos: stateCreditos,
-            userClases: {
-              ...this.state.userClases,
-              [clase.id]: 3
-            }
-          })
+          this.setState(
+            {
+              creditos: stateCreditos,
+              userClases: {
+                ...this.state.userClases,
+                [clase.id]: 3
+              }
+            },
+            () => this.props.updateData()
+          )
           return
         } else message.error('Ocurrió un error, por favor vuelve a intentarlo')
         return
