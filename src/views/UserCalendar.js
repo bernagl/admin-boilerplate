@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 import WeekCalendar from 'react-week-events'
 import 'react-week-events/dist/styles.css'
-import { getDocumentsByModel } from '../actions/firebase_actions'
+import {
+  getDocumentsByModel,
+  updateDocument
+} from '../actions/firebase_actions'
 import moment from 'moment'
 import message from 'antd/lib/message'
 import Button from 'antd/lib/button'
@@ -82,7 +85,7 @@ export default class extends Component {
             : status === 2
             ? message.info('Para cancelar la clase es en el apartado de clases')
             : status === 3
-            ? message.info('Estás en lista de espera de esta clase')
+            ? this.handleTailClass(event)
             : // : message.info('La clase ya concluyó y no se puede cancelar')
               message.info('La clase ya se venció')
         }}
@@ -94,6 +97,32 @@ export default class extends Component {
         </div>
       </div>
     )
+  }
+
+  handleTailClass = async event => {
+    if (!window.confirm('¿Deseas eliminarte de la lista de espera?')) return
+    const { uid: id, updateData } = this.props
+    const { userClases } = this.state
+    const newUserClases = { ...userClases }
+    const newClassTail = { ...(event.espera ? event.espera : {}) }
+    delete newClassTail[id]
+    delete newUserClases[event.id]
+    const updateUserResponse = await updateDocument('usuario')({
+      id,
+      clases: newUserClases
+    })
+
+    if (updateUserResponse === 202) {
+      const updateClassResponse = await updateDocument('horario')({
+        id: event.id,
+        espera: newClassTail
+      })
+      if (updateClassResponse === 202) {
+        message.success('Te hemos eliminado de la lista de espera')
+        updateData()
+      } else message.error('Ocurrió un error, por favor vuelve a intentarlo')
+    } else message.error('Ocurrió un error, por favor vuelve a intentarlo')
+    console.log(updateUserResponse)
   }
 
   eventHandler = async clase => {
