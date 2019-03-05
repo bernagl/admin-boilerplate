@@ -285,8 +285,6 @@ export default class extends React.Component {
         : 0
       : 0
 
-    console.log(activeSucursal)
-
     return !user ? (
       <span>Cargando</span>
     ) : (

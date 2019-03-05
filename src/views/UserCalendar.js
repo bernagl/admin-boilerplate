@@ -122,7 +122,6 @@ export default class extends Component {
         updateData()
       } else message.error('Ocurrió un error, por favor vuelve a intentarlo')
     } else message.error('Ocurrió un error, por favor vuelve a intentarlo')
-    console.log(updateUserResponse)
   }
 
   eventHandler = async clase => {
@@ -245,7 +244,6 @@ export default class extends Component {
       userClases
     } = this.state
     const { expires, ilimitado } = this.props
-    console.log(userClases)
 
     const unlimited = ilimitado
       ? ilimitado[gymSelected]
