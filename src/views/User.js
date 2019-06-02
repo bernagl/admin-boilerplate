@@ -289,7 +289,7 @@ export default class extends React.Component {
       <span>Cargando</span>
     ) : (
       <div className="row">
-        <div className="col-6">
+        <div className="col-12 col-md-6">
           <h2 className="mb-1">{user.nombre}</h2>
           {typeof user.fecha_nacimiento !== 'undefined' && (
             <h3>
@@ -308,7 +308,7 @@ export default class extends React.Component {
               : 'inactiva'}
           </Tag>
         </div>
-        <div className="col-6">
+        <div className="col-12 col-md-6">
           <h3>
             {[
               <div>
@@ -334,7 +334,7 @@ export default class extends React.Component {
           <Tabs defaultActiveKey="1">
             <TabPane tab="Perfil" key="1">
               <div className="row">
-                <div className="col-6">
+                <div className="col-12 col-6">
                   <div>
                     <Item label="Sucursal">
                       <Select
@@ -354,7 +354,7 @@ export default class extends React.Component {
                       </Select>
                     </Item>
                   </div>
-                  <Collapse style={{ width: '90%' }} accordion>
+                  <Collapse style={{ width: '100%' }} accordion>
                     <Panel header="Actualizar créditos" key="1">
                       <Form submit={this.updateCreditosSubmit} shouldUpdate>
                         <Input
@@ -381,8 +381,8 @@ export default class extends React.Component {
                       <Form submit={this.updateExpiredCredit} shouldUpdate>
                         <Datepicker
                           name="fechaFin"
-                          placeholder="Paquete ilímitado"
-                          label="Páquete ilímitado"
+                          placeholder="Fecha de expiración de créditos"
+                          label="Fecha de expiración de créditos"
                           required
                           defaultValue={expires}
                         />

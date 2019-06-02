@@ -56,10 +56,10 @@ export default class Horario extends Component {
     return (
       <AnimationWrapper>
         <div className="row">
-          <div className="col-6">
+          <div className="col-12 col-md-6">
             <h2>Asignar inscripción</h2>
             <div className="row">
-              <div className="col-6">
+              <div className="col-12 col-md-6">
                 {/* <Item label="Usuario" layout="vertical"> */}
                 <AutoComplete
                   dataSource={data}
@@ -70,7 +70,7 @@ export default class Horario extends Component {
                 />
                 {/* </Item> */}
               </div>
-              <div className="col-6">
+              <div className="col-12 col-md-6 mt-3 mt-md-0">
                 <Select
                   placeholder="Método de pago"
                   onChange={tipo => this.setState({ tipo })}
@@ -81,7 +81,7 @@ export default class Horario extends Component {
                   <Select.Option key="Terminal">Terminal</Select.Option>
                 </Select>
               </div>
-              <div className="col-6 my-3">
+              <div className="col-12 col-md-6 my-3">
                 <Button type="primary" onClick={this.submit}>
                   Actualizar inscripción
                 </Button>

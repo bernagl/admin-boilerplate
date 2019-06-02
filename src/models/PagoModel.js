@@ -174,7 +174,7 @@ export default class Pago extends React.Component {
               : 'Mostrar pagos cancelados'}
           </a>
         </div>
-        <div className="col-6">
+        <div className="col-12 col-md-6">
           <Select
             onChange={type => this.handleSelect(type, null)}
             placeholder="Filtar por..."
@@ -186,7 +186,7 @@ export default class Pago extends React.Component {
             <Select.Option key="paquete">Créditos</Select.Option>
           </Select>
         </div>
-        <div className="col-6">
+        <div className="col-12 col-md-6">
           <RangePicker
             placeholder={['Desde', 'Hasta']}
             format="DD-MM-YYYY"

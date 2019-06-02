@@ -57,6 +57,30 @@ export const getUsuarios = id => {
     })
 }
 
+export const getQeue = id => {
+  return db
+    .ref('horario')
+    .child(id)
+    .once('value')
+    .then(async snap => {
+      let { espera } = snap.val()
+      const usuarios = []
+      if (typeof espera === 'undefined') espera = {}
+      const usuariosPromise = Object.keys(espera).map(uid => {
+        if (espera[uid]) {
+          return db
+            .ref('usuario')
+            .child(uid)
+            .once('value')
+            .then(usnap => ({ ...usnap.val(), id: usnap.key }))
+        }
+      })
+
+      const usuariosResolve = await Promise.all(usuariosPromise)
+      return usuariosResolve.filter(v => v && v)
+    })
+}
+
 export const getGanancias = () => {
   return db
     .ref('pago')

@@ -130,7 +130,7 @@ export default class Horario extends Component {
     return (
       <AnimationWrapper>
         <div className="row">
-          <div className="col-6">
+          <div className="col-12 col-md-6">
             <Form ref={this.formRef} submit={this.submit}>
               <div className="row">
                 <div className="col-12">
@@ -222,7 +222,7 @@ export default class Horario extends Component {
                     />
                   </Item>
                 </div>
-                <div className="col-3">
+                <div className="col-12 col-md-3">
                   <Item label="Hora inicio" layout="vertical" className="fw">
                     <TimePicker
                       onChange={inicio => this.setValue('inicio', inicio)}
@@ -230,7 +230,7 @@ export default class Horario extends Component {
                     />
                   </Item>
                 </div>
-                <div className="col-3">
+                <div className="col-12 col-md-3">
                   <Item label="Hora fin" layout="vertical">
                     <TimePicker
                       onChange={fin => this.setValue('fin', fin)}
@@ -238,7 +238,7 @@ export default class Horario extends Component {
                     />
                   </Item>
                 </div>
-                <div className="col-3">
+                <div className="col-6 col-md-3">
                   <Item label="Cupo" layout="vertical">
                     <InputNumber
                       min={1}
@@ -248,7 +248,7 @@ export default class Horario extends Component {
                     />
                   </Item>
                 </div>
-                <div className="col-3">
+                <div className="col-6 col-md-3">
                   <Item label="Costo (créditos)" layout="vertical">
                     <InputNumber
                       min={1}

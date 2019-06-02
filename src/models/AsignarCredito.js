@@ -109,10 +109,10 @@ export default class Horario extends Component {
     return (
       <AnimationWrapper>
         <div className="row">
-          <div className="col-6">
+          <div className="col-12 col-md-6">
             <h2>Asignar créditos</h2>
             <div className="row">
-              <div className="col-6 my-3">
+              <div className="col-12 col-md-6 my-3">
                 <Item label="Usuario" layout="vertical">
                   <AutoComplete
                     dataSource={data}
@@ -133,7 +133,7 @@ export default class Horario extends Component {
               />
             </Item>
           </div> */}
-              <div className="col-6 my-3">
+              <div className="col-12 col-md-6 my-3">
                 <Item label="Sucursal" layout="vertical">
                   <Select
                     placeholder="Selecciona una sucursal"
@@ -146,7 +146,7 @@ export default class Horario extends Component {
                   </Select>
                 </Item>
               </div>
-              <div className="col-6">
+              <div className="col-12 col-md-6">
                 <Item label="Paquete" layout="vertical">
                   <Select
                     placeholder="Selecciona un paquete"
@@ -159,7 +159,7 @@ export default class Horario extends Component {
                   </Select>
                 </Item>
               </div>
-              <div className="col-6">
+              <div className="col-12 col-md-6">
                 <Item label="Método de pago" layout="vertical">
                   <Select
                     placeholder="Método de pago"
@@ -172,7 +172,7 @@ export default class Horario extends Component {
                   </Select>
                 </Item>
               </div>
-              <div className="col-6">
+              <div className="col-12 col-md-6">
                 <Item label="Asignar inscripción">
                   <Checkbox
                     checked={checked}

@@ -14,7 +14,8 @@ export default class SalonModel extends Component {
 
   submit = model => {
     const { sucursal } = this.state
-    return { ...model, sucursal }
+    const snap = { meses: model.creditos ? '' : model.meses}
+    return { ...model, ...snap, sucursal }
   }
 
   render() {

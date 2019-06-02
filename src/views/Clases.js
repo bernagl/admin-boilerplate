@@ -11,6 +11,7 @@ import {
 import {
   cancelarClase,
   getUsuarios,
+  getQeue,
   getGanancias
 } from '../actions/clase_actions'
 import EditarClase from '../components/EditarClase'
@@ -29,6 +30,7 @@ message.config({
 
 export default class Gimnasio extends Component {
   state = {
+    qeue: [],
     activeWeek: false,
     cancelClass: true,
     gymSelected: 0,
@@ -193,7 +195,8 @@ export default class Gimnasio extends Component {
     const difference = moment.duration(moment(event.inicio).diff(moment()))
     const cancelClass = difference.asMinutes() > 1 ? true : false
     const usuarios = await getUsuarios(event.id)
-    this.setState({ modal: true, event, cancelClass, usuarios })
+    const qeue = await getQeue(event.id)
+    this.setState({ modal: true, event, cancelClass, usuarios, qeue })
     // sendMail()
   }
 
@@ -207,7 +210,8 @@ export default class Gimnasio extends Component {
       modal,
       gymSelected,
       gimnasios,
-      usuarios
+      usuarios,
+      qeue
     } = this.state
     return (
       <AnimationWrapper>
@@ -324,6 +328,13 @@ export default class Gimnasio extends Component {
                       </Button>
                     </div>
                   </div>
+                </TabPane>
+                <TabPane tab="Lista de espera" key="4">
+                  {qeue.length > 0 ? (
+                    qeue.map(({ id, nombre }) => <div key={id}>{nombre}</div>)
+                  ) : (
+                    <div>No hay usuarios en lista de espera</div>
+                  )}
                 </TabPane>
               </Tabs>
             </Fragment>
