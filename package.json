@@ -11,7 +11,7 @@
     "firebase": "^5.1.0",
     "formsy": "^0.19.2",
     "formsy-react": "^1.1.4",
-    "moment": "^2.22.2",
+    "moment": "^2.29.2",
     "react": "^16.4.1",
     "react-csv": "^1.0.14",
     "react-dom": "^16.4.1",
